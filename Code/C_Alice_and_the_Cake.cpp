@@ -124,10 +124,7 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
-const int md = 1e9 + 7;
 void testcase();
-ll power(ll base,ll exponent);
-void markCycles(vi &a,vi &b,vi &c,map<int,int>&apos,map<int,int>&bpos,set<int>&seen,int start,bool first);
 int main(){
     ios;
     int t = 1;
@@ -140,60 +137,32 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vi a(n),b(n),c(n);
-    map<int,int>apos,bpos;
-    readArray(a);
-    readArray(b);
-    readArray(c);
-    inc(i,0,n){
-        apos[--a[i]] = i;
-        bpos[--b[i]] = i;
-        c[i]--;
+    vll arr(n);
+    readArray(arr);
+    ll sum = 0;
+    each(value,arr){
+        sum += value;
     }
-    set<int>seen;
-    inc(i,0,n){
-        if(c[i] != -1){
-            markCycles(a,b,c,apos,bpos,seen,i,a[i] == c[i]);
+    if(n == 1){
+        yy;
+    } else {
+        multiset<ll> a = multiset<ll>(all(arr));
+        multiset<ll> b = multiset<ll>{sum};
+        until(b.empty()){
+            ll curr = *--b.end();
+            if(curr < *--a.end()){
+                NN;
+                return;
+            }
+            b.erase(--b.end());
+            if(a.count(curr)){
+                a.erase(a.find(curr));
+            } else {
+                b.ins((curr >> 1));
+                b.ins(ceil(curr,cast(2,ll)));
+            }
         }
+        a.empty() ? YY : NN;
     }
-    ll numCycles = 0;
-    inc(i,0,n){
-        if(c[i] == -1 and !seen.count(i) and a[i] != b[i]){
-            markCycles(a,b,c,apos,bpos,seen,i,true);
-            numCycles++;
-        }
-    }
-    see(power(2,numCycles));
     return;
-}
-ll power(ll base,ll exponent){
-    if(exponent == 0){
-        return 1;
-    } else {
-        ll sz = cast(log2(exponent) + 1,ll);
-        vll dp(sz,0);
-        dp[0] = base;
-        inc(i,1,dp.sz()){
-            dp[i] = dp[i - 1] * dp[i - 1];
-            dp[i] %= md;
-        }
-        ll ans = 1;
-        while(exponent){
-            int pos = log2(exponent&(-exponent));
-            exponent ^= (1 << pos);
-            ans *= dp[pos];
-            ans %= md;
-        }
-        return ans;
-    }
-}
-
-void markCycles(vi &a,vi &b,vi &c,map<int,int>&apos,map<int,int>&bpos,set<int>&seen,int start,bool first){
-    seen.ins(start);
-    int next = first ? apos[b[start]] : bpos[a[start]];
-    if(seen.count(next)){
-        return;
-    } else {
-        markCycles(a,b,c,apos,bpos,seen,next,first);
-    }
 }
