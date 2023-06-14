@@ -135,45 +135,31 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n,k;
-    cin >> n >> k;
-    string res;
-    cin >> res;
-    vpii gaps;
-    int start = 0;
-    while(start < n){
-        while(start < n and res[start] == 'W'){
-            start++;
+    string dir;
+    cin >> dir;
+    map<pii,set<pii>>path;
+    pii curr = {0,0};
+    int time = 0;
+    each(d,dir){
+        pii c = curr;
+        switch(d){
+            case 'N':  curr.f++; 
+                break;
+            case 'S': curr.f--;
+                break;
+            case 'E': curr.s++;
+                break;
+            case 'W': curr.s--;
+                break;
         }
-        int end = start;
-        while(end < n and res[start] == res[end]){
-            end++;
-        }
-        gaps.pb({start,end});
-        start = end;
-    }
-    custSort(gaps,[](pii &a,pii &b){
-        return a.s - a.f < b.s - b.f;
-    });
-    int index = 0;
-    while(index < gaps.sz() and k > 0){
-        int start = gaps[index].f;
-        int end = gaps[index++].s;
-        while(start < end){
-            res[start++] = 'W';
-            k--;
+        if(!path[c].count(curr)){
+            path[c].ins(curr);
+            path[curr].ins(c);
+            time += 5;
+        } else {
+            time++;
         }
     }
-    ll ans = 0;
-    inc(i,0,n){
-        if(res[i] == 'W'){
-            if(i == 0 or res[i - 1] == 'L'){
-                ans++;
-            } else {
-                ans += 2;
-            }
-        }
-    }
-    see(ans);
+    see(time);
     return;
 }

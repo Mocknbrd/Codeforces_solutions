@@ -135,44 +135,22 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n,k;
-    cin >> n >> k;
-    string res;
-    cin >> res;
-    vpii gaps;
-    int start = 0;
-    while(start < n){
-        while(start < n and res[start] == 'W'){
-            start++;
-        }
-        int end = start;
-        while(end < n and res[start] == res[end]){
-            end++;
-        }
-        gaps.pb({start,end});
-        start = end;
+    string bin;
+    cin >> bin;
+    int ones = 0,zeros = 0;
+    each(bit,bin){
+        ones += bit == '1';
+        zeros += bit == '0';
     }
-    custSort(gaps,[](pii &a,pii &b){
-        return a.s - a.f < b.s - b.f;
-    });
-    int index = 0;
-    while(index < gaps.sz() and k > 0){
-        int start = gaps[index].f;
-        int end = gaps[index++].s;
-        while(start < end){
-            res[start++] = 'W';
-            k--;
-        }
-    }
-    ll ans = 0;
-    inc(i,0,n){
-        if(res[i] == 'W'){
-            if(i == 0 or res[i - 1] == 'L'){
-                ans++;
-            } else {
-                ans += 2;
-            }
-        }
+    int zerosLeft = 0,onesLeft = 0;
+    int ans = inf;
+    each(bit,bin){
+        int leftZeros = onesLeft + zeros - zerosLeft;
+        int leftOnes = zerosLeft + ones - onesLeft;
+        int cnd = min(leftZeros,leftOnes);
+        ans = min(ans,cnd);
+        zerosLeft += bit == '0';
+        onesLeft += bit == '1';
     }
     see(ans);
     return;

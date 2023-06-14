@@ -125,6 +125,7 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
+inline bool isPerm(multiset<int>&set,map<int,int>&cnt);
 int main(){
     ios;
     int t = 1;
@@ -135,45 +136,34 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n,k;
-    cin >> n >> k;
-    string res;
-    cin >> res;
-    vpii gaps;
-    int start = 0;
-    while(start < n){
-        while(start < n and res[start] == 'W'){
-            start++;
-        }
-        int end = start;
-        while(end < n and res[start] == res[end]){
-            end++;
-        }
-        gaps.pb({start,end});
-        start = end;
-    }
-    custSort(gaps,[](pii &a,pii &b){
-        return a.s - a.f < b.s - b.f;
-    });
-    int index = 0;
-    while(index < gaps.sz() and k > 0){
-        int start = gaps[index].f;
-        int end = gaps[index++].s;
-        while(start < end){
-            res[start++] = 'W';
-            k--;
-        }
-    }
-    ll ans = 0;
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    multiset<int>firstset,secondset;
+    map<int,int>firstcnt,secondcnt;
     inc(i,0,n){
-        if(res[i] == 'W'){
-            if(i == 0 or res[i - 1] == 'L'){
-                ans++;
-            } else {
-                ans += 2;
-            }
+        secondset.ins(arr[i]);
+        secondcnt[arr[i]]++;
+    }
+    vpii ans;
+    inc(i,0,n){
+        firstset.ins(arr[i]);
+        firstcnt[arr[i]]++;
+        secondset.erase(secondset.find(arr[i]));
+        if(--secondcnt[arr[i]] == 0){
+            secondcnt.erase(arr[i]);
+        }
+        if(isPerm(firstset,firstcnt) and isPerm(secondset,secondcnt)){
+            ans.pb({i + 1,n - i - 1});
         }
     }
-    see(ans);
+    see(ans.sz());
+    each(way,ans){
+        see(way.f << " " << way.s);
+    }
     return;
+}
+inline bool isPerm(multiset<int>&set,map<int,int>&cnt){
+    return !set.empty() and *set.rbegin() == cnt.sz() and *set.begin() == 1 and *set.rbegin() == set.sz();
 }

@@ -135,44 +135,24 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n,k;
-    cin >> n >> k;
-    string res;
-    cin >> res;
-    vpii gaps;
-    int start = 0;
-    while(start < n){
-        while(start < n and res[start] == 'W'){
-            start++;
-        }
-        int end = start;
-        while(end < n and res[start] == res[end]){
-            end++;
-        }
-        gaps.pb({start,end});
-        start = end;
-    }
-    custSort(gaps,[](pii &a,pii &b){
-        return a.s - a.f < b.s - b.f;
-    });
-    int index = 0;
-    while(index < gaps.sz() and k > 0){
-        int start = gaps[index].f;
-        int end = gaps[index++].s;
-        while(start < end){
-            res[start++] = 'W';
-            k--;
+    int n,p,k;
+    cin >> n >> p >> k;
+    p--;
+    string str;
+    cin >> str;
+    int x,y;
+    cin >> x >> y;
+    vi dp(n,0);
+    dec(i,n - 1,0){
+        dp[i] = '1' - str[i];
+        if(i + k < n){
+            dp[i] += dp[i + k];
         }
     }
-    ll ans = 0;
-    inc(i,0,n){
-        if(res[i] == 'W'){
-            if(i == 0 or res[i - 1] == 'L'){
-                ans++;
-            } else {
-                ans += 2;
-            }
-        }
+    int ans = inf;
+    inc(q,p,n){
+        int time = dp[q] * x + (q - p) * y;
+        ans = min(ans,time);
     }
     see(ans);
     return;
