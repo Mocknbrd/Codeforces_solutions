@@ -125,11 +125,9 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
-string unseenString(string pinCode,int pos,set<string>&given,set<string>&output);
 int main(){
     ios;
     int t = 1;
-    cin >> t;
     while(t--){
         testcase();
     }
@@ -138,49 +136,44 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vector<string>arr(n);
-    map<string,int>cnts;
-    set<string>given,output;
-    vector<string>ans;
-    inc(i,0,n){
-        cin >> arr[i];
-        cnts[arr[i]]++;
-        given.ins(arr[i]);
-    }
-    int changes = 0;
-    each(rec,cnts){
-        string pin = rec.f;
-        int cnt = rec.s;
-        if(!output.count(pin)){
-            output.ins(pin);
-            cnt--;
-            ans.pb(pin);
+    vi arr(n);
+    readArray(arr);
+    set<int>tracker;
+    int start = 0;
+    vi ans;
+    while(start < n){
+        int end = start;
+        map<int,int>enter;
+        while(end < n){
+            int value = arr[end++];
+            if(value > 0){
+                if(tracker.count(value) or ++enter[value] > 1){
+                    see(-1);
+                    return;
+                } 
+                tracker.ins(value);
+            } else {
+                if(!tracker.count(-value)){
+                    see(-1);
+                    return;
+                }
+                tracker.erase(-value);
+            }
+            if(tracker.empty()){
+                break;
+            }
         }
-        int pos = 0;
-        while(cnt > 0){
-            string cnd = unseenString(pin,pos,given,output);
-            output.ins(cnd);
-            changes++;
-            pos++;
-            pos %= 4;
-            cnt--;
+        if(tracker.empty()){
+            ans.pb(end - start);
+        } else {
+            see(-1);
+            return;
         }
-        given.erase(pin);
+        start = end;
     }
-    see(changes);
-    each_key(value,output){
-        see(value);
+    see(ans.sz());
+    each(value,ans){
+        cout << value << " ";
     }
     return;
-}
-string unseenString(string pinCode,int pos,set<string>&given,set<string>&output){
-    string ans = pinCode;
-    inc(d,0,10){
-        char digit = d + '0';
-        ans[pos] = digit;
-        if(!given.count(ans) and !output.count(ans)){
-            break;
-        }
-    }
-    return ans;
 }

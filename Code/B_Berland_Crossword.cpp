@@ -56,7 +56,7 @@ using namespace std;
 #define inc_type(type,i,start,end) range_type(type,i,start,end,1)
 #define dec_type(type,i,start,end) range_type(type,i,start,end,-1)
 #define inc_la_type(type,i,start,end,buffer) range_la(type,i,start,end,1,buffer)
-#define each_key(element,container) for(const &element:container)
+#define each_key(element,container) for(const auto &element:container)
 #define each(element,container) for(auto &element:container)
 #define iter_for(it,container) for(auto it = container.begin();it != container.end();it++)
 #define iter_rev(it,container) for(auto it = container.rbegin();it != container.rend();it++)
@@ -125,7 +125,6 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
-inline int getBit(int mask,int pos);
 int main(){
     ios;
     int t = 1;
@@ -136,21 +135,5 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n,up,right,down,left;
-    cin >> n >> up >> right >> down >> left;
-    inc(mask,0,(1 << 4)){
-        int upRem = up - getBit(mask,0) - getBit(mask,1);
-        int downRem = down - getBit(mask,2) - getBit(mask,3);
-        int leftRem = left - getBit(mask,0) - getBit(mask,2);
-        int rightRem = right - getBit(mask,1) - getBit(mask,3);
-        if(upRem >= 0 and upRem <= n-2 and downRem >= 0 and downRem <= n-2 and leftRem >= 0 and leftRem <= n-2 and rightRem >= 0 and rightRem <= n-2){
-            YY;
-            return;
-        }
-    }
-    NN;
     return;
-}
-inline int getBit(int mask,int pos){
-    return ((mask >> pos)&1);
 }

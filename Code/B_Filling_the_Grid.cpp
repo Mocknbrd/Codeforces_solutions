@@ -124,63 +124,63 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
+ll md = 1e9 + 7;
 void testcase();
-string unseenString(string pinCode,int pos,set<string>&given,set<string>&output);
+int power(int base,int exponent);
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vector<string>arr(n);
-    map<string,int>cnts;
-    set<string>given,output;
-    vector<string>ans;
-    inc(i,0,n){
-        cin >> arr[i];
-        cnts[arr[i]]++;
-        given.ins(arr[i]);
-    }
-    int changes = 0;
-    each(rec,cnts){
-        string pin = rec.f;
-        int cnt = rec.s;
-        if(!output.count(pin)){
-            output.ins(pin);
-            cnt--;
-            ans.pb(pin);
+    int h,w;
+    cin >> h >> w;
+    vvll grid(h,vll(w,0));
+    inc(i,0,h){
+        int r;
+        cin >> r;
+        inc(j,0,r){
+            grid[i][j] = j + 1;
         }
-        int pos = 0;
-        while(cnt > 0){
-            string cnd = unseenString(pin,pos,given,output);
-            output.ins(cnd);
-            changes++;
-            pos++;
-            pos %= 4;
-            cnt--;
+    }
+    inc(j,0,w){
+        int c;
+        cin >> c;
+        inc(i,0,c){
+            grid[i][j] = i + 1;
         }
-        given.erase(pin);
     }
-    see(changes);
-    each_key(value,output){
-        see(value);
+    int cnts = 0;
+    inc(row,1,h){
+        inc(col,1,w){
+            cnts += grid[row][col] == 0 and grid[row - 1][col] != col and grid[row][col - 1] != row;
+        }
     }
+    see(power(2,cnts));
     return;
 }
-string unseenString(string pinCode,int pos,set<string>&given,set<string>&output){
-    string ans = pinCode;
-    inc(d,0,10){
-        char digit = d + '0';
-        ans[pos] = digit;
-        if(!given.count(ans) and !output.count(ans)){
-            break;
+int power(int base,int exponent){
+    if(exponent == 0){
+        return 1;
+    } else {
+        int size = log2(exponent) + 1;
+        vll dp(size + 1,0);
+        dp[0] = base;
+        inc(i,1,dp.sz()){
+            dp[i] = dp[i - 1] * dp[i - 1];
+            dp[i] %= md;
         }
+        ll ans = 1;
+        while(exponent){
+            int pos = log2(exponent&(-exponent));
+            exponent ^= (1 << pos);
+            ans *= dp[pos];
+            ans %= md;
+        }
+        return ans;
     }
-    return ans;
 }

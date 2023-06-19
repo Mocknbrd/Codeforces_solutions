@@ -125,62 +125,42 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
-string unseenString(string pinCode,int pos,set<string>&given,set<string>&output);
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vector<string>arr(n);
-    map<string,int>cnts;
-    set<string>given,output;
-    vector<string>ans;
+    int n,m;
+    cin >> n >> m;
+    vi like(m);
+    readArray(like);
+    vi pos(n);
+    map<int,int>minpos,maxpos,currpos;
     inc(i,0,n){
-        cin >> arr[i];
-        cnts[arr[i]]++;
-        given.ins(arr[i]);
+        pos[i] = i + 1;
+        minpos[pos[i]] = i;
+        maxpos[pos[i]] = i;
+        currpos[pos[i]] = i;
     }
-    int changes = 0;
-    each(rec,cnts){
-        string pin = rec.f;
-        int cnt = rec.s;
-        if(!output.count(pin)){
-            output.ins(pin);
-            cnt--;
-            ans.pb(pin);
+    each(post,like){
+        int postpos = currpos[post];
+        if(postpos != 0){
+            int abovePost = pos[postpos - 1];
+            swap(pos[postpos],pos[postpos - 1]);
+            swap(currpos[post],currpos[abovePost]);
+            minpos[post] = min(minpos[post],currpos[post]);
+            maxpos[post] = max(maxpos[post],currpos[post]);
+            minpos[abovePost] = min(minpos[abovePost],currpos[abovePost]);
+            maxpos[abovePost] = max(maxpos[abovePost],currpos[abovePost]);
         }
-        int pos = 0;
-        while(cnt > 0){
-            string cnd = unseenString(pin,pos,given,output);
-            output.ins(cnd);
-            changes++;
-            pos++;
-            pos %= 4;
-            cnt--;
-        }
-        given.erase(pin);
     }
-    see(changes);
-    each_key(value,output){
-        see(value);
+    inc(post,1,n + 1){
+        see(++minpos[post] << " " << ++maxpos[post]);
     }
     return;
-}
-string unseenString(string pinCode,int pos,set<string>&given,set<string>&output){
-    string ans = pinCode;
-    inc(d,0,10){
-        char digit = d + '0';
-        ans[pos] = digit;
-        if(!given.count(ans) and !output.count(ans)){
-            break;
-        }
-    }
-    return ans;
 }
