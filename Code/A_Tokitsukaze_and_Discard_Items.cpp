@@ -124,69 +124,17 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
-ll md = 1e9 + 7;
 void testcase();
-int power(int base,int exponent);
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int h,w;
-    cin >> h >> w;
-    vvll grid(h,vll(w,0));
-    inc(i,0,h){
-        int r;
-        cin >> r;
-        inc(j,0,r){
-            grid[i][j] = j + 1;
-        }
-        if(r + 1 < h){
-            grid[i][r + 1] = -1;
-        }
-    }
-    inc(j,0,w){
-        int c;
-        cin >> c;
-        inc(i,0,c){
-            grid[i][j] = i + 1;
-        }
-        if(c + 1 < w){
-            grid[c + 1][j] = -1;
-        }
-    }
-    ll cnts = 0;
-    inc(i,1,h){
-        inc(j,1,w){
-            cnts += grid[i][j] == 0 and grid[i - 1][j] != i and grid[i][j - 1] != j;
-        }
-    }
-    see(power(2,cnts));
+    
     return;
-}
-int power(int base,int exponent){
-    if(exponent == 0){
-        return 1;
-    } else {
-        int size = log2(exponent) + 1;
-        vll dp(size + 1,0);
-        dp[0] = base;
-        inc(i,1,dp.sz()){
-            dp[i] = dp[i - 1] * dp[i - 1];
-            dp[i] %= md;
-        }
-        ll ans = 1;
-        while(exponent){
-            int pos = log2(exponent&(-exponent));
-            exponent ^= (1 << pos);
-            ans *= dp[pos];
-            ans %= md;
-        }
-        return ans;
-    }
 }
