@@ -125,6 +125,8 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
+void step(vvi &grid,int &r,int &c);
+int simulate(vvi &grid,vvb &directDrop,int r,int c);
 int main(){
     ios;
     int t = 1;
@@ -135,29 +137,40 @@ int main(){
     return 0;
 }
 void testcase(){
-    ll n,m,k;
+    int n,m,k;
     cin >> n >> m >> k;
-    vll arr(m);
-    readArray(arr);
-    int start = 0;
-    ll ans = 0,deleted = 0;
-    until(start == m){
-        ll startpos = arr[start] - deleted;
-        ll startGrp = (startpos / k) + (startpos % k != 0);
-        int end = start;
-        until(end == m){
-            ll endpos = arr[end] - deleted;
-            ll endGrp = (endpos / k) + (endpos % k != 0);
-            if(startGrp == endGrp){
-                end++;
-            } else {
-                break;
-            }
-        }
-        ans++;
-        deleted += end - start;
-        start = end;
+    vvi grid(n,vi(m,0));
+    readMatrix(grid);
+    vi drops(k);
+    readArray(drops);
+    vvb directDrop(n,vb(m,false));
+    inc(j,0,m){
+        directDrop[n - 1][j] = grid[n - 1][j] == 2;
     }
-    see(ans);
+    vi ans;
+    inc(i,0,k){
+        ans.pb(simulate(grid,directDrop,0,drops[i] - 1));
+    }
+    writeArray(ans);
     return;
+}
+int simulate(vvi &grid,vvb &directDrop,int r,int c){
+    int n = grid.sz();
+    if(r == n or directDrop[r][c]){
+        return c + 1;
+    } else {
+        int row = r,col = c;
+        step(grid,r,c);
+        grid[row][col] = 2;
+        int ans = simulate(grid,directDrop,r,c);
+        directDrop[row][col] = row == n - 1 or directDrop[row + 1][col];
+        return ans;
+    }
+}
+void step(vvi &grid,int &r,int &c){
+    switch(grid[r][c]){
+        case 1: r,c++; break;
+        case 2: r++,c; break;
+        case 3: r,c--; break;
+    }
 }

@@ -128,36 +128,63 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    ll n,m,k;
+    int n,m,k;
     cin >> n >> m >> k;
-    vll arr(m);
-    readArray(arr);
-    int start = 0;
-    ll ans = 0,deleted = 0;
-    until(start == m){
-        ll startpos = arr[start] - deleted;
-        ll startGrp = (startpos / k) + (startpos % k != 0);
-        int end = start;
-        until(end == m){
-            ll endpos = arr[end] - deleted;
-            ll endGrp = (endpos / k) + (endpos % k != 0);
-            if(startGrp == endGrp){
-                end++;
-            } else {
-                break;
+    vector<string>grid(n);
+    readArray(grid);
+    vvi left(n,vi(m,0)),right(n,vi(m,0));
+    inc(i,0,n){
+        inc(j,0,m){
+            if(grid[i][j] == '*'){
+                if(right[i][j] == 0){
+                    int row = i,col = j,value = 0;
+                    while(row < n and col < m and grid[row][col] == '*'){
+                        right[row++][col++] = value++;
+                    }
+                }
+                if(left[i][j] == 0){
+                    int row = i,col = j,value = 0;
+                    while(row < n and col >= 0 and grid[row][col] == '*'){
+                        left[row++][col--] = value++;
+                    }
+                }
             }
         }
-        ans++;
-        deleted += end - start;
-        start = end;
     }
-    see(ans);
+    vvb isPart(n,vb(m,false));
+    inc(i,0,n){
+        inc(j,0,m){
+            if(grid[i][j] == '*' and !isPart[i][j] and min(left[i][j],right[i][j]) >= k){
+                int num = min(left[i][j],right[i][j]);
+                int row = i,col = j;
+                while(num >= 0){
+                    isPart[row--][col--] = true;
+                    num--;
+                }
+                row = i,col = j;
+                num = min(left[i][j],right[i][j]);
+                while(num >= 0){
+                    isPart[row--][col++] = true;
+                    num--;
+                }
+            }
+        }
+    }
+    inc(i,0,n){
+        inc(j,0,m){
+            if(grid[i][j] == '*' and !isPart[i][j]){
+                NN;
+                return;
+            }
+        }
+    }
+    YY;
     return;
 }
