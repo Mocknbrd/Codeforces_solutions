@@ -56,7 +56,7 @@ using namespace std;
 #define inc_type(type,i,start,end) range_type(type,i,start,end,1)
 #define dec_type(type,i,start,end) range_type(type,i,start,end,-1)
 #define inc_la_type(type,i,start,end,buffer) range_la(type,i,start,end,1,buffer)
-#define each_key(element,container) for(const &element:container)
+#define each_key(element,container) for(const auto &element:container)
 #define each(element,container) for(auto &element:container)
 #define iter_for(it,container) for(auto it = container.begin();it != container.end();it++)
 #define iter_rev(it,container) for(auto it = container.rbegin();it != container.rend();it++)
