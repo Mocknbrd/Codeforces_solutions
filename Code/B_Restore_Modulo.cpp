@@ -135,38 +135,26 @@ int main(){
     return 0;
 }
 void testcase(){
+    set<ll>diff;
     int n;
     cin >> n;
-    vi arr(n);
-    inc(i,0,n){
-        cin >> arr[i];
-    }
-    set<int>first,second;
-    inc(i,0,n){
-        first.ins(i + 1);
-        second.ins(i + 1);
-    }
-    vi minAns = arr,maxAns = arr;
-    first.erase(arr[0]);
-    second.erase(arr[0]);
+    vll arr(n);
+    readArray(arr);
     inc(i,1,n){
-        int value1 = arr[i],value2 = arr[i];
-        if(arr[i] == arr[i - 1]){
-            value1 = *--first.lower_bound(arr[i]);
-            value2 = *second.begin();
+        diff.ins(arr[i] - arr[i - 1]);
+    }
+    if(diff.sz() <= 1){
+        see(0);
+    } else if(diff.sz() > 2){
+        see(-1);
+    } else {
+        ll ans = *diff.rbegin() - *diff.begin();
+        sorted(arr);
+        if(ans > arr.back()){
+            see(ans << " " << *diff.rbegin());
+        } else {
+            see(-1);
         }
-        minAns[i] = value2;
-        maxAns[i] = value1;
-        first.erase(value1);
-        second.erase(value2);
     }
-    inc(i,0,n){
-        cout << minAns[i] << " ";
-    }
-    br();
-    inc(i,0,n){
-        cout << maxAns[i] << " ";
-    }
-    br();
     return;
 }
