@@ -69,8 +69,6 @@ using namespace std;
 #define rsort(arr) sort(arr); rev(all(arr));
 #define slice(start,end) substr(start,end - (start) + 1)
 #define char_index(c) (c >= 'A' and c <= 'Z' ? c - 'A' : c - 'a')
-#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops")
-#pragma GCC optimize("no-stack-protector,fast-math")
 inline ll llmax(ll a,ll b){
     return a > b ? a : b;
 }
@@ -159,8 +157,9 @@ void testcase(){
                     break;
                 case 3: handleThree(matrix,topLeft,topRight,bottomLeft,bottomRight,ans);
                     break;
-                default: handleFour(matrix,topLeft,topRight,bottomLeft,bottomRight,ans);
+                case 4: handleFour(matrix,topLeft,topRight,bottomLeft,bottomRight,ans);
                     break;
+                default: break;
             }
         }
     }

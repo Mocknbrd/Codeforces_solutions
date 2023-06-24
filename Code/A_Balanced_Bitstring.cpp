@@ -137,5 +137,44 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n,k;
+    cin >> n >> k;
+    string bit;
+    cin >> bit;
+    map<int,char>mp;
+    inc(i,0,n){
+        int index = i % k;
+        if(bit[i] != '?'){
+            if(!mp.count(index)){
+                mp[index] = bit[i];
+            } else if(mp[index] != bit[i]){
+                NN;
+                return;
+            }
+        }
+    }
+    inc(i,0,n){
+        if(mp.count(i % k)){
+            bit[i] = mp[i % k];
+        }
+    }
+    int ones = 0,zeros = 0;
+    inc(i,0,k){
+        ones += bit[i] == '1';
+        zeros += bit[i] == '0';
+    }
+    if(ones > k / 2 or zeros > k / 2){
+        NN;
+    } else {
+        slid_win(start,end,k,n){
+            ones += bit[end] == '1' - bit[start - 1] == '1';
+            zeros += bit[end] == '0' - bit[start - 1] == '0';
+            if(ones > k / 2 or ones > k / 2){
+                NN;
+                return;
+            } 
+        }
+        YY;
+    }
     return;
 }

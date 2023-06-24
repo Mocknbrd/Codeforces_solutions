@@ -137,5 +137,27 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    string str;
+    cin >> str;
+    vector<set<int>>back(2);
+    int seq = 0;
+    vi ans(n);
+    inc(i,0,n){
+        char value = str[i];
+        int digit = value - '0';
+        if(back[digit ^ 1].empty()){
+            back[digit].ins(++seq);
+            ans[i] = seq;
+        } else {
+            int sequence = *back[digit ^ 1].begin();
+            back[digit ^ 1].erase(sequence);
+            back[digit].ins(sequence);
+            ans[i] = sequence;
+        }
+    }
+    see(seq);
+    writeArray(ans);
     return;
 }

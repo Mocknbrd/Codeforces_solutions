@@ -137,5 +137,24 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n,x;
+    cin >> n >> x;
+    vi arr(n);
+    readArray(arr);
+    sorted(arr);
+    if(arr.front() == arr.back() and arr.front() == x){
+        see(0);
+    } else {
+        int diffSum = 0;
+        each(value,arr){
+            diffSum += x - value;
+        }
+        int present = lower_bound(all(arr),x) - arr.begin();
+        if(diffSum == 0 or (present < n and arr[present] == x)){
+            see(1);
+        } else {
+            see(2);
+        }
+    }
     return;
 }

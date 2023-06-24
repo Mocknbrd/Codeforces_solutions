@@ -127,6 +127,7 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
+int goodString(string &str,map<char,vi>&prefix,int start,int end,int ch);
 int main(){
     ios;
     int t = 1;
@@ -137,5 +138,35 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    string str;
+    cin >> str;
+    map<char,vi>prefix;
+    inc_type(char,ch,'a','z' + 1){
+        prefix[ch] = vi(n + 1,0);
+    }
+    inc(i,0,n){
+        inc_type(char,ch,'a','z' + 1){
+            prefix[ch][i + 1] = prefix[ch][i] + str[i] == ch;
+        }
+    }
+    int ans1 = goodString(str,prefix,0,n,str.front() - 'a');
+    int ans2 = goodString(str,prefix,0,n,str.back() - 'a');
+    see(min(ans1,ans2));
     return;
+}
+int goodString(string &str,map<char,vi>&prefix,int start,int end,int ch){
+    int mid = (start + end) >> 1;
+    char cons = ch + 'a';
+    if(start == end){
+        return cons != str[start];
+    } else {
+        int left = prefix[cons][mid + 1] - prefix[cons][start];
+        int right = prefix[cons][end + 1] - prefix[cons][mid];
+        int number = (end - start + 1) >> 1;
+        int ans1 = number - left + 1 + goodString(str,prefix,mid + 1,end,mod(ch + 1,26));
+        int ans2 = number - right + 1 + goodString(str,prefix,start,mid,mod(ch + 1,26)); 
+        return min(ans1,ans2);
+    }
 }

@@ -127,6 +127,7 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
+int getDigits(ll n);
 int main(){
     ios;
     int t = 1;
@@ -137,5 +138,47 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n,l;
+    cin >> n >> l;
+    vector<double>arr(n + 1);
+    arr[0] = 0;
+    readArray(arr,1);
+    arr.pb(l);
+    ld start = 0,end = l;
+    ld ans = l;
+    while(start <= end){
+        ld mid = (start + end) / 2;
+        ld leftEnd = upper_bound(all(arr),mid) - arr.begin()  - 1;
+        ld rightEnd = upper_bound(all(arr),mid) - arr.begin();
+        ld leftTime = 0.0;
+        int speed = 1;
+        inc(i,0,leftEnd){
+            leftTime += (arr[i + 1] - arr[i]) / speed++;
+        }
+        leftTime += (mid - arr[leftEnd]) / speed;
+        ld rightTime = 0;
+        speed = 1;
+        dec(i,arr.sz() - 1,rightEnd + 1){
+            rightTime += (arr[i] - arr[i - 1]) / speed++;
+        }
+        rightTime += (arr[rightEnd] - mid) / speed;
+        if(abs(leftTime - rightTime) <= pow(10,-6)){
+            ll integerPart = min(leftTime,rightTime);
+            cout << setprecision(getDigits(integerPart) + 15) << leftTime << endl;
+            return;
+        } else if(leftTime > rightTime){
+            end = mid;
+        } else {
+            start = mid;
+        }
+    }
     return;
+}
+int getDigits(ll n){
+    int ans = 0;
+    while(n){
+        ans++;
+        n /= 10;
+    }
+    return ans;
 }
