@@ -125,9 +125,9 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
-int goodString(string &str,map<char,vi>&prefix,char ch,int start,int end);
+int count(string &str,string &pattern);
 int main(){
-    // ios;
+    ios;
     int t = 1;
     cin >> t;
     while(t--){
@@ -140,49 +140,33 @@ void testcase(){
     cin >> n;
     string str;
     cin >> str;
-    map<char,vi>prefix;
-    inc_type(char,ch,'a','z' + 1){
-        prefix[ch].resize(n + 1,0);
-    }
-    inc(i,0,n){
-        inc_type(char,ch,'a','z' + 1){
-            prefix[ch][i + 1] = prefix[ch][i] + ch == str[i];
+    string pattern = "abacaba";
+    inc_la(i,0,n,pattern.sz() - 1){
+        string ss = str;
+        bool ans = true;
+        inc(j,0,pattern.sz()){
+            if(ss[i + j] != '?' and ss[i + j] != pattern[j]){
+                ans = false;
+                break;
+            }
+            ss[i + j] = pattern[j];
+        }
+        if(ans and count(ss,pattern) == 1){
+            yy;
+            inc(j,0,n){
+                ss[j] = ss[j] == '?' ? 'z' : ss[j];
+            }
+            see(ss);
+            return;
         }
     }
-    int ans = inf;
-    inc_type(char,ch,'a','z' + 1){
-        ans = min(ans,goodString(str,prefix,ch,0,n - 1));
-    }
-    see(ans);
+    nn;
     return;
 }
-int goodString(string&str,map<char,vi>&prefix,char ch,int start,int end){
-    if(start > end){
-        return 0;
-    } else if(start == end){
-        return str[start] != ch;
-    } else {
-        int mid = (start + end) /2 ;
-        int number = mid - start + 1;
-        int leftCnt = 0;
-        int rightCnt = 0;
-        inc(i,start,mid + 1){
-            leftCnt += str[i] == ch;
-        }
-        dec(i,end,mid){
-            rightCnt += str[i] == ch;
-        }
-        char nextChar = ch == 'z' ? 'a' : ch + 1;
-        if(leftCnt != rightCnt){
-            if(leftCnt < rightCnt){
-                return number - rightCnt + goodString(str,prefix,nextChar,start,mid);
-            } else {
-                return number - leftCnt + goodString(str,prefix,nextChar,mid + 1,end);
-            }
-        } else {
-            int ans1 = goodString(str,prefix,nextChar,start,mid);
-            int ans2 = goodString(str,prefix,nextChar,mid + 1,end);
-            return number - leftCnt + min(ans1,ans2);
-        }
+int count(string &str,string &pattern){
+    int ans = 0;
+    inc_la(i,0,str.sz(),pattern.sz() - 1){
+        ans += str.substr(i,pattern.sz()) == pattern;
     }
+    return ans;
 }
