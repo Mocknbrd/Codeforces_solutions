@@ -125,7 +125,6 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
-int count(string &str,string &pattern);
 int main(){
     ios;
     int t = 1;
@@ -136,37 +135,5 @@ int main(){
     return 0;
 }
 void testcase(){
-    int length;
-    cin >> length;
-    string str;
-    cin >> str;
-    string pattern = "abacaba";
-    inc_la(i,0,length,pattern.sz() - 1){
-        string ss = str;
-        bool ans = true;
-        inc(j,0,pattern.sz()){
-            if(ss[i + j] != '?' and ss[i + j] != pattern[j]){
-                ans = false;
-                break;
-            }
-            ss[i + j] = pattern[j];
-        }
-        if(ans and count(ss,pattern) == 1){
-            inc(j,0,length){
-                ss[j] = ss[j] == '?' ? 'z' : ss[j];
-            }
-            yy;
-            see(ss);
-            return;
-        }
-    }
-    nn;
     return;
-}
-int count(string &str,string &pattern){
-    int ans = 0;
-    inc_la(i,0,str.sz(),pattern.sz() - 1){
-        ans += str.substr(i,pattern.sz()) == pattern;
-    }
-    return ans;
 }

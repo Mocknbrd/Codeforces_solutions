@@ -125,7 +125,8 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
-int count(string &str,string &pattern);
+string constructPattern(string &input,int k);
+vector<string>getSubString(string &input,int k);
 int main(){
     ios;
     int t = 1;
@@ -136,37 +137,47 @@ int main(){
     return 0;
 }
 void testcase(){
-    int length;
-    cin >> length;
-    string str;
-    cin >> str;
-    string pattern = "abacaba";
-    inc_la(i,0,length,pattern.sz() - 1){
-        string ss = str;
-        bool ans = true;
-        inc(j,0,pattern.sz()){
-            if(ss[i + j] != '?' and ss[i + j] != pattern[j]){
-                ans = false;
-                break;
-            }
-            ss[i + j] = pattern[j];
-        }
-        if(ans and count(ss,pattern) == 1){
-            inc(j,0,length){
-                ss[j] = ss[j] == '?' ? 'z' : ss[j];
-            }
-            yy;
-            see(ss);
-            return;
+    int n,k;
+    cin >> n >> k;
+    string input;
+    cin >> input;
+    string pattern = constructPattern(input,k);
+    int ans = 0;
+    range_la(int,i,0,n,k,k - 1){
+        inc(j,0,k){
+            ans += input[i + j] != pattern[j];
         }
     }
-    nn;
+    see(ans);
     return;
 }
-int count(string &str,string &pattern){
-    int ans = 0;
-    inc_la(i,0,str.sz(),pattern.sz() - 1){
-        ans += str.substr(i,pattern.sz()) == pattern;
+string constructPattern(string &input,int k){
+    string ans = input.substr(0,k);
+    int start = 0,end = k - 1;
+    vector<string>substrings = getSubString(input,k);
+    while(start <= end){
+        vi cnts(26,0);
+        each(substring,substrings){
+            cnts[char_index(substring[start])]++;
+            cnts[char_index(substring[end])]++;
+        }
+        char ch = 'a';
+        int max = cnts[0];
+        inc(i,0,26){
+            if(cnts[i] > max){
+                ch = 'a' + i;
+                max = cnts[i];
+            }
+        }
+        ans[start++] = ch;
+        ans[end--] = ch;
+    }
+    return ans;
+}
+vector<string>getSubString(string &input,int k){
+    vector<string>ans;
+    range_la(int,i,0,input.sz(),k,k - 1){
+        ans.pb(input.substr(i,k));
     }
     return ans;
 }
