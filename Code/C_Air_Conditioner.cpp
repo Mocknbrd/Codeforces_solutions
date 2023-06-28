@@ -127,6 +127,7 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
+pii findEffRange(vpii &ranges);
 int main(){
     ios;
     int t = 1;
@@ -137,5 +138,43 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n,m;
+    cin >> n >> m;
+    map<int,vpii>mp;
+    inc(i,0,n){
+        int t,l,h;
+        cin >> t >> l >> h;
+        mp[t].pb({l,h});
+    }
+    ll ptime = 0,mn = m,mx = m;
+    each(record,mp){
+        ll time = record.f;
+        pii effRange = findEffRange(record.s);
+        if(effRange.f > effRange.s){
+            NN;
+            return;
+        } else {
+            ll lower = effRange.f,upper = effRange.s;
+            ll diff = time - ptime;
+            mn -= diff,mx += diff;
+            if(mn > upper or mx < lower){
+                NN;
+                return;
+            } else {
+                mn = max(mn,lower);
+                mx = min(mx,upper);
+            }
+            ptime = time;
+        }
+    }
+    YY;
     return;
+}
+pii findEffRange(vpii &ranges){
+    pii ans = {-inf,inf};
+    each(range,ranges){
+        ans.f = max(ans.f,range.f);
+        ans.s = min(ans.s,range.s);
+    }
+    return ans;
 }

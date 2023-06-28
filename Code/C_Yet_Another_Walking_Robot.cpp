@@ -127,6 +127,7 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
+void move(pii &pos,char ch);
 int main(){
     ios;
     int t = 1;
@@ -137,5 +138,34 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    string path;
+    cin >> path;
+    map<pii,int>seen;
+    pii pos = {0,0};
+    pii ans = {-inf,inf};
+    seen[pos]  = -1;
+    inc(i,0,n){
+        move(pos,path[i]);
+        if(seen.count(pos) and i - seen[pos] < ans.s - ans.f + 1){
+            ans.f = seen[pos] + 1;
+            ans.s = i;
+        }
+        seen[pos] = i;
+    }
+    if(ans.s is inf){
+        see(-1);
+    } else {
+        see(++ans.f << " " << ++ans.s);
+    }
     return;
+}
+void move(pii &pos,char ch){
+    switch(ch){
+        case 'L': pos.f--; break;
+        case 'R': pos.f++; break;
+        case 'U': pos.s++; break;
+        case 'D': pos.s--; break;
+    }
 }

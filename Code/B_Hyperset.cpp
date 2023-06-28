@@ -127,15 +127,45 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
+string build(string &first,string &second);
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
+    int n,k;
+    cin >> n >> k;
+    vector<string>arr(n);
+    readArray(arr);
+    set<string>seen = set<string>(all(arr));
+    int ans = 0;
+    inc(i,0,n){
+        inc(j,i + 1,n){
+            ans += seen.count(build(arr[i],arr[j]));
+        }
+    }
+    see(ans / 3);
     return;
+}
+string build(string &first,string &second){
+    string ans = "";
+    inc(i,0,first.sz()){
+        if(first[i] is second[i]){
+            ans += first[i];
+        } else {
+            if(first[i] isnt 'E' and second[i] isnt 'E'){
+                ans += 'E';
+            } else if(first[i] isnt 'S' and second[i] isnt 'S'){
+                ans += 'S';
+            } else {
+                ans += 'T';
+            }
+        }
+    }
+    return ans;
 }
