@@ -130,18 +130,55 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi arr(n);
+    int n,k;
+    cin >> n >> k;
+    vll arr(n);
     readArray(arr);
-    map<int,int>cnts;
-    
+    map<ll,ll>cnts;
+    each(value,arr){
+        cnts[value]++;
+    }
+    each(record,cnts){
+        if(record.s >= k){
+            see(0);
+            return;
+        }
+    }
+    ll target = 0;
+    sorted(arr);
+    map<ll,ll>cost;
+    map<ll,PQ<int>>steps;
+    inc(i,0,n){
+        ll value = arr[i],cst = 0;
+        while(value >= 0){
+            if(steps.count(value) and steps[value].sz() is k){
+                if(cst < steps[value].top()){
+                    cost[value] -= steps[value].top(); steps[value].pop();
+                    cost[value] += cst;
+                    steps[value].push(cst);
+                }
+            } else {
+                cost[value] += cst;
+                steps[value].push(cst);
+            }
+            cst++;
+            value = value is 0 ? value - 1 : value >> 1;
+        }
+    }
+    ll ans = inf;
+    each(element,steps){
+        ll value = element.f;
+        if(cost.count(value) and element.s.sz() is k){
+            ans = min(ans,cost[value]);
+        }
+    }
+    see(ans);
     return;
 }

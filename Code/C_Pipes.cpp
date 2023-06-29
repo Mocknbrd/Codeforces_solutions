@@ -127,6 +127,7 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
+bool solve(vector<string>&arr,int r,int c,set<char>&linear,set<char>&curved,int dir);
 int main(){
     ios;
     int t = 1;
@@ -139,9 +140,43 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vi arr(n);
+    vector<string>arr(2);
     readArray(arr);
-    map<int,int>cnts;
-    
+    set<char>linear = {'1','2'},curved = {'3','4','5','6'};
+    if(solve(arr,0,0,linear,curved,0)){
+        YY;
+    } else {
+        NN;
+    }
     return;
+}
+bool solve(vector<string>&arr,int r,int c,set<char>&linear,set<char>&curved,int dir){
+    int n = arr[0].sz();
+    if(r > 1 or c >= n or r < 0){
+        return r is 1 and c is n;
+    } else {
+        int nr = r,nc = c,ndir = dir;
+        if(linear.count(arr[r][c])){
+            switch(dir){
+                case 0: nc++; break;
+                case 1: nr++; break;
+                case 2: nr--;break;
+            }
+        } else {
+            switch(dir){
+                case 0: {
+                    if(r is 0){
+                        nr++;
+                        ndir = 1;
+                    } else {
+                        nr--;
+                        ndir = 2;
+                    }
+                } break;
+                case 1: nc++, ndir = 0; break;
+                case 2: nc++,ndir = 0; break;
+            }
+        }
+        return solve(arr,nr,nc,linear,curved,ndir);
+    }
 }
