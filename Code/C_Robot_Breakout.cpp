@@ -137,5 +137,29 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    int xmin = -1e5,xmax = 1e5,ymin = -1e5,ymax = 1e5;
+    while(n--){
+        int x,y,first,second,third,fourth;
+        cin >> x >> y >> first >> second >> third >> fourth;
+        if(first is 0){
+            xmin = max(xmin,x);
+        }
+        if(second is 0){
+            ymax = min(ymax,y);
+        }
+        if(third is 0){
+            xmax = min(xmax,x);
+        }
+        if(fourth is 0){
+            ymin = max(ymin,y);
+        }
+    }
+    if(xmax >= xmin and ymax >= ymin){
+        see(1 << " " << xmax << " " << ymax);
+    } else {
+        see(0);
+    }
     return;
 }

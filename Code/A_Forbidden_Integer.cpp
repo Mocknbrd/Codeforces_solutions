@@ -4,7 +4,7 @@ using namespace std;
     ios_base::sync_with_stdio(0); \
     cin.tie(0);                   \
     cout.tie(0);
-#define see(statement) cout << statement << endl
+#define see(statement) cout<<statement<<endl
 #define YY see("YES")
 #define NN see("NO")
 #define yy see("Yes")
@@ -137,5 +137,36 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n,x,k;
+    cin >> n >> k >> x;
+    if(x != 1){
+        YY;
+        vi ans(n,1);
+        see(ans.sz());
+        writeArray(ans);
+    } else {
+        if(k < 2){
+            NN;
+        } else if(n % 2 == 0){
+            YY;
+            vi ans(n / 2,2);
+            see(ans.sz());
+            writeArray(ans);
+        } else {
+            vi ans;
+            while(n > k){
+                ans.pb(2);
+                n -= 2;
+            }
+            if(n > 1){
+                ans.pb(n);
+                YY;
+                see(ans.sz());
+                writeArray(ans);
+            } else {
+                NN;
+            }
+        }
+    }
     return;
 }

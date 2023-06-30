@@ -4,7 +4,7 @@ using namespace std;
     ios_base::sync_with_stdio(0); \
     cin.tie(0);                   \
     cout.tie(0);
-#define see(statement) cout << statement << endl
+#define see(statement) cout<<statement<<endl
 #define YY see("YES")
 #define NN see("NO")
 #define yy see("Yes")
@@ -137,5 +137,19 @@ int main(){
     return 0;
 }
 void testcase(){
+    pll a,b,c;
+    cin >> a.f >> a.s >> b.f >> b.s >> c.f >> c.s;
+    ll ans = 0;
+    bool first = true;
+    if((b.f <= a.f and c.f <= a.f) or (b.f >= a.f and c.f >= a.f)){
+        first = false;
+        ll mn = min(b.f,c.f);
+        ans += abs(mn - a.f) + 1;
+    }
+    if((c.s <= a.s and b.s <= a.s) or (c.s >= a.s and b.s >= a.s)){
+        ll mn = min(c.s,b.s);
+        ans += abs(mn - a.s) + first;
+    }
+    see(ans);
     return;
 }

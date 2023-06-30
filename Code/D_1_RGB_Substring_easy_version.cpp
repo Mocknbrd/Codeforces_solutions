@@ -137,5 +137,24 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n,k;
+    cin >> n >> k;
+    string str;
+    cin >> str;
+    vector<string>cnds = {"RGB","GBR","BRG"};
+    vvi prefix(3,vi(n + 1,0));
+    inc(i,0,3){
+        string cnd = cnds[i];
+        inc(j,0,n){
+            prefix[i][j + 1] = prefix[i][j] + (str[j] isnt cnd[j % 3]);
+        }
+    }
+    int ans = inf;
+    for(int start = 0,end = k - 1; end < n; start++,end++){
+        inc(i,0,3){
+            ans = min(ans,prefix[i][end + 1] - prefix[i][start]);
+        }
+    }
+    see(ans);
     return;
 }

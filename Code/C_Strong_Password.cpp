@@ -4,7 +4,7 @@ using namespace std;
     ios_base::sync_with_stdio(0); \
     cin.tie(0);                   \
     cout.tie(0);
-#define see(statement) cout << statement << endl
+#define see(statement) cout<<statement<<endl
 #define YY see("YES")
 #define NN see("NO")
 #define yy see("Yes")
@@ -127,6 +127,8 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
+bool isSub(string &arr,string &cnd);
+bool solve(string &data,string &left,string &right,string &curr,int index,map<string,bool>&dp);
 int main(){
     ios;
     int t = 1;
@@ -137,5 +139,12 @@ int main(){
     return 0;
 }
 void testcase(){
+    string data;
+    cin >> data;
+    int m;
+    cin >> m;
+    string left,right;
+    cin >> left >> right;
+    
     return;
 }

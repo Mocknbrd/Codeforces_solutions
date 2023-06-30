@@ -130,12 +130,50 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    set<int>elements = set<int>(all(arr));
+    if(elements.sz() is n){
+        see(0);
+    } else {
+        inc(window,1,n + 1){
+            int ones = 0;
+            unordered_map<int,int>cnts;
+            each(value,arr){
+                cnts[value]++;
+            }
+            each(count,cnts){
+                ones += count.s is 1;
+            }
+            inc(i,0,window){
+                ones -= cnts[arr[i]]-- is 1;
+                ones += cnts[arr[i]] is 1;
+            }
+            slid_win(start,end,window,n){
+                if(ones is n - window){
+                    see(window);
+                    return;
+                }
+                ones -= cnts[arr[start - 1]]++ is 1;
+                ones += cnts[arr[start - 1]] is 1;
+                ones -= cnts[arr[end]]-- is 1;
+                ones += cnts[arr[end]] is 1;
+            }
+            if(ones is n - window){
+                see(window);
+                return;
+            }
+        }
+        see(inf);
+    }
     return;
 }

@@ -127,15 +127,69 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
+string findSum(string &first,string &second);
+string handler(string &number,int length);
 int main(){
     ios;
     int t = 1;
-    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    string number;
+    cin >> number;
+    string first,second;
+    if(n % 2 is 0){
+        see(handler(number,n / 2));
+    } else {
+        string ans1 = handler(number,n / 2);
+        string ans2 = handler(number,n / 2 - 1);
+        string ans3 = handler(number,n / 2 + 1);
+        see(min({ans1,ans2,ans3}));
+    }
     return;
+}
+string findSum(string &first,string &second){
+    int end1 = first.sz() - 1,end2 = second.sz() - 1;
+    int carry = 0;
+    string ans = "";
+    while(end1 >= 0 and end2 >= 0){
+        int digit1 = first[end1--] - '0';
+        int digit2 = first[end2--] - '0';
+        int sum = digit1 + digit2 + carry;
+        carry = sum / 10;
+        ans += to_string(sum % 10);
+    }
+    while(end1 >= 0){
+        int digit = first[end1--] - '0';
+        int sum = digit + carry;
+        carry = sum / 10;
+        ans += to_string(sum % 10);
+    }
+    while(end2 >= 0){
+        int digit = second[end2--] - '0';
+        int sum = digit + carry;
+        carry = sum / 10;
+        ans += to_string(sum % 10);
+    }
+    ans = carry > 0 ? ans + to_string(carry) : ans;
+    rev(ans);
+    return ans;
+}
+string handler(string &number,int length){
+    if(number[length] isnt '0'){
+        string first = number.substr(0,length);
+        string second = number.substr(length);
+        return findSum(first,second);
+    } else {
+        int left = length,right = length;
+        while(left >= 0 and number[left] is '0'){
+            left--;
+        }
+        // while(right )
+    }
 }
