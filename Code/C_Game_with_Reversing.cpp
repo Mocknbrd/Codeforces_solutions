@@ -22,7 +22,6 @@ using namespace std;
 #define rb pop_back
 #define gcd(a,b) __gcd(a,b)
 #define sz() size()
-#define vec(type) vector<type>
 #define ins(element) insert(element)
 #define br() cout<<endl
 #define cast(element,type) static_cast<type>(element)
@@ -90,17 +89,7 @@ vector<pair<tmp1,tmp2>>zipped(vector<tmp1>&arr1,vector<tmp2>&arr2){
     return ans;
 }
 template<typename tmp>
-vec(tmp)uniqueConsec(vector<tmp>&arr){
-    vec(tmp)ans;
-    inc(i,0,arr.sz()){
-        if(ans.sz() is 0 or ans.back() isnt arr[i]){
-            ans.pb(arr[i]);
-        }
-    }
-    return ans;
-} 
-template<typename tmp>
-vector<pair<int,tmp>>enumerated(vec(tmp)&arr){
+vector<pair<int,tmp>>enumerated(vector<tmp>&arr){
     vector<pair<int,tmp>>ans;
     inc(i,0,arr.sz()){
         ans.pb({i,arr[i]});
@@ -108,13 +97,13 @@ vector<pair<int,tmp>>enumerated(vec(tmp)&arr){
     return ans;
 }
 template<typename tmp>
-inline void readArray(vec(tmp)&arr,int start = 0){
+inline void readArray(vector<tmp>&arr,int start = 0){
     inc(i,start,arr.size()){
         cin >> arr[i];
     }
 }
 template<typename tmp>
-inline void readMatrix(vec(tmp)&matrix,int r = 0,int c = 0){
+inline void readMatrix(vector<vector<tmp>>&matrix,int r = 0,int c = 0){
     inc(i,r,matrix.size()){
         inc(j,c,matrix[i].size()){
             cin >> matrix[i][j];
@@ -122,14 +111,14 @@ inline void readMatrix(vec(tmp)&matrix,int r = 0,int c = 0){
     }
 }
 template<typename tmp> 
-inline void writeArray(vec(tmp)&arr,int start = 0){
+inline void writeArray(vector<tmp>&arr,int start = 0){
     inc(i,start,arr.size()){
         cout << arr[i] << " ";
     }
     br();
 }
 template<typename tmp> 
-inline tmp findMaxIndex(vec(tmp)&arr,int start = 0){
+inline tmp findMaxIndex(vector<tmp>&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
         ans = (arr[ans] > arr[i] ? ans : i);
@@ -137,7 +126,7 @@ inline tmp findMaxIndex(vec(tmp)&arr,int start = 0){
     return ans;
 }
 template<typename tmp> 
-inline tmp findMinIndex(vec(tmp)&arr,int start = 0){
+inline tmp findMinIndex(vector<tmp>&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
         ans = (arr[ans] < arr[i] ? ans : i);
@@ -145,7 +134,7 @@ inline tmp findMinIndex(vec(tmp)&arr,int start = 0){
     return ans;
 }
 template<typename tmp>
-inline void writeMatrix(vec(vec(tmp))&matrix,int r = 0,int c = 0){
+inline void writeMatrix(vector<vector<tmp>>&matrix,int r = 0,int c = 0){
     inc(i,r,matrix.size()){
         inc(j,c,matrix[i].size()){
             cout << matrix[i][j] << " ";
@@ -173,6 +162,7 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
+int diff(string &s1,string &s2);
 int main(){
     ios;
     int t = 1;
@@ -183,5 +173,22 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    string s1,s2;
+    cin >> s1 >> s2;
+    int front = diff(s1,s2);
+    rev(s2);
+    int back = diff(s1,s2);
+    int first = (front << 1) - front % 2;
+    int second = back is 0 ? 2 : (back << 1) - (1 - back % 2);
+    see(min(first,second));
     return;
+}
+int diff(string &s1,string &s2){
+    int ans = 0;
+    inc(i,0,s1.sz()){
+        ans += s1[i] isnt s2[i];
+    }
+    return ans;
 }

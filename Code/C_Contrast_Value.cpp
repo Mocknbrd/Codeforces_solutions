@@ -183,5 +183,15 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    vll arr(n);
+    readArray(arr);
+    vll uniqueArr = uniqueConsec(arr);
+    int ans = uniqueArr.sz();
+    inc_la(i,1,uniqueArr.sz(),1){
+        ans -= ((uniqueArr[i - 1] < uniqueArr[i] and uniqueArr[i] < uniqueArr[i + 1]) or (uniqueArr[i - 1] > uniqueArr[i] and uniqueArr[i] > uniqueArr[i + 1]));
+    }
+    see(ans);
     return;
 }

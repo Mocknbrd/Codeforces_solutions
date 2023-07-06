@@ -22,7 +22,6 @@ using namespace std;
 #define rb pop_back
 #define gcd(a,b) __gcd(a,b)
 #define sz() size()
-#define vec(type) vector<type>
 #define ins(element) insert(element)
 #define br() cout<<endl
 #define cast(element,type) static_cast<type>(element)
@@ -47,9 +46,6 @@ using namespace std;
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define loop(type,it,init,condition,update) for(type it = init;condition;update)
-#define list(first,second,container) for(auto &[first,second]: container)
-#define enumerate(first,second,container) list(first,second,enumerated(container))
-#define zip(first,second,container1,container2) list(first,second,zipped(container1,container2))
 #define enum_sub_type(type,submask,mask,equal) loop(type,submask,mask,(equal ? submask >= 0 : submask > 0),submask = (submask - 1) & mask)
 #define enum_sub(submask,mask,equal) enum_sub_type(int,submask,mask,equal) 
 #define rng_la(type,i,start,end,step,buffer) loop(type,i,start,i + buffer < end,i += step)
@@ -81,40 +77,14 @@ inline ll llmax(ll a,ll b){
 inline ll llmin(ll a,ll b){
     return a<b?a:b;
 }
-template<typename tmp1,typename tmp2>
-vector<pair<tmp1,tmp2>>zipped(vector<tmp1>&arr1,vector<tmp2>&arr2){
-    vector<pair<tmp1,tmp2>>ans;
-    inc(i,0,arr1.sz()){
-        ans.pb({arr1[i],arr2[i]});
-    }
-    return ans;
-}
 template<typename tmp>
-vec(tmp)uniqueConsec(vector<tmp>&arr){
-    vec(tmp)ans;
-    inc(i,0,arr.sz()){
-        if(ans.sz() is 0 or ans.back() isnt arr[i]){
-            ans.pb(arr[i]);
-        }
-    }
-    return ans;
-} 
-template<typename tmp>
-vector<pair<int,tmp>>enumerated(vec(tmp)&arr){
-    vector<pair<int,tmp>>ans;
-    inc(i,0,arr.sz()){
-        ans.pb({i,arr[i]});
-    }
-    return ans;
-}
-template<typename tmp>
-inline void readArray(vec(tmp)&arr,int start = 0){
+inline void readArray(vector<tmp>&arr,int start = 0){
     inc(i,start,arr.size()){
         cin >> arr[i];
     }
 }
 template<typename tmp>
-inline void readMatrix(vec(tmp)&matrix,int r = 0,int c = 0){
+inline void readMatrix(vector<vector<tmp>>&matrix,int r = 0,int c = 0){
     inc(i,r,matrix.size()){
         inc(j,c,matrix[i].size()){
             cin >> matrix[i][j];
@@ -122,14 +92,14 @@ inline void readMatrix(vec(tmp)&matrix,int r = 0,int c = 0){
     }
 }
 template<typename tmp> 
-inline void writeArray(vec(tmp)&arr,int start = 0){
+inline void writeArray(vector<tmp>&arr,int start = 0){
     inc(i,start,arr.size()){
         cout << arr[i] << " ";
     }
     br();
 }
 template<typename tmp> 
-inline tmp findMaxIndex(vec(tmp)&arr,int start = 0){
+inline tmp findMaxIndex(vector<tmp>&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
         ans = (arr[ans] > arr[i] ? ans : i);
@@ -137,7 +107,7 @@ inline tmp findMaxIndex(vec(tmp)&arr,int start = 0){
     return ans;
 }
 template<typename tmp> 
-inline tmp findMinIndex(vec(tmp)&arr,int start = 0){
+inline tmp findMinIndex(vector<tmp>&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
         ans = (arr[ans] < arr[i] ? ans : i);
@@ -145,7 +115,7 @@ inline tmp findMinIndex(vec(tmp)&arr,int start = 0){
     return ans;
 }
 template<typename tmp>
-inline void writeMatrix(vec(vec(tmp))&matrix,int r = 0,int c = 0){
+inline void writeMatrix(vector<vector<tmp>>&matrix,int r = 0,int c = 0){
     inc(i,r,matrix.size()){
         inc(j,c,matrix[i].size()){
             cout << matrix[i][j] << " ";
@@ -176,12 +146,38 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
+    int n,q;
+    cin >> n >> q;
+    vi arr(n);
+    readArray(arr);
+    deque<int>dq = deque<int>(all(arr));
+    map<int,pii>mp;
+    int turn = 1;
+    int mxIndex = findMaxIndex(arr);
+    until(dq.front() is arr[mxIndex]){
+        int first = dq.front(); dq.pop_front();
+        int second = dq.front(); dq.pop_front();
+        mp[turn++] = {first,second};
+        dq.push_front(max(first,second));
+        dq.pb(min(first,second));
+    }
+    vi ref = vi(all(dq));
+    while(q--){
+        ll m;
+        cin >> m;
+        if(m < mxIndex){
+            see(mp[m].f << " " << mp[m].s);
+        } else {
+            ll index = mod(m - mxIndex - 1,cast(n - 1,ll)) + 1;
+            see(arr[mxIndex] << " " << ref[index]); 
+        }
+    }
     return;
 }

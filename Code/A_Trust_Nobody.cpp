@@ -183,5 +183,33 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    if(n is 1){
+        if(arr[0] is 0){
+            see(0);
+        } else {
+            see(-1);
+        }
+    } else {
+        sorted(arr);
+        if(arr.front() is arr.back() and arr.front() is 0){
+            see(0);
+            return;
+        } else {
+            int ans = -1;
+            inc_la(i,0,n,1){
+                int truth = i + 1;
+                int liars = n - truth;
+                if(arr[i] <= liars and arr[i + 1] > liars){
+                    ans = liars;
+                    break;
+                }
+            }
+            see(ans);
+        }
+    }
     return;
 }
