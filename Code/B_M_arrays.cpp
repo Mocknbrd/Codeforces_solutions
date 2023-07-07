@@ -174,11 +174,6 @@ constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 const ll llzero=cast(0,ll);
 void testcase();
-vi generateAnsFront1(deque<int>front,deque<int>back,deque<int>elements,int a,int b);
-vi generateAnsFront2(deque<int>front,deque<int>back,deque<int>elements,int a,int b);
-vi generateAnsBack1(deque<int>front,deque<int>back,deque<int>elements,int a,int b);
-vi generateAnsBack2(deque<int>front,deque<int>back,deque<int>elements,int a,int b);
-bool validate(vi &cnd,int a,int b);
 int main(){
     ios;
     int t = 1;
@@ -189,169 +184,34 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n,a,b;
-    cin >> n >> a >> b;
-    if(a is 0 and b is 0){
-        inc(i,0,n){
-            cout << i + 1 << " ";
-        }
-        cout << endl;
-        return;
+    int n,m;
+    cin >> n >> m;
+    vi arr(n);
+    readArray(arr);
+    map<int,vi>info;
+    set<int>seen;
+    each(value,arr){
+        info[mod(value,m)].pb(value);
     }
-    if(a + b >= n - 1 or abs(a - b) > 1){
-        see(-1);
-    } else {
-        deque<int>elements;
-        inc(i,1,n + 1){
-            elements.pb(i);
-        }
-        deque<int>front,back;
-        int backCnt = 0,frontCnt = 0;
-        while(frontCnt isnt b){
-            front.pb(elements.front());
-            elements.pop_front();
-            frontCnt++;
-        }
-        while(backCnt isnt a){
-            back.pb(elements.back());
-            elements.rb();
-            backCnt++;
-        }
-        vi ans1 = generateAnsFront1(front,back,elements,a,b);
-        vi ans2 = generateAnsBack1(front,back,elements,a,b);
-        vi ans3 = generateAnsBack2(front,back,elements,a,b);
-        vi ans4 = generateAnsFront2(front,back,elements,a,b);
-        if(validate(ans1,a,b) is true){
-            writeArray(ans1);
-        } else if(validate(ans2,a,b) is true){
-            writeArray(ans2);
-        } else if(validate(ans3,a,b) is true){
-            writeArray(ans3);
-        } else if(validate(ans4,a,b) is true){
-            writeArray(ans4);
-        } else {
-            see(-1);
+    int ans = 0;
+    each(record,info){
+        int rem = record.f;
+        if(seen.count(rem) is false){
+            int complement = mod(m - rem,m);
+            seen.ins(rem);
+            seen.ins(complement);
+            if(info.count(complement) is false){
+                ans += info[rem].sz();
+            } else if(complement isnt rem){
+                ans++;
+                if(info[rem].sz() isnt info[complement].sz()){
+                    ans += abs(cast(info[rem].sz(),int) - cast(info[complement].sz(),int)) - 1;
+                }
+            } else {
+                ans++;
+            }
         }
     }
+    see(ans);
     return;
-}
-vi generateAnsFront1(deque<int>front,deque<int>back,deque<int>elements,int a,int b){
-    vi ans = {elements.front()};
-    elements.rf();
-    while(front.sz() and back.sz()){
-        if(a > b is 0){
-            ans.pb(back.front());
-            ans.pb(front.front());
-        } else {
-            ans.pb(front.front());
-            ans.pb(back.front());
-        }
-        back.rf();
-        front.rf();
-    }
-    while(front.sz()){
-        ans.pb(front.front());
-        front.rf();
-    }
-    while(back.sz()){
-        ans.pb(back.front());
-        back.rf();
-    }
-    while(elements.sz()){
-        ans.pb(elements.front());
-        elements.rf();
-    }
-    return ans;
-}
-vi generateAnsFront2(deque<int>front,deque<int>back,deque<int>elements,int a,int b){
-    vi ans = {elements.back()};
-    elements.rb();
-    while(front.sz() and back.sz()){
-        if(a > b){
-            ans.pb(back.front());
-            ans.pb(front.front());
-        } else {
-            ans.pb(front.front());
-            ans.pb(back.front());
-        }
-        back.rf();
-        front.rf();
-    }
-    while(front.sz()){
-        ans.pb(front.front());
-        front.rf();
-    }
-    while(back.sz()){
-        ans.pb(back.front());
-        back.rf();
-    }
-    while(elements.sz()){
-        ans.pb(elements.back());
-        elements.rb();
-    }
-    return ans;
-}
-vi generateAnsBack1(deque<int>front,deque<int>back,deque<int>elements,int a,int b){
-    vi ans = {elements.back()};
-    elements.rb();
-    while(front.sz() and back.sz()){
-        if(a > b){
-            ans.pb(back.back());
-            ans.pb(front.back());
-        } else {
-            ans.pb(front.back());
-            ans.pb(back.back());
-        }
-        back.rb();
-        front.rb();
-    }
-    while(front.sz()){
-        ans.pb(front.back());
-        front.rb();
-    }
-    while(back.sz()){
-        ans.pb(back.back());
-        back.rb();
-    }
-    while(elements.sz()){
-        ans.pb(elements.back());
-        elements.rb();
-    }
-    return ans;
-}
-vi generateAnsBack2(deque<int>front,deque<int>back,deque<int>elements,int a,int b){
-    vi ans = {elements.front()};
-    elements.rf();
-    while(front.sz() and back.sz()){
-        if(a > b){
-            ans.pb(back.back());
-            ans.pb(front.back());
-        } else {
-            ans.pb(front.back());
-            ans.pb(back.back());
-        }
-        back.rb();
-        front.rb();
-    }
-    while(front.sz()){
-        ans.pb(front.back());
-        front.rb();
-    }
-    while(back.sz()){
-        ans.pb(back.back());
-        back.rb();
-    }
-    while(elements.sz()){
-        ans.pb(elements.front());
-        elements.rf();
-    }
-    return ans;
-}
-bool validate(vi &cnd,int a,int b){
-    int mxma = 0,minima = 0;
-    inc_la(i,1,cnd.sz(),1){
-        mxma += cnd[i] > cnd[i - 1] and cnd[i] > cnd[i + 1];
-        minima += cnd[i] < cnd[i - 1] and cnd[i] < cnd[i + 1];
-    }
-    return mxma is a and minima is b;
 }

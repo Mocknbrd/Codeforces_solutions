@@ -20,6 +20,7 @@ using namespace std;
 #define s second
 #define pb push_back
 #define rb pop_back
+#define rf pop_front
 #define gcd(a,b) __gcd(a,b)
 #define sz() size()
 #define vec(type) vector<type>
