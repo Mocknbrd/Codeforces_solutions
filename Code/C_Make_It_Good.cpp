@@ -209,11 +209,11 @@ bool testCnd(vi &arr,int start){
     int begin = 0,end = cnd.sz() - 1;
     vi ans;
     while(begin <= end){
-        if(arr[begin] < arr[end]){
-            ans.pb(arr[begin++]);
+        if(cnd[begin] < cnd[end]){
+            ans.pb(cnd[begin++]);
         } else {
-            ans.pb(arr[end--]);
+            ans.pb(cnd[end--]);
         }
     }
-    return isSorted(ans) and !ans.empty();
+    return isSorted(ans);
 }
