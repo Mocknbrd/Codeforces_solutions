@@ -183,5 +183,26 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    map<int,int>values;
+    each(value,arr){
+        values[value]++;
+    }
+    int ans = 0;
+    inc(sum,0,101){
+        int cnd = 0,first = 0,second = sum;
+        while(first <= second){
+            if(first is second){
+                cnd += values[first++] / 2;
+            } else {
+                cnd += min(values[first++],values[second--]);
+            }
+        }
+        ans = max(ans,cnd);
+    }
+    see(ans);
     return;
 }

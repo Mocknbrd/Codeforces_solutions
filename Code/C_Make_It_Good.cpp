@@ -173,6 +173,7 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 void testcase();
+bool testCnd(vi &arr,int start);
 int main(){
     ios;
     int t = 1;
@@ -183,5 +184,36 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    int ans = n,start = 0,end = n;
+    while(start <= end){
+        int mid = (start + end) >> 1;
+        if(testCnd(arr,mid) is true){
+            ans = mid;
+            end = mid - 1;
+        } else {
+            start = mid + 1;
+        }
+    }
+    see(ans);
     return;
+}
+bool testCnd(vi &arr,int start){
+    vi cnd;
+    inc(i,start,arr.sz()){
+        cnd.pb(arr[i]);
+    }
+    int begin = 0,end = cnd.sz() - 1;
+    vi ans;
+    while(begin <= end){
+        if(arr[begin] < arr[end]){
+            ans.pb(arr[begin++]);
+        } else {
+            ans.pb(arr[end--]);
+        }
+    }
+    return isSorted(ans) and !ans.empty();
 }

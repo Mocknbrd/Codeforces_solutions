@@ -73,7 +73,7 @@ using namespace std;
 #define cnt(container,value) count(all(container),value)
 #define isSorted(container) is_sorted(all(container))
 #define rev(arr) reverse(all(arr))
-#define rsort(arr) sorted(arr); rev(arr);
+#define rsort(arr) sort(arr); rev(all(arr));
 #define slice(start,end) substr(start,end - (start) + 1)
 #define char_index(c) (c >= 'A' and c <= 'Z' ? c - 'A' : c - 'a')
 inline ll llmax(ll a,ll b){
@@ -172,6 +172,7 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
+const ll llzero=cast(0,ll);
 void testcase();
 int main(){
     ios;
@@ -183,5 +184,15 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    string str;
+    cin >> str;
+    int one = 0,zero = 0;
+    inc_la(i,0,n,1){
+        one += str[i] is '1' and str[i + 1] is '1';
+        zero += str[i] is '0' and str[i + 1] is '0';
+    }
+    see(max(one,zero));
     return;
 }

@@ -183,5 +183,40 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    vll arr(n);
+    readArray(arr);
+    vll pos,neg;
+    each(value,arr){
+        if(value < 0){
+            neg.pb(value);
+        } else {
+            pos.pb(value);
+        }
+    }
+    rsort(pos);
+    sorted(neg);
+    ll ans = - linf;
+    inc(pos_num,0,6){
+        int neg_num = 5 - pos_num;
+        if(neg_num <= neg.sz() and pos_num <= pos.sz()){
+            ll cnd = 1;
+            inc(i,0,pos_num){
+                cnd *= pos[i];
+            }
+            if(neg_num % 2 is 1){
+                rev(neg);
+            }
+            inc(i,0,neg_num){
+                cnd *= neg[i];
+            }
+            if(neg_num % 2 is 1){
+                rev(neg);
+            }
+            ans = max(ans,cnd);
+        }
+    }
+    see(ans);
     return;
 }

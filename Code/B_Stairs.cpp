@@ -73,7 +73,7 @@ using namespace std;
 #define cnt(container,value) count(all(container),value)
 #define isSorted(container) is_sorted(all(container))
 #define rev(arr) reverse(all(arr))
-#define rsort(arr) sorted(arr); rev(arr);
+#define rsort(arr) sort(arr); rev(all(arr));
 #define slice(start,end) substr(start,end - (start) + 1)
 #define char_index(c) (c >= 'A' and c <= 'Z' ? c - 'A' : c - 'a')
 inline ll llmax(ll a,ll b){
@@ -183,5 +183,27 @@ int main(){
     return 0;
 }
 void testcase(){
+    ll x;
+    cin >> x;
+    vll dp(31,0);
+    dp[0] = 1ll;
+    inc_type(ll,height,1,31){
+        dp[height] = 2 * dp[height - 1] + pow(2,2 * height);
+    }
+    vll prefix(32,0);
+    inc(i,1,32){
+        prefix[i] = prefix[i - 1] + dp[i - 1];
+    }
+    int ans = 0,start = 0,end = 31;
+    while(start <= end){
+        int mid = (start + end) >> 1;
+        if(prefix[mid] <= x){
+            ans = mid;
+            start = mid + 1;
+        } else {
+            end = mid - 1;
+        }
+    }
+    see(min(30,ans));
     return;
 }

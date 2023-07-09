@@ -73,7 +73,7 @@ using namespace std;
 #define cnt(container,value) count(all(container),value)
 #define isSorted(container) is_sorted(all(container))
 #define rev(arr) reverse(all(arr))
-#define rsort(arr) sorted(arr); rev(arr);
+#define rsort(arr) sort(arr); rev(all(arr));
 #define slice(start,end) substr(start,end - (start) + 1)
 #define char_index(c) (c >= 'A' and c <= 'Z' ? c - 'A' : c - 'a')
 inline ll llmax(ll a,ll b){
@@ -172,6 +172,7 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
+const ll llzero=cast(0,ll);
 void testcase();
 int main(){
     ios;
@@ -183,5 +184,29 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    vld xaxis,yaxis;
+    inc(i,0,2 * n){
+        ll x,y;
+        cin >> x >> y;
+        if(x isnt 0){
+            xaxis.pb(x);
+        }
+        if(y isnt 0){
+            yaxis.pb(y);
+        }
+    }
+    custSort(xaxis,[](ld &a,ld &b){
+        return abs(a) < abs(b);
+    });
+    custSort(yaxis,[](ld &a,ld &b){
+        return abs(a) < abs(b);
+    });
+    ld ans = 0;
+    inc(i,0,n){
+        ans += sqrt(xaxis[i] * xaxis[i] + yaxis[i] * yaxis[i]);
+    }
+    see(setprecision(17) << ans);
     return;
 }

@@ -183,5 +183,26 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    ll ans = 0;
+    int start = 0;
+    while(start < n){
+        int end = start + 1;
+        while(end < n and arr[end] >= arr[end - 1]){
+            end++;
+        }
+        if(end < n){
+            ll target = arr[end - 1];
+            while(end < n and arr[end] < arr[end - 1]){
+                end++;
+            }
+            ans += target - arr[end - 1];
+        }
+        start = end;
+    }
+    see(ans);
     return;
 }
