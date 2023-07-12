@@ -179,41 +179,26 @@ int main(){
     return 0;
 }
 void testcase(){
-    string arr;
-    cin >> arr;
-    int up = 0,down = 0,left = 0,right = 0;
-    each(character,arr){
-        up += character is 'U';
-        down += character is 'D';
-        left += character is 'L';
-        right += character is 'R';
-    }
-    if(min(up,down) is 0){
-        if(min(left,right) is 0){
-            see(0);
-        } else {
-            see(2);
-            see("LR");
-        }
-    } else if(min(left,right) is 0){
-        see(2);
-        see("UD");
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    if(n is 1){
+        see(-1);
     } else {
-        string ans = "";
-        inc(i,0,min(up,down)){
-            ans += "D";
+        int ans = inf;
+        map<int,int>lastpos;
+        inc(i,0,n){
+            if(lastpos.count(arr[i]) is true){
+                ans = min(ans,i - lastpos[arr[i]] + 1);
+            }
+            lastpos[arr[i]] = i;
         }
-        inc(i,0,min(left,right)){
-            ans += "L";
+        if(ans is inf){
+            see(-1);
+        } else {
+            see(ans);
         }
-        inc(i,0,min(up,down)){
-            ans += "U";
-        }
-        inc(i,0,min(left,right)){
-            ans += "R";
-        }
-        see(ans.sz());
-        see(ans);
     }
     return;
 }

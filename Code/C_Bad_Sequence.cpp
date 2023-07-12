@@ -43,6 +43,7 @@ using namespace std;
 #define PQ priority_queue
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
+#define elif else if
 #define loop(type,it,init,condition,update) for(type it = init;condition;update)
 #define list(first,second,container) for(auto &[first,second]: container)
 #define enumerate(first,second,container) list(first,second,enumerated(container))
@@ -179,41 +180,5 @@ int main(){
     return 0;
 }
 void testcase(){
-    string arr;
-    cin >> arr;
-    int up = 0,down = 0,left = 0,right = 0;
-    each(character,arr){
-        up += character is 'U';
-        down += character is 'D';
-        left += character is 'L';
-        right += character is 'R';
-    }
-    if(min(up,down) is 0){
-        if(min(left,right) is 0){
-            see(0);
-        } else {
-            see(2);
-            see("LR");
-        }
-    } else if(min(left,right) is 0){
-        see(2);
-        see("UD");
-    } else {
-        string ans = "";
-        inc(i,0,min(up,down)){
-            ans += "D";
-        }
-        inc(i,0,min(left,right)){
-            ans += "L";
-        }
-        inc(i,0,min(up,down)){
-            ans += "U";
-        }
-        inc(i,0,min(left,right)){
-            ans += "R";
-        }
-        see(ans.sz());
-        see(ans);
-    }
     return;
 }

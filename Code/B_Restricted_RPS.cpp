@@ -41,6 +41,7 @@ using namespace std;
 #define check(statement) cout<<"**************Check: "<<statement<<" **************"<<endl;
 #define pi 2*acos(0.0)
 #define PQ priority_queue
+#define elif else if
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define loop(type,it,init,condition,update) for(type it = init;condition;update)
@@ -169,6 +170,8 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 void testcase();
+void update(string &arr,string &ans,char curr,map<char,int>&count);
+char defeat(char move);
 int main(){
     ios;
     int t = 1;
@@ -179,41 +182,56 @@ int main(){
     return 0;
 }
 void testcase(){
-    string arr;
-    cin >> arr;
-    int up = 0,down = 0,left = 0,right = 0;
-    each(character,arr){
-        up += character is 'U';
-        down += character is 'D';
-        left += character is 'L';
-        right += character is 'R';
+    int n,rock,paper,sciss;
+    cin >> n >> rock >> paper >> sciss;
+    string bob;
+    cin >> bob;
+    map<char,int>count;
+    count['R'] = rock,count['P'] = paper,count['S'] = sciss;
+    string ans(n,'A');
+    vec(char) moves = {'R','P','S'};
+    each(move,moves){
+        update(bob,ans,move,count);
     }
-    if(min(up,down) is 0){
-        if(min(left,right) is 0){
-            see(0);
-        } else {
-            see(2);
-            see("LR");
+    inc(i,0,n){
+        if(ans[i] is 'A'){
+            each(move,moves){
+                if(count[move] > 0){
+                    ans[i] = move;
+                    count[move]--;
+                    break;
+                }
+            }
         }
-    } else if(min(left,right) is 0){
-        see(2);
-        see("UD");
-    } else {
-        string ans = "";
-        inc(i,0,min(up,down)){
-            ans += "D";
-        }
-        inc(i,0,min(left,right)){
-            ans += "L";
-        }
-        inc(i,0,min(up,down)){
-            ans += "U";
-        }
-        inc(i,0,min(left,right)){
-            ans += "R";
-        }
-        see(ans.sz());
+    }
+    int wins = 0;
+    inc(i,0,n){
+        wins += defeat(bob[i]) is ans[i];
+    }
+    if(wins >= ceil(n,2)){
+        YY;
         see(ans);
+    } else {
+        NN;
     }
     return;
+}
+void update(string &arr,string &ans,char curr,map<char,int>&count){
+    inc(i,0,arr.sz()){
+        if(defeat(arr[i]) is curr and count[curr] > 0){
+            ans[i] = curr;
+            count[curr]--;
+        }
+    }
+}
+char defeat(char move){
+    switch(move){
+        case 'R': return 'P';
+            break;
+        case 'P': return 'S';
+            break;
+        default: return 'R';
+            break;
+    }
+    return 'A';
 }
