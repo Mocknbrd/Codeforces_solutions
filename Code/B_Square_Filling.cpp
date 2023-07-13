@@ -173,26 +173,33 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vll arr(n);
-    readArray(arr);
-    if(*max_element(all(arr)) <= 0){
-        see(*max_element(all(arr)));
-    } else {
-        ll even = 0,odd = 0;
-        inc(i,0,n){
-            even += (i % 2 is 0) * max(0ll,arr[i]);
-            odd += (i % 2) * max(0ll,arr[i]);
+    int n,m;
+    cin >> n >> m;
+    vvi a(n,vi(m,0)),b(n,vi(m,0));
+    readMatrix(a);
+    vpii ans;
+    inc_la(row,0,n,1){
+        inc_la(col,0,m,1){
+            if(a[row][col] + a[row][col + 1] + a[row + 1][col] + a[row + 1][col + 1] is 4){
+                ans.pb({row + 1,col + 1});
+                b[row][col] = b[row][col + 1] = b[row + 1][col] = b[row + 1][col + 1] = 1;
+            }
         }
-        see(max(even,odd));
+    }
+    if(a is b){
+        see(ans.sz());
+        each(move,ans){
+            see(move.f << " " << move.s);
+        }
+    } else {
+        see(-1);
     }
     return;
 }

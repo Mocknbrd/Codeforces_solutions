@@ -182,17 +182,27 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vll arr(n);
-    readArray(arr);
-    if(*max_element(all(arr)) <= 0){
-        see(*max_element(all(arr)));
+    if(n is 1){
+        see("a");
+    } elif(n is 2){
+        see("ab");
     } else {
-        ll even = 0,odd = 0;
-        inc(i,0,n){
-            even += (i % 2 is 0) * max(0ll,arr[i]);
-            odd += (i % 2) * max(0ll,arr[i]);
+        inc(factor,1,n){
+            if(n % factor isnt 0){
+                string ans = "a";
+                while(ans.sz() isnt factor){
+                    ans += ans.back() + 1;
+                }
+                while(ans.sz() < n){
+                    ans += ans;
+                }
+                while(ans.sz() isnt n){
+                    ans.rb();
+                }
+                see(ans);
+                return;
+            }
         }
-        see(max(even,odd));
     }
     return;
 }

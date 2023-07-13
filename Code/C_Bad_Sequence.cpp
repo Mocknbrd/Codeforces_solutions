@@ -173,12 +173,34 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    string arr;
+    cin >> arr;
+    int closed = 0;
+    vec(char)stack;
+    inc(i,0,n){
+        if(arr[i] is ')'){
+            if(stack.empty() is true){
+                closed++;
+            } else {
+                stack.rb();
+            }
+        } else {
+            stack.pb(arr[i]);
+        }
+    }
+    if(stack.sz() <= 1 and closed <= 1 and stack.sz() is closed){
+        yy;
+    } else {
+        nn;
+    }
     return;
 }
