@@ -1,7 +1,4 @@
-#include <bits/stdc++.h> 
-#pragma GCC optimize("O2")
-#pragma GCC optimize("Ofast")
-#pragma GCC target("avx,avx2,fma")   
+#include <bits/stdc++.h>    
 using namespace std;
 #define ios                           ios_base::sync_with_stdio(0);     cin.tie(0);                       cout.tie(0);
 #define see(statement) cout << statement << endl
@@ -176,7 +173,7 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
@@ -185,19 +182,20 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vi arr(n);
-    readArray(arr);
-    int ans = 0;
-    set<int>seen;
-    int curr = 0;
-    each(value,arr){
-        seen.ins(curr);
-        curr ^= value;
-        each_key(cnd,seen){
-            ans = max(ans,curr ^ cnd);
+    if(n % 2 is 0){
+        NN;
+    } else {
+        YY;
+        vi ans(2 * n,0);
+        bool greater = true;
+        inc(i,0,n){
+            int smaller = (i << 1) + 1;
+            int bigger = (i << 1) + 2;
+            ans[i] = greater is true ? smaller : bigger;
+            ans[i + n] = greater is true ? bigger : smaller;
+            greater = !greater;
         }
-        seen.ins(curr);
+        writeArray(ans);
     }
-    see(ans);
     return;
 }

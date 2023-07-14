@@ -3,7 +3,7 @@
 #pragma GCC optimize("Ofast")
 #pragma GCC target("avx,avx2,fma")   
 using namespace std;
-#define ios                           ios_base::sync_with_stdio(0);     cin.tie(0);                       cout.tie(0);
+#define ios ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 #define see(statement) cout << statement << endl
 #define YY see("YES")
 #define NN see("NO")
@@ -185,19 +185,25 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vi arr(n);
+    vi arr(n << 2);
     readArray(arr);
-    int ans = 0;
-    set<int>seen;
-    int curr = 0;
-    each(value,arr){
-        seen.ins(curr);
-        curr ^= value;
-        each_key(cnd,seen){
-            ans = max(ans,curr ^ cnd);
+    inc(i,1,arr.sz()){
+        int area = arr[0] * arr[i];
+        map<int,int>counts;
+        set<int>values;
+        each(value,arr){
+            counts[value]++;
+            values.ins(value);
         }
-        seen.ins(curr);
+        bool isAns = true;
+        each_key(value,values){
+            if(area % value isnt 0){
+                isAns = false;
+                break;
+            } else {
+                
+            }
+        }
     }
-    see(ans);
     return;
 }

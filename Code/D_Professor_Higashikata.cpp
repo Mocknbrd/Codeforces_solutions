@@ -183,21 +183,6 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi arr(n);
-    readArray(arr);
-    int ans = 0;
-    set<int>seen;
-    int curr = 0;
-    each(value,arr){
-        seen.ins(curr);
-        curr ^= value;
-        each_key(cnd,seen){
-            ans = max(ans,curr ^ cnd);
-        }
-        seen.ins(curr);
-    }
-    see(ans);
+    
     return;
 }
