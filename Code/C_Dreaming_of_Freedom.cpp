@@ -183,53 +183,15 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi arr(n << 2);
-    readArray(arr);
-    sorted(arr);
-    int area = arr.front() * arr.back();
-    map<int,int>counts;
-    set<int>values;
-    each(value,arr){
-        counts[value]++;
-        values.ins(value);
-    }
-    bool isAns = true;
-    each_key(value,values){
-        if(counts.count(value) is false){
-            continue;
-        } elif(area % value isnt 0){
-            isAns = false;
-            break;
-        } else {
-            int second = area / value;
-            if(counts.count(second) is false){
-                isAns = false;
-                break;
-            } else {
-                if(value is second){
-                    if(counts[value] % 4 isnt 0){
-                        isAns = false;
-                        break;
-                    } else {
-                        counts.erase(value);
-                    }
-                } else {
-                    int numRectangles = min(counts[value] >> 1,counts[second] >> 1);
-                    counts[value] -= (numRectangles << 1);
-                    counts[second] -= (numRectangles << 1);
-                    if(counts[value] isnt 0 or counts[second] isnt 0){
-                        isAns = false;
-                        break;
-                    } else {
-                        counts.erase(value);
-                        counts.erase(second);
-                    }
-                }
-            }
+    int n,m;
+    cin >> n >> m;
+    int factor = n,div = 2;
+    while(div * div <= n){
+        if(n % div is 0){
+            factor = min({factor,div,n / div});
         }
+        div++;
     }
-    isAns is true ? YY : NN;
+    factor > m or n is 1 ? YY : NN;
     return;
 }

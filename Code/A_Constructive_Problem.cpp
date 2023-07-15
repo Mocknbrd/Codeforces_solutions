@@ -183,53 +183,48 @@ int main(){
     return 0;
 }
 void testcase(){
+    set<int>first,second;
     int n;
     cin >> n;
-    vi arr(n << 2);
+    vi arr(n);
     readArray(arr);
-    sorted(arr);
-    int area = arr.front() * arr.back();
-    map<int,int>counts;
-    set<int>values;
-    each(value,arr){
-        counts[value]++;
-        values.ins(value);
+    inc(i,0,n + 1){
+        first.ins(i);
+        second.ins(i);
     }
-    bool isAns = true;
-    each_key(value,values){
-        if(counts.count(value) is false){
-            continue;
-        } elif(area % value isnt 0){
-            isAns = false;
-            break;
-        } else {
-            int second = area / value;
-            if(counts.count(second) is false){
-                isAns = false;
+    int before = -1,after = -1;
+    each(value,arr){
+        first.erase(value);
+    }
+    before = *first.begin();
+    if(before is n){
+        nn;
+    } else {
+        int left = inf,right = inf;
+        inc(i,0,n){
+            if(arr[i] is before + 1){
+                left = i;
                 break;
-            } else {
-                if(value is second){
-                    if(counts[value] % 4 isnt 0){
-                        isAns = false;
-                        break;
-                    } else {
-                        counts.erase(value);
-                    }
-                } else {
-                    int numRectangles = min(counts[value] >> 1,counts[second] >> 1);
-                    counts[value] -= (numRectangles << 1);
-                    counts[second] -= (numRectangles << 1);
-                    if(counts[value] isnt 0 or counts[second] isnt 0){
-                        isAns = false;
-                        break;
-                    } else {
-                        counts.erase(value);
-                        counts.erase(second);
-                    }
-                }
             }
         }
+        dec(i,n - 1,0){
+            if(arr[i] is before + 1){
+                right = i;
+                break;
+            }
+        }
+        if(left is inf){
+            yy;
+        } else {
+            inc(i,left,right + 1){
+                arr[i] = before;
+            }
+            each(value,arr){
+                second.erase(value);
+            }
+            after = *second.begin();
+            after - before is 1 ? yy : nn;
+        }
     }
-    isAns is true ? YY : NN;
     return;
 }

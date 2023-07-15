@@ -185,51 +185,29 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vi arr(n << 2);
+    vi arr(n);
     readArray(arr);
-    sorted(arr);
-    int area = arr.front() * arr.back();
-    map<int,int>counts;
-    set<int>values;
+    map<int,int>primes;
     each(value,arr){
-        counts[value]++;
-        values.ins(value);
-    }
-    bool isAns = true;
-    each_key(value,values){
-        if(counts.count(value) is false){
-            continue;
-        } elif(area % value isnt 0){
-            isAns = false;
-            break;
-        } else {
-            int second = area / value;
-            if(counts.count(second) is false){
-                isAns = false;
-                break;
-            } else {
-                if(value is second){
-                    if(counts[value] % 4 isnt 0){
-                        isAns = false;
-                        break;
-                    } else {
-                        counts.erase(value);
-                    }
-                } else {
-                    int numRectangles = min(counts[value] >> 1,counts[second] >> 1);
-                    counts[value] -= (numRectangles << 1);
-                    counts[second] -= (numRectangles << 1);
-                    if(counts[value] isnt 0 or counts[second] isnt 0){
-                        isAns = false;
-                        break;
-                    } else {
-                        counts.erase(value);
-                        counts.erase(second);
-                    }
-                }
+        int curr = value;
+        int prime = 2;
+        while(prime * prime <= curr){
+            while(curr % prime is 0){
+                curr /= prime;
+                primes[prime]++;
             }
+            prime++;
+        }
+        if(curr isnt 1){
+            primes[curr]++;
         }
     }
-    isAns is true ? YY : NN;
+    int ans = 0,ones = 0;
+    each(prime,primes){
+        ans += prime.s >> 1;
+        ones += prime.s % 2;
+    }
+    ans += ones / 3;
+    see(ans);
     return;
 }
