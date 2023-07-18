@@ -174,45 +174,39 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 void testcase();
-int getRem(int first,int second,int parity);
+ll solve(ll a,ll b);
+map<ll,ll>graph;
 int main(){
     ios;
     int t = 1;
     cin >> t;
+    graph[9] = 8; graph[8] = 6; graph[6] = 2; graph[2] = 4; graph[4] = 8;
+    graph[1] = 2; graph[7] = 4;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi a(n),b(n);
-    readArray(a);
-    readArray(b);
-    if(*max_element(all(a)) is 0 or *max_element(all(b)) is 0 or a is b){
-        YY;
-    } else {
-        set<int>rems;
-        inc(i,0,n){
-            if(a[i] isnt 0 or b[i] isnt 0){
-                rems.ins(getRem(a[i],b[i],0));
-            }
-        }
-        rems.sz() is 1 ? YY : NN;
-    }
+    ll curr,k;
+    cin >> curr >> k;
+    see(max(curr * k,solve(curr,k)));
     return;
 }
-int getRem(int first,int second,int parity){
-    if(first is 0){
-        return mod(parity,3);
-    } elif(second is 0){
-        return mod(parity + 1,3);
-    } elif(first >= (second << 1)){
-        return getRem(mod(first,second << 1),second,parity);
-    } elif(second >= (first << 1)){
-        return getRem(first,mod(second,first << 1),parity);
+ll solve(ll a,ll b){
+    if(b is 1){
+        return a;
+    } if(a % 10 is 0){
+        return a * b;
+    } elif(a % 10 is 5){
+        return solve(a + 5,b - 1);
+    } elif(a % 10 is 4){
+        ll optFloor = (20ll * a - b) / 40ll;
+        ll optCeil = ceil(20ll * a - b, 40ll);
+        ll floorValue = (b + 20ll * optFloor) * (a - optFloor);
+        ll ceilValue = (b + 20ll * optCeil) * (a - optCeil);
+        return max({a * b,floorValue,ceilValue});
     } else {
-        return getRem(second,abs(first - second),parity + 1);
+        return solve(a + a % 10,b - 1);
     }
 }
