@@ -162,7 +162,7 @@ template<typename tmp> tmp mod(tmp number,tmp base){
     return number % base;
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    return (a / gcd(a,b)) * (b / gcd(a,b));
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -184,5 +184,33 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    string color;
+    cin >> color;
+    multiset<int>red,blue;
+    inc(i,0,n){
+        if(color[i] is 'R'){
+            red.ins(arr[i]);
+        } else {
+            blue.ins(arr[i]);
+        }
+    }
+    inc(i,0,n){
+        int element = i + 1;
+        auto blueCnd = blue.sz() is 0 ? multiset<int>::iterator(nullptr) : blue.lower_bound(element);
+        auto redCnd = red.sz() is 0 ? multiset<int>::iterator(nullptr) : --red.upper_bound(element);
+        if(blue.sz() isnt 0 and blueCnd isnt blue.end() and *blueCnd >= element){
+            blue.erase(blueCnd);
+        } elif(red.sz() isnt 0 and redCnd isnt red.end() and *redCnd <= element){
+            red.erase(redCnd);
+        } else {
+            NN;
+            return;
+        }
+    }
+    YY;
     return;
 }

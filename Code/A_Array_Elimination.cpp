@@ -162,7 +162,7 @@ template<typename tmp> tmp mod(tmp number,tmp base){
     return number % base;
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    return (a / gcd(a,b)) * (b / gcd(a,b));
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -184,5 +184,32 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    vi cnts(31,0);
+    each(element,arr){
+        int value = element;
+        while(value){
+            int pos = log2(value & (-value));
+            cnts[pos]++;
+            value ^= (1 << pos);
+        }
+    }
+    vi ans;
+    inc(count,1,n + 1){
+        bool cnd = true;
+        inc(pos,0,31){
+            if(cnts[pos] % count isnt 0){
+                cnd = false;
+                break;
+            }
+        }
+        if(cnd is true){
+            ans.pb(count);
+        }
+    }
+    writeArray(ans);
     return;
 }

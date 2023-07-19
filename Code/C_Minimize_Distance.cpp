@@ -174,6 +174,7 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 1e9 + 10;
 constexpr ll linf = 1e18 + 10;
 void testcase();
+void solve(vll &arr,vll &cnds,int k);
 int main(){
     ios;
     int t = 1;
@@ -184,5 +185,42 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n,k;
+    cin >> n >> k;
+    vll arr(n);
+    readArray(arr);
+    vll pos,neg;
+    each(value,arr){
+        if(value >= 0){
+            pos.pb(value);
+        } else {
+            neg.pb(abs(value));
+        }
+    }
+    vll poscnds = {0},negcnds = {0};
+    solve(pos,poscnds,k);
+    solve(neg,negcnds,k);
+    ll ans = 0;
+    each(cnd,poscnds){
+        ans += (cnd << 1ll);
+    }
+    each(cnd,negcnds){
+        ans += (cnd << 1ll);
+    }
+    ans -= max(*max_element(all(poscnds)),*max_element(all(negcnds)));
+    see(ans);
     return;
+}
+void solve(vll &arr,vll &cnds,int k){
+    rsort(arr);
+    int start = 0;
+    while(start < arr.sz()){
+        int end = start;
+        ll mx = -linf;
+        while(end < arr.sz() and end - start isnt k){
+            mx = max(mx,arr[end++]);
+        }
+        cnds.pb(mx);
+        start = end;
+    }
 }
