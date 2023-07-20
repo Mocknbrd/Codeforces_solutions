@@ -174,56 +174,45 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
 void testcase();
-ll getAns(ll discount,ll turns);
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    ll discount,turns;
-    cin >> discount >> turns;
-    ll ans = discount * turns;
-    if(mod(discount,10ll) is 0){
-        ans = max(ans,discount * turns);
-    } elif(mod(discount,10ll) is 5){
-        ans = max(ans,(discount + 5) * (turns - 1));
-    } else {
-        if(mod(discount,2ll) is 1){
-            discount += mod(discount,10ll);
-            turns--;
-        }
-        inc(turn,0,4){
-            if(turns > 0){
-                ans = max(ans,getAns(discount,turns));
-            }
-            discount += mod(discount,10ll);
-            turns--;
-        }
+    int n;
+    cin >> n;
+    vll arr(n);
+    readArray(arr);
+    sorted(arr);
+    ll sum = 0;
+    each(value,arr){
+        sum += value;
     }
-    see(ans);
+    int m;
+    cin >> m;
+    while(m--){
+        ll dragonDefense,dragonAttack;
+        cin >> dragonDefense >> dragonAttack;
+        ll ans = linf;
+        {
+            int pos = upper_bound(all(arr),dragonDefense) - arr.begin() - 1;
+            ll knightAttack = arr[pos],knightDef = sum - arr[pos];
+            ll ans1 = max(0ll,dragonDefense - knightAttack) + max(0ll,dragonAttack - knightDef);
+            ans = min(ans,ans1);
+        }
+        {
+            auto it = lower_bound(all(arr),dragonDefense);
+            it -= it is arr.end();
+            ll knightAttack = *it,knightDef = sum - knightAttack;
+            ll ans2 = max(0ll,dragonDefense - knightAttack) + max(0ll,dragonAttack - knightDef);
+            ans = min(ans,ans2);
+        }
+        see(ans);
+    }
     return;
-}
-ll getAns(ll discount,ll turns){
-    ll ans = discount * turns;
-    ll opt = (5 * turns - discount) / 40;
-    {
-        ll opt1 = min(opt,turns / 4);
-        if(opt1 > 0){
-            ll gamma = (discount + 20 * opt1) * (turns - 4 * opt1);
-            ans = max(ans,gamma);
-        }
-    }
-    {
-        ll opt2 = min(opt + 1,turns / 4);
-        if(opt2 > 0){
-            ll gamma = (discount + 20 * opt2) * (turns - 4 * opt2);
-            ans = max(ans,gamma);
-        }
-    }
-    return ans;
 }

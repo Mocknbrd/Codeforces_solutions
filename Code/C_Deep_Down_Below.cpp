@@ -174,7 +174,6 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
 void testcase();
-ll getAns(ll discount,ll turns);
 int main(){
     ios;
     int t = 1;
@@ -185,45 +184,55 @@ int main(){
     return 0;
 }
 void testcase(){
-    ll discount,turns;
-    cin >> discount >> turns;
-    ll ans = discount * turns;
-    if(mod(discount,10ll) is 0){
-        ans = max(ans,discount * turns);
-    } elif(mod(discount,10ll) is 5){
-        ans = max(ans,(discount + 5) * (turns - 1));
-    } else {
-        if(mod(discount,2ll) is 1){
-            discount += mod(discount,10ll);
-            turns--;
-        }
-        inc(turn,0,4){
-            if(turns > 0){
-                ans = max(ans,getAns(discount,turns));
+    int n;
+    cin >> n;
+    vpll caves;
+    while(n--){
+        int k;
+        cin >> k;
+        vll arr(k);
+        readArray(arr);
+        ll start = *min_element(all(arr)),end = *max_element(all(arr)) + 1,ans = linf;
+        while(start <= end){
+            ll mid = (start + end) >> 1;
+            ll value = mid;
+            each(element,arr){
+                value += value > element;
             }
-            discount += mod(discount,10ll);
-            turns--;
+            if(value - mid < k){
+                start = mid + 1;
+            } else {
+                ans = mid;
+                end = mid - 1;
+            }
+        }
+        caves.pb({ans,k});
+    }
+    sorted(caves);
+    vll power,number;
+    inc(i,0,caves.sz()){
+        power.pb(caves[i].f);
+        number.pb(caves[i].s);
+    }
+    ll start = power[0],end = power.back(),ans = end;
+    while(start <= end){
+        ll mid = (start + end) >> 1;
+        ll value = mid;
+        bool isAns = true;
+        inc(i,0,power.sz()){
+            if(value < power[i]){
+                isAns = false;
+                break;
+            }
+            value += number[i];
+        }
+        if(isAns is true){
+            ans = mid;
+            end = mid - 1;
+        } else {
+            start = mid + 1;
         }
     }
     see(ans);
     return;
-}
-ll getAns(ll discount,ll turns){
-    ll ans = discount * turns;
-    ll opt = (5 * turns - discount) / 40;
-    {
-        ll opt1 = min(opt,turns / 4);
-        if(opt1 > 0){
-            ll gamma = (discount + 20 * opt1) * (turns - 4 * opt1);
-            ans = max(ans,gamma);
-        }
-    }
-    {
-        ll opt2 = min(opt + 1,turns / 4);
-        if(opt2 > 0){
-            ll gamma = (discount + 20 * opt2) * (turns - 4 * opt2);
-            ans = max(ans,gamma);
-        }
-    }
-    return ans;
 }

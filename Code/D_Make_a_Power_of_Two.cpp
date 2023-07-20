@@ -174,7 +174,7 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
 void testcase();
-ll getAns(ll discount,ll turns);
+int getAns(ll target,ll number);
 int main(){
     ios;
     int t = 1;
@@ -185,45 +185,31 @@ int main(){
     return 0;
 }
 void testcase(){
-    ll discount,turns;
-    cin >> discount >> turns;
-    ll ans = discount * turns;
-    if(mod(discount,10ll) is 0){
-        ans = max(ans,discount * turns);
-    } elif(mod(discount,10ll) is 5){
-        ans = max(ans,(discount + 5) * (turns - 1));
-    } else {
-        if(mod(discount,2ll) is 1){
-            discount += mod(discount,10ll);
-            turns--;
-        }
-        inc(turn,0,4){
-            if(turns > 0){
-                ans = max(ans,getAns(discount,turns));
-            }
-            discount += mod(discount,10ll);
-            turns--;
-        }
+    ll n;
+    cin >> n;
+    vll cnds;
+    ll cnd = 1;
+    while(cnd <= linf){
+        cnds.pb(cnd);
+        cnd <<= 1ll;
+    }
+    int ans = inf;
+    each(cnd,cnds){
+        ans = min(ans,getAns(cnd,n));
     }
     see(ans);
     return;
 }
-ll getAns(ll discount,ll turns){
-    ll ans = discount * turns;
-    ll opt = (5 * turns - discount) / 40;
-    {
-        ll opt1 = min(opt,turns / 4);
-        if(opt1 > 0){
-            ll gamma = (discount + 20 * opt1) * (turns - 4 * opt1);
-            ans = max(ans,gamma);
+int getAns(ll target,ll number){
+    string targetStr = to_string(target);
+    string numberStr = to_string(number);
+    int index = 0;
+    inc(i,0,numberStr.sz()){
+        if(numberStr[i] is targetStr[index]){
+            if(++index is targetStr.sz()){
+                break;
+            }
         }
     }
-    {
-        ll opt2 = min(opt + 1,turns / 4);
-        if(opt2 > 0){
-            ll gamma = (discount + 20 * opt2) * (turns - 4 * opt2);
-            ans = max(ans,gamma);
-        }
-    }
-    return ans;
+    return numberStr.sz() - index + targetStr.sz() - index;
 }
