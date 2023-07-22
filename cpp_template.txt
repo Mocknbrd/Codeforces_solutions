@@ -1,9 +1,9 @@
-#include <bits/stdc++.h>    
+#include <bits/stdc++.h>
+#pragma GCC optimize("O2")
+#pragma GCC optimize("Ofast")
+#pragma GCC target("avx,avx2,fma")
 using namespace std;
-#define ios                       \
-    ios_base::sync_with_stdio(0); \
-    cin.tie(0);                   \
-    cout.tie(0);
+#define ios ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 #define see(statement) cout << statement << endl
 #define YY see("YES")
 #define NN see("NO")
@@ -11,7 +11,6 @@ using namespace std;
 #define nn see("No")
 #define is ==
 #define isnt !=
-#define endl "\n"
 #define f first
 #define Aa see("Alice")
 #define AA see("ALICE")
@@ -44,15 +43,17 @@ using namespace std;
 #define vpll vector<pll>
 #define check(statement) cout<<"**************Check: "<<statement<<" **************"<<endl;
 #define pi 2*acos(0.0)
-#define PQ priority_queue
+#define max_heap(tmp) priority_queue<tmp>
+#define min_heap(tmp) priority_queue<tmp,vec(tmp),greater<tmp>>
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
+#define elif else if
 #define loop(type,it,init,condition,update) for(type it = init;condition;update)
 #define list(first,second,container) for(auto &[first,second]: container)
 #define enumerate(first,second,container) list(first,second,enumerated(container))
 #define zip(first,second,container1,container2) list(first,second,zipped(container1,container2))
 #define enum_sub_type(type,submask,mask,equal) loop(type,submask,mask,(equal ? submask >= 0 : submask > 0),submask = (submask - 1) & mask)
-#define enum_sub(submask,mask,equal) enum_sub_type(int,submask,mask,equal) 
+#define enum_sub(submask,mask,equal) enum_sub_type(int,submask,mask,equal)
 #define rng_la(type,i,start,end,step,buffer) loop(type,i,start,i + buffer < end,i += step)
 #define inc_la(i,start,end,buffer) rng_la(int,i,start,end,1,buffer)
 #define slid_win(left,right,size,end) for(int left = 1, right = size; right < end; left++,right++)
@@ -99,7 +100,7 @@ vec(tmp)uniqueConsec(vector<tmp>&arr){
         }
     }
     return ans;
-} 
+}
 template<typename tmp>
 vector<pair<int,tmp>>enumerated(vec(tmp)&arr){
     vector<pair<int,tmp>>ans;
@@ -122,14 +123,14 @@ inline void readMatrix(vec(tmp)&matrix,int r = 0,int c = 0){
         }
     }
 }
-template<typename tmp> 
+template<typename tmp>
 inline void writeArray(vec(tmp)&arr,int start = 0){
     inc(i,start,arr.size()){
         cout << arr[i] << " ";
     }
     br();
 }
-template<typename tmp> 
+template<typename tmp>
 inline tmp findMaxIndex(vec(tmp)&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
@@ -137,7 +138,7 @@ inline tmp findMaxIndex(vec(tmp)&arr,int start = 0){
     }
     return ans;
 }
-template<typename tmp> 
+template<typename tmp>
 inline tmp findMinIndex(vec(tmp)&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
@@ -161,7 +162,7 @@ template<typename tmp> tmp mod(tmp number,tmp base){
     return number % base;
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    return (a * b) / gcd(a,b);
+    return (a / gcd(a,b)) * (b / gcd(a,b));
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -170,8 +171,8 @@ template<typename tmp>
 inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRight = true){
     return (incLeft ? mid >= left : mid > left) and (incRight ? mid <= right : mid < right);
 }
-constexpr int inf = 1e9 + 10;
-constexpr ll linf = 1e18 + 10;
+constexpr int inf = 2e9;
+constexpr ll linf = 2e18;
 void testcase();
 int main(){
     ios;
