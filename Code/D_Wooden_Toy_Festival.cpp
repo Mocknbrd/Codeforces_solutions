@@ -184,19 +184,5 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n,k;
-    cin >> n >> k;
-    vi arr(n);
-    readArray(arr);
-    sorted(arr);
-    inc(i,0,n){
-        arr[i] -= i;
-    }
-    ll ans = 1;
-    while(k--){
-        int pos = upper_bound(all(arr),ans) - arr.begin();
-        ans += pos;
-    }
-    see(ans);
     return;
 }
