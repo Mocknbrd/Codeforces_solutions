@@ -184,5 +184,39 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    ll n,x,y;
+    cin >> n >> x >> y;
+    string a,b;
+    cin >> a >> b;
+    vb diff(n,false);
+    inc(i,0,n){
+        diff[i] = a[i] isnt b[i];
+    }
+    vi segments;
+    int start = 0,ans = 0;
+    while(start < n){
+        if(diff[start] is false){
+            start++;
+        } else {
+            int end = start;
+            while(end < n and diff[end] is true){
+                end++;
+            }
+            segments.pb(end - start);
+            ans += end - start;
+            start = end;
+        }
+    }
+    if(mod(ans,2)){
+        see(-1);
+    } elif(ans isnt 2){
+        see((ans >> 1) * y);
+    } else {
+        if(segments.sz() is 2){
+            see(y);
+        } else {
+            see(min(y << 1,x));
+        }
+    }
+    return;
 }

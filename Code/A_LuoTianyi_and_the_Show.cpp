@@ -184,5 +184,26 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n,m;
+    cin >> n >> m;
+    vi arr(n);
+    readArray(arr);
+    int ones = 0,twos = 0;
+    set<int>values;
+    each(value,arr){
+        ones += value is -1;
+        twos += value is -2;
+        if(value > 0){
+            values.ins(value);
+        }
+    }
+    vi pos(all(values));
+    int ans = min(m,cast(pos.sz(),int) + max(ones,twos));
+    inc(i,0,pos.sz()){
+        int position = pos[i];
+        int cnd = 1 + min(position - 1,i + ones) + min(m - position,cast(pos.sz(),int) - i - 1 + twos);
+        ans = max(ans,cnd);
+    }
+    see(ans);
+    return;
 }

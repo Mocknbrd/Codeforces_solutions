@@ -184,5 +184,11 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vll arr(n);
+    readArray(arr);
+    vpii negatives;
+    int start = 0;
+    return;
 }

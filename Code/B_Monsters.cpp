@@ -184,5 +184,22 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n,k;
+    cin >> n >> k;
+    vi arr(n);
+    readArray(arr);
+    map<int,vi> pos;
+    inc(i,0,n){
+        pos[mod(arr[i],k)].pb(i + 1);
+    }
+    vi ans = pos[0];
+    iter_rev(it,pos){
+        if(it->first isnt 0){
+            inc(i,0,it->s.sz()){
+                ans.pb(it->second[i]);
+            }
+        }
+    }
+    writeArray(ans);
+    return;
 }

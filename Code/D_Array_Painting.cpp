@@ -177,12 +177,66 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    vpii two,one;
+    int start = 0;
+    while(start < n){
+        while(start < n and arr[start] is 0){
+            start++;
+        }
+        if(start < n) {
+            int end = start;
+            bool isTwo = false;
+            while(end < n and arr[end] isnt 0){
+                isTwo = isTwo or (arr[end] is 2);
+                end++;
+            }
+            if(isTwo is true){
+                two.pb({start,end - 1});
+            } else {
+                one.pb({start,end - 1});
+            }
+            start = end + 1;
+        }
+    }
+    set<int>seen;
+    int ans = two.sz() + one.sz();
+    each(cluster,two){
+        int start = cluster.f,end = cluster.s;
+        if(start - 1 >= 0 and seen.count(start - 1) is false){
+            seen.ins(start - 1);
+        }
+        if(end + 1 < n and seen.count(end + 1) is false){
+            seen.ins(end + 1);
+        }
+        inc(i,start,end + 1){
+            seen.ins(i);
+        }
+    }
+    each(cluster,one){
+        int start = cluster.f,end = cluster.s;
+        if(start - 1 >= 0 and seen.count(start - 1) is false){
+            seen.ins(start - 1);
+        } elif(end + 1 < n and seen.count(end + 1) is false){
+            seen.ins(end + 1);
+        }
+        inc(i,start,end + 1){
+            seen.ins(i);
+        }
+    }
+    inc(i,0,n){
+        ans += (seen.count(i) is false);
+    }
+    see(ans);
+    return;
 }

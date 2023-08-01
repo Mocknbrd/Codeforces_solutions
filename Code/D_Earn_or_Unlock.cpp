@@ -173,16 +173,54 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
+class BitsetCompare{
+    public:
+    bool operator()(const bitset<100001>&b1,const bitset<100001>&b2) const {
+        return b1.to_string() < b2.to_string();
+    }
+};
 void testcase();
+ll solve(vi &arr,int index,int next,bitset<100001>&state,unordered_map<bitset<100001>,ll>&dp);
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    unordered_map<bitset<100001>,ll>dp;
+    bitset<100001>state;
+    state[0] = 1;
+    see(solve(arr,0,1,state,dp));
+    return;
+}
+ll solve(vi &arr,int index,int next,bitset<100001>&state,unordered_map<bitset<100001>,ll>&dp){
+    if(index is next){
+        ll ans = 0;
+        inc(i,0,arr.sz()){
+            ans += state[i] * arr[i];
+        }
+        return dp[state] = ans;
+    } elif(dp.count(state) is true){
+        return dp[state];
+    } else {
+        ll ans1 = solve(arr,index + 1,next,state,dp);
+        state[index] = 0;
+        inc(i,next,min(next + arr[index],cast(arr.sz(),int))){
+            state[i] = 1;
+        }
+        ll ans2 = solve(arr,index + 1,min(next + arr[index],cast(arr.sz(),int)),state,dp);
+        state[index] = 1;
+        inc(i,next,min(next + arr[index],cast(arr.sz(),int))){
+            state[i] = 0;
+        }
+        return dp[state] = max(ans1,ans2);
+    }
 }

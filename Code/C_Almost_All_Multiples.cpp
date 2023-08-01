@@ -184,5 +184,31 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n,x;
+    cin >> n >> x;
+    vi ans(n + 1,0);
+    inc(i,0,ans.sz()){
+        ans[i] = i;
+    }
+    swap(ans[1],ans.back());
+    if(x isnt n){
+        swap(ans[1],ans[x]);
+        int index = x + x;
+        int prev = x;
+        while(index < n){
+            if(ans[prev] % ans[index] is 0 and ans[prev] % index is 0 and ans[index] % prev is 0){
+                swap(ans[prev],ans[index]);
+                prev = index;
+            }
+            index += x;
+        }
+        inc(i,2,n){
+            if(ans[i] % i isnt 0){
+                see(-1);
+                return;
+            }
+        }
+    }
+    writeArray(ans,1);
+    return;
 }

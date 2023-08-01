@@ -184,5 +184,43 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    if(n is 1){
+        see(1);
+    } else {
+        int targetValue = arr.front() is n ? n - 1 : n;
+        int right = -1;
+        inc(i,0,n){
+            if(arr[i] is targetValue){
+                right = i;
+                break;
+            }
+        }
+        vi ans;
+        inc(i,right + 1,n){
+            ans.pb(arr[i]);
+        }
+        ans.pb(arr[right]);
+        inc(i,0,right){
+            ans.pb(arr[i]);
+        }
+        dec(leftBound,right - 1,0){
+            vi cnd;
+            inc(i,right,n){
+                cnd.pb(arr[i]);
+            }
+            dec(i,right - 1,leftBound){
+                cnd.pb(arr[i]);
+            }
+            inc(i,0,leftBound){
+                cnd.pb(arr[i]);
+            }
+            ans = max(ans,cnd);
+        }
+        writeArray(ans);
+    }
+    return;
 }

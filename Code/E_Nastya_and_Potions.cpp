@@ -44,7 +44,7 @@ using namespace std;
 #define check(statement) cout<<"**************Check: "<<statement<<" **************"<<endl;
 #define pi 2*acos(0.0)
 #define max_heap(tmp) priority_queue<tmp>
-#define min_heap(tmp) priority_queue<tmp,vector<tmp>,greater<tmp>>
+#define min_heap(tmp) priority_queue<tmp,vec(tmp),greater<tmp>>
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define elif else if
@@ -174,6 +174,7 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
 void testcase();
+ll findAns(vll &ans,vll &cost,vvi &recipe,int potion);
 int main(){
     ios;
     int t = 1;
@@ -184,5 +185,46 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n,k;
+    cin >> n >> k;
+    vll cost(n + 1);
+    readArray(cost,1);
+    vll ans(n + 1,linf);
+    inc(i,0,k){
+        int index;
+        cin >> index;
+        ans[index] = 0;
+    }
+    vvi recipe(n + 1);
+    inc(potion,1,n + 1){
+        int m;
+        cin >> m;
+        while(m--){
+            int index;
+            cin >> index;
+            recipe[potion].pb(index);
+        }
+    }
+    inc(potion,1,ans.sz()){
+        if(ans[potion] is linf){
+            findAns(ans,cost,recipe,potion);
+        }
+    }
+    writeArray(ans,1);
+    return;
+}
+ll findAns(vll &ans,vll &cost,vvi &recipe,int potion){
+    if(ans[potion] isnt linf){
+        return ans[potion];
+    } else {
+        ans[potion] = cost[potion];
+        if(recipe[potion].empty() is false){
+            ll cnd = 0;
+            each(ing,recipe[potion]){
+                cnd += findAns(ans,cost,recipe,ing);
+            }
+            ans[potion] = min(cnd,ans[potion]);
+        }
+        return ans[potion];
+    }
 }

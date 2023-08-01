@@ -173,6 +173,8 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
+bool isOneColor(string arr);
+bool checkBalanced(string &arr);
 void testcase();
 int main(){
     ios;
@@ -184,5 +186,67 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    string arr;
+    cin >> arr;
+    int open = 0,close = 0;
+    each(character,arr){
+        open += character is '(';
+        close += character is ')';
+    }
+    if(open isnt close){
+        see(-1);
+    } elif(isOneColor(arr)){
+        see(1);
+        inc(i,0,n){
+            cout << 1 << " ";
+        }
+        br();
+    } else {
+        vi second,stack;
+        inc(i,0,n){
+            if(arr[i] is '('){
+                stack.pb(i);
+            } elif(stack.empty() is false){
+                stack.rb();
+            } else {
+                second.pb(i);
+            }
+        }
+        each(index,stack){
+            second.pb(index);
+        }
+        vi color(n,0);
+        each(index,second){
+            color[index] = 2;
+        }
+        inc(i,0,n){
+            color[i] = color[i] is 0 ? 1 : color[i];
+        }
+        see(2);
+        writeArray(color);
+    }
+    return;
+}
+bool isOneColor(string arr){
+    if(checkBalanced(arr)){
+        return true;
+    } else {
+        rev(arr);
+        return checkBalanced(arr);
+    }
+}
+bool checkBalanced(string &arr){
+    vi stack;
+    inc(i,0,arr.sz()){
+        if(arr[i] is '('){
+            stack.pb(i);
+        } elif(stack.empty() is true){
+            return false;
+        } else {
+            stack.rb();
+        }
+    }
+    return stack.empty() is true;
 }

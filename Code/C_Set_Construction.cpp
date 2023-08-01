@@ -184,5 +184,47 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vvi graph(n);
+    vi degree(n,0);
+    inc(i,0,n){
+        string b;
+        cin >> b;
+        inc(j,0,n){
+            if(b[j] is '1'){
+                graph[i].pb(j);
+                degree[j]++;
+            }
+        }
+    }
+    vec(set<int>) sets(n);
+    inc(i,0,n){
+        sets[i].ins(i + 1);
+    }
+    queue<int>q;
+    inc(i,0,n){
+        if(degree[i] is 0){
+            q.push(i);
+        }
+    }
+    while(q.empty() is false){
+        int curr = q.front(); q.pop();
+        each(index,graph[curr]){
+            each(value,sets[curr]){
+                sets[index].ins(value);
+            }
+            if(--degree[index] is 0){
+                q.push(index);
+            }
+        }
+    }
+    each(element,sets){
+        cout << element.sz() << " ";
+        each_key(value,element){
+            cout << value << " ";
+        }
+        br();
+    }
+    return;
 }

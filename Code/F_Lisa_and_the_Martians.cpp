@@ -184,5 +184,35 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n,k;
+    cin >> n >> k;
+    vi arr(n);
+    readArray(arr);
+    map<int,vi>pos;
+    inc(i,0,n){
+        pos[arr[i]].pb(i + 1);
+    }
+    sorted(arr);
+    int ans = 0,first = 0,second = 0,mx = -inf;
+    inc_la(i,0,n,1){
+        int cnd = 0;
+        inc(pos,0,k){
+            int bit1 = (arr[i] >> pos) & 1;
+            int bit2 = (arr[i + 1] >> pos) & 1;
+            if(bit1 isnt bit2 or bit1 is 0){
+                cnd |= (1 << pos);
+            }
+        }
+        int res = (arr[i] ^ cnd) & (arr[i + 1] ^ cnd);
+        if(res > mx){
+            mx = res;
+            ans = cnd;
+            first = arr[i];
+            second = arr[i + 1];
+        }
+    }
+    int pos1 = pos[first].back(); pos[first].rb();
+    int pos2 = pos[second].back();
+    see(min(pos1,pos2) << " " << max(pos1,pos2) << " " << ans);
+    return;
 }

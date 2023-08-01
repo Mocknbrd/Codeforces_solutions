@@ -174,15 +174,45 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
 void testcase();
+int findScore(pii first,pii second);
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vpii arr;
+    inc(i,0,n){
+        pii curr;
+        cin >> curr.f >> curr.s;
+        if(arr.empty() is true or curr isnt arr.back()){
+            arr.pb(curr);
+        }
+    }
+    int ans = 1;
+    pii curr = {0,0};
+    each(score,arr){
+        pii first = {curr.f,score.f};
+        pii second = {curr.s,score.s};
+        ans += findScore(first,second) - (score.f is score.s);
+        curr = {min(score.f,score.s),min(score.f,score.s)};
+    }
+    see(ans);
+    return;
+}
+int findScore(pii first,pii second){
+    if(first.f > second.s or first.s < second.f){
+        return 0;
+    } elif(first.f >= second.f and first.s <= second.s){
+        return first.s - first.f + 1;
+    } else {
+        int mid = (first.f + first.s) >> 1;
+        return findScore({first.f,mid},second) + findScore({mid + 1,first.s},second);
+    }
 }

@@ -184,5 +184,6 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    
+    return;
 }

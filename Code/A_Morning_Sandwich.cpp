@@ -184,5 +184,19 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int b,c,h;
+    cin >> b >> c >> h;
+    int ans = inf;
+    int start = 0,end = b;
+    while(start <= end){
+        int mid = (start + end) >> 1;
+        if(mid - 1 <= c + h){
+            ans = mid + mid - 1;
+            start = mid + 1;
+        } else {
+            end = mid - 1;
+        }
+    }
+    see(ans);
+    return;
 }

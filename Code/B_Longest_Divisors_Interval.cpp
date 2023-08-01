@@ -184,5 +184,12 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    ll n;
+    cin >> n;
+    ll ans = 1;
+    while(n % ans is 0){
+        ans++;
+    }
+    see(ans - 1);
+    return;
 }

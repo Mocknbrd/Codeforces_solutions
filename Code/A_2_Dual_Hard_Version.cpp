@@ -184,5 +184,70 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vll arr(n);
+    readArray(arr);
+    if(isSorted(arr)){
+        see(0);
+    } else {
+        vpii pos,neg;
+        if(*min_element(all(arr)) < 0){
+            int index = 0;
+            inc(i,0,n){
+                if(arr[i] < arr[index]){
+                    index = i;
+                }
+            }
+            while(arr[index] > -20){
+                arr[index] += arr[index];
+                neg.pb({index + 1,index + 1});
+            }
+            dec(i,n - 1,0){
+                if(arr[i] > 0){
+                    neg.pb({i + 1,index + 1});
+                }
+            }
+            dec(i,n - 1,0){
+                if(i > 0){
+                    neg.pb({i,i + 1});
+                }
+            }
+            if(neg.sz() <= 31){
+                see(neg.sz());
+                each(step,neg){
+                    see(step.f << " " << step.s);
+                }
+                return;
+            }
+        }
+        if(*max_element(all(arr)) > 0){
+            int index = 0;
+            inc(i,0,n){
+                if(arr[i] > arr[index]){
+                    index = i;
+                }
+            }
+            while(arr[index] < 20){
+                arr[index] += arr[index];
+                pos.pb({index + 1,index + 1});
+            }
+            inc(i,0,n){
+                if(arr[i] < 0){
+                    pos.pb({i + 1,index + 1});
+                }
+            }
+            inc_la(i,0,n,1){
+                pos.pb({i + 2,i + 1});
+            }
+            if(pos.sz() <= 31){
+                see(pos.sz());
+                each(step,pos){
+                    see(step.f << " " << step.s);
+                }
+                return;
+            }
+        }
+    }
+    return;
 }

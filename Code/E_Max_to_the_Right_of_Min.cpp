@@ -177,12 +177,17 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    
+    return;
 }

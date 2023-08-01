@@ -44,7 +44,7 @@ using namespace std;
 #define check(statement) cout<<"**************Check: "<<statement<<" **************"<<endl;
 #define pi 2*acos(0.0)
 #define max_heap(tmp) priority_queue<tmp>
-#define min_heap(tmp) priority_queue<tmp,vector<tmp>,greater<tmp>>
+#define min_heap(tmp) priority_queue<tmp,vec(tmp),greater<tmp>>
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define elif else if
@@ -184,5 +184,58 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vll prefix(n - 1);
+    readArray(prefix);
+    set<ll>left;
+    inc(i,0,n){
+        left.ins(i + 1);
+    }
+    if(prefix[0] > n){
+        inc_la(i,0,prefix.sz(),1){
+            left.erase(prefix[i + 1] - prefix[i]);
+        }
+        if(left.sz() isnt 2 or *left.begin() + *left.rbegin() isnt prefix[0]){
+            NN;
+        } else {
+            YY;
+        }
+    } else {
+        int target = -1;
+        set<ll>seen;
+        seen.ins(prefix[0]);
+        inc_la(i,0,prefix.sz(),1){
+            if(prefix[i + 1] - prefix[i] > n or seen.count(prefix[i + 1] - prefix[i])){
+                target = i;
+                break;
+            } 
+            seen.ins(prefix[i + 1] - prefix[i]);
+        }
+        if(target is -1){
+            left.erase(prefix[0]);
+            inc_la(i,0,prefix.sz(),1){
+                left.erase(prefix[i + 1] - prefix[i]);
+            }
+            if(left.sz() isnt 1){
+                NN;
+            } else {
+                YY;
+            }
+        } else {
+            left.erase(prefix[0]);
+            inc_la(i,0,target + 1,1){
+                left.erase(prefix[i + 1] - prefix[i]);
+            }
+            inc_la(i,target + 1,prefix.sz(),1){
+                left.erase(prefix[i + 1] - prefix[i]);
+            }
+            if(left.sz() isnt 2 or prefix[target] + *left.begin() + *left.rbegin() isnt prefix[target + 1]){
+                NN;
+            } else {
+                YY;
+            }
+        }
+    }
+    return;
 }

@@ -184,5 +184,59 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n,k;
+    cin >> n >> k;
+    string src,target;
+    cin >> src >> target;
+    string srccpy = src,targetcpy = target;
+    sorted(srccpy);
+    sorted(targetcpy);
+    if(srccpy isnt targetcpy){
+        NN;
+    } else {
+        map<char,vi>pos;
+        inc(i,0,n){
+            pos[src[i]].pb(i);
+        }
+        if(n <= k){
+            src is target ? YY : NN;
+        } elif(n is k + 1){
+            if(src is target){
+                YY;
+            } else {
+                swap(src.front(),src.back());
+                src is target ? YY : NN;
+            }
+        } else {
+            set<int>swappable;
+            inc(i,0,n){
+                if(i + k < n){
+                    swappable.ins(i);
+                    swappable.ins(i + k);
+                }
+                if(i + k + 1 < n){
+                    swappable.ins(i + k + 1);
+                }
+            }
+            int missing = -1;
+            inc(i,0,n){
+                if(swappable.count(i) is false){
+                    missing = i;
+                    break;
+                }
+            }
+            if(missing is -1 or src[missing] is target[missing]){
+                YY;
+            } else {
+                each(position,pos[target[missing]]){
+                    if(mod(abs(missing - position),k) is 0 or mod(abs(missing - position),k + 1) is 0){
+                        YY;
+                        return;
+                    }
+                }
+                NN;
+            }
+        }
+    }
+    return;
 }

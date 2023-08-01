@@ -174,6 +174,7 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
 void testcase();
+int digitalLog(int n);
 int main(){
     ios;
     int t = 1;
@@ -184,5 +185,41 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vi a(n),b(n);
+    readArray(a);
+    readArray(b);
+    max_heap(int)first,second;
+    each(value,a){
+        first.push(value);
+    }
+    each(value,b){
+        second.push(value);
+    }
+    int ans = 0;
+    while(first.empty() is false){
+        int curr1 = first.top(); first.pop();
+        int curr2 = second.top(); second.pop();
+        if(curr1 isnt curr2){
+            ans++;
+            if(curr1 > curr2){
+                curr1 = digitalLog(curr1);
+            } else {
+                curr2 = digitalLog(curr2);
+            }
+            first.push(curr1);
+            second.push(curr2);
+        }
+    }
+    see(ans);
+    return;
+}
+int digitalLog(int n){
+    int ans = 0;
+    while(n){
+        n /= 10;
+        ans++;
+    }
+    return ans;
 }

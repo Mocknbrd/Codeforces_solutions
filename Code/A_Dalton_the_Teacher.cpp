@@ -184,5 +184,15 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    int ans = 0;
+    inc(i,0,n){
+        ans += (i + 1 is arr[i]);
+    }
+    int res = (ans >> 1) + (ans % 2);
+    see(res);
+    return;
 }

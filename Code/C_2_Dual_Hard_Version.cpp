@@ -174,6 +174,8 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
 void testcase();
+int determineLess(ll cnd,ll target,ll value);
+int determineMore(ll cnd,ll target,ll value);
 int main(){
     ios;
     int t = 1;
@@ -184,5 +186,92 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vll arr(n);
+    readArray(arr);
+    int index1 = 0,index2 = 0;
+    inc(i,0,n){
+        if(abs(arr[index1]) < abs(arr[i]) and arr[i] < 0){
+            index1 = i;
+        }
+        if(abs(arr[index2]) < abs(arr[i]) and arr[i] > 0){
+            index2 = i;
+        }
+    }
+    vpll ans1,ans2;
+    if(isSorted(arr)){
+        see(0);
+        return;
+    } 
+    {
+        for(int i = n - 1; i - 1 >= 0; i--){
+            if(arr[i - 1] > arr[i]){
+                int second = (arr[i] < arr[index1] ? i : index1);
+                int num = determineLess(arr[i - 1],0,arr[second]);
+                arr[i - 1] += arr[second] * cast(num,ll);
+                while(num--){
+                    ans1.pb({i,second + 1});
+                }
+            }
+        }
+        for(int i = n - 1;i - 1 >= 0; i--){
+            ans1.pb({i,i + 1});
+        }
+    } 
+    {
+        inc_la(i,0,n,1){
+            if(arr[i] > arr[i + 1]){
+                int second = (arr[i] > arr[index2] ? i : index2);
+                int num = determineMore(arr[i + 1],0,arr[second]);
+                arr[i + 1] += arr[second] * cast(num,ll);
+                while(num--){
+                    ans2.pb({i + 2,second + 1});
+                }
+            }
+        }
+        inc_la(i,0,n,1){
+            ans2.pb({i + 2,i + 1});
+        }
+    }
+    if(ans1.sz() <= 31){
+        see(ans1.sz());
+        each(step,ans1){
+            see(step.f << " " << step.s);
+        }
+    } else {
+        see(ans2.sz());
+        each(step,ans2){
+            see(step.f << " " << step.s);
+        }
+    }
+    return;
+}
+int determineLess(ll cnd,ll target,ll value){
+    int ans = 31;
+    ll start = 0,end = 31;
+    while(start <= end){
+        ll mid = (start + end) >> 1;
+        if(cnd + mid * value < target){
+            ans = mid;
+            end = mid - 1;
+        } else {
+            start = mid + 1;
+        }
+    }
+    return ans;
+}
+int determineMore(ll cnd,ll target,ll value){
+    int ans = 31;
+    ll start = 0,end = 31;
+    while(start <= end){
+        ll mid = (start + end) >> 1;
+        if(cnd + mid * value > target){
+            ans = mid;
+            end = mid - 1;
+        } else {
+            start = mid + 1;
+        }
+    }
+    return ans;
 }

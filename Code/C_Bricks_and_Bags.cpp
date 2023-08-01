@@ -184,5 +184,26 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    ll n;
+    cin >> n;
+    vll arr(n);
+    readArray(arr);
+    sorted(arr);
+    set<ll>elements(all(arr));
+    if(elements.sz() <= 2){
+        see(2ll * abs(arr.front() - arr.back()));
+    } else {
+        ll ans = linf;
+        inc(i,0,2){
+            ll cnd = linf;
+            each(element,arr){
+                if(element isnt arr.front() and element isnt arr.back()){
+                    ll first
+                }
+            }
+            ans = max(ans,cnd);
+        }
+        see(ans);
+    }
+    return;
 }

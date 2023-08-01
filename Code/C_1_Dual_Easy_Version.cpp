@@ -174,6 +174,8 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
 void testcase();
+int determineLess(ll cnd,ll target,ll value);
+int determineMore(ll cnd,ll target,ll value);
 int main(){
     ios;
     int t = 1;
@@ -184,5 +186,74 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    int n;
+    cin >> n;
+    vll arr(n);
+    readArray(arr);
+    int index = 0;
+    inc(i,0,n){
+        if(abs(arr[index]) < abs(arr[i])){
+            index = i;
+        } 
+    }
+    vpll ans;
+    if(isSorted(arr)){
+        see(0);
+        return;
+    } elif(arr[index] < 0){
+        for(int i = n - 1; i - 1 >= 0; i--){
+            if(arr[i - 1] > arr[i]){
+                int second = (arr[i] < arr[index] ? i : index);
+                int num = determineLess(arr[i - 1],arr[i],arr[second]);
+                arr[i - 1] += arr[second] * cast(num,ll);
+                while(num--){
+                    ans.pb({i,second + 1});
+                }
+            }
+        }
+    } else {
+        inc_la(i,0,n,1){
+            if(arr[i] > arr[i + 1]){
+                int second = (arr[i] > arr[index] ? i : index);
+                int num = determineMore(arr[i + 1],arr[i],arr[second]);
+                arr[i + 1] += arr[second] * cast(num,ll);
+                while(num--){
+                    ans.pb({i + 2,second + 1});
+                }
+            }
+        }
+    }
+    see(ans.sz());
+    each(step,ans){
+        see(step.f << " " << step.s);
+    }
+    return;
+}
+int determineLess(ll cnd,ll target,ll value){
+    int ans = 31;
+    ll start = 0,end = 31;
+    while(start <= end){
+        ll mid = (start + end) >> 1;
+        if(cnd + mid * value <= target){
+            ans = mid;
+            end = mid - 1;
+        } else {
+            start = mid + 1;
+        }
+    }
+    return ans;
+}
+int determineMore(ll cnd,ll target,ll value){
+    int ans = 31;
+    ll start = 0,end = 31;
+    while(start <= end){
+        ll mid = (start + end) >> 1;
+        if(cnd + mid * value >= target){
+            ans = mid;
+            end = mid - 1;
+        } else {
+            start = mid + 1;
+        }
+    }
+    return ans;
 }

@@ -44,7 +44,7 @@ using namespace std;
 #define check(statement) cout<<"**************Check: "<<statement<<" **************"<<endl;
 #define pi 2*acos(0.0)
 #define max_heap(tmp) priority_queue<tmp>
-#define min_heap(tmp) priority_queue<tmp,vec(tmp),greater<tmp>>
+#define min_heap(tmp) priority_queue<tmp,vector<tmp>,greater<tmp>>
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define elif else if
@@ -184,5 +184,36 @@ int main(){
     return 0;
 }
 void testcase(){
+    int n;
+    cin >> n;
+    vi arr(n);
+    readArray(arr);
+    sorted(arr);
+    ll time = linf,start = 0,end = linf;
+    while(start <= end){
+        ll mid = (start + end) >> 1;
+        int left = 0;
+        while(left < n and arr[left] - arr.front() <= (mid << 1)){
+            left++;
+        }
+        int right = n - 1;
+        while(right >= 0 and arr.back() - arr[right] <= (mid << 1)){
+            right--;
+        }
+        bool ans = true;
+        inc(i,left,right + 1){
+            if(arr[i] - arr[left] > (mid << 1)){
+                ans = false;
+                break;
+            }
+        }
+        if(ans is true){
+            time = mid;
+            end = mid - 1;
+        } else {
+            start = mid + 1;
+        }
+    }
+    see(time);
     return;
 }

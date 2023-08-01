@@ -184,5 +184,23 @@ int main(){
     return 0;
 }
 void testcase(){
-    see(387701719537826430 % 327869);
+    ll n;
+    cin >> n;
+    vll arr(n);
+    readArray(arr);
+    map<ll,ll>height;
+    each(value,arr){
+        height[value]++;
+    }
+    ll ans = 0;
+    each(record,height){
+        ans += (record.s >> 1);
+    }
+    ll seen = 0;
+    iter_rev(it,height){
+        seen += it->s;
+        ans = max(ans,seen * (n - seen));
+    }
+    see(ans);
+    return;
 }
