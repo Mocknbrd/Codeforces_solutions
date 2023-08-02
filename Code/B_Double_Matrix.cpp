@@ -9,6 +9,8 @@ using namespace std;
 #define NN see("NO")
 #define yy see("Yes")
 #define nn see("No")
+#define poss see("Possible")
+#define imposs see("Impossible")
 #define is ==
 #define isnt !=
 #define f first
@@ -184,22 +186,74 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vpii arr(n + 1);
-    arr[0] = {0,0};
-    inc(i,1,arr.sz()){
-        cin >> arr[i].f >> arr[i].s;
+    int n,m;
+    cin >> n >> m;
+    vvi a(n,vi(m,0)),b(n,vi(m,0));
+    readMatrix(a);
+    readMatrix(b);
+    if(b[0][0] < a[0][0]){
+        swap(b[0][0],a[0][0]);
     }
-    vpii cnds;
-    inc_la(i,0,arr.sz(),1){
-        cnds.pb({max(arr[i].f,arr[i].s),min(arr[i + 1].f,arr[i + 1].s)});
+    inc(i,1,n){
+        if(min(a[i][0],b[i][0]) > a[i - 1][0]){
+            if(b[i] < a[i]){
+                swap(a[i][0],b[i][0]);
+            }
+        } elif(a[i][0] > a[i - 1][0] or b[i][0] > a[i - 1][0]){
+            if(b[i][0] > a[i - 1][0]){
+                swap(a[i][0],b[i][0]);
+            }
+        } else {
+            imposs;
+            return;
+        }
     }
-    ll ans = 0;
-    inc(i,0,cnds.sz()){
-        ans += max(cnds[i].s - cnds[i].f + 1,0);
-        ans -= (i + 1 < cnds.sz() and cnds[i].s is cnds[i + 1].f);
+    inc(j,1,m){
+        if(min(a[0][j],b[0][j]) > a[0][j - 1]){
+            if(b[0][j] < a[0][j]){
+                swap(b[0][j],a[0][j]);
+            }
+        } elif(a[0][j] > a[0][j - 1] or b[0][j] > a[0][j - 1]){
+            if(b[0][j] > a[0][j - 1]){
+                swap(a[0][j],b[0][j]);
+            }
+        } else {
+            imposs;
+            return;
+        }
     }
-    see(ans);
+    inc(i,1,n){
+        inc(j,1,m){
+            if(min(a[i][j],b[i][j]) > a[i - 1][j] and min(a[i][j],b[i][j]) > a[i][j - 1]){
+                if(b[i][j] < a[i][j]){
+                    swap(a[i][j],b[i][j]);
+                }
+            } elif(a[i][j] > max(a[i - 1][j],a[i][j - 1]) or b[i][j] > max(a[i - 1][j],a[i][j - 1])){
+                if(b[i][j] > max(a[i - 1][j],a[i][j - 1])){
+                    swap(a[i][j],b[i][j]);
+                }
+            } else {
+                imposs;
+                return;
+            }
+        }
+    }
+    inc(i,0,n){
+        inc_la(j,0,m,1){
+            if(b[i][j] >= b[i][j + 1] or a[i][j] >= a[i][j + 1]){
+                imposs;
+                return;
+            }
+        }
+    }
+    inc(j,0,m){
+        inc_la(i,0,n,1){
+            if(b[i][j] >= b[i + 1][j] or a[i][j] >= a[i + 1][j]){
+                imposs;
+                return;
+            }
+        }
+    }
+    poss;
     return;
 }

@@ -177,7 +177,7 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
@@ -185,21 +185,8 @@ int main(){
 }
 void testcase(){
     int n;
-    cin >> n;
-    vpii arr(n + 1);
-    arr[0] = {0,0};
-    inc(i,1,arr.sz()){
-        cin >> arr[i].f >> arr[i].s;
-    }
-    vpii cnds;
-    inc_la(i,0,arr.sz(),1){
-        cnds.pb({max(arr[i].f,arr[i].s),min(arr[i + 1].f,arr[i + 1].s)});
-    }
-    ll ans = 0;
-    inc(i,0,cnds.sz()){
-        ans += max(cnds[i].s - cnds[i].f + 1,0);
-        ans -= (i + 1 < cnds.sz() and cnds[i].s is cnds[i + 1].f);
-    }
-    see(ans);
+    vector<string>arr(n);
+    readArray(arr);
+    
     return;
 }

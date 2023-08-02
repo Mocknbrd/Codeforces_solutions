@@ -186,20 +186,43 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vpii arr(n + 1);
-    arr[0] = {0,0};
-    inc(i,1,arr.sz()){
-        cin >> arr[i].f >> arr[i].s;
+    vi arr(n);
+    readArray(arr);
+    map<int,int>counts;
+    each(value,arr){
+        counts[value]++;
     }
-    vpii cnds;
-    inc_la(i,0,arr.sz(),1){
-        cnds.pb({max(arr[i].f,arr[i].s),min(arr[i + 1].f,arr[i + 1].s)});
+    int target = arr[0],mx = counts[target];
+    each(entry,counts){
+        if(entry.s > mx){
+            mx = entry.s;
+            target = entry.f;
+        }
     }
-    ll ans = 0;
-    inc(i,0,cnds.sz()){
-        ans += max(cnds[i].s - cnds[i].f + 1,0);
-        ans -= (i + 1 < cnds.sz() and cnds[i].s is cnds[i + 1].f);
+    vvi ans;
+    dec(i,n - 1,1){
+        if(arr[i] is target and arr[i - 1] isnt target){
+            if(arr[i - 1] < arr[i]){
+                ans.pb({1,i,i + 1});
+            } else {
+                ans.pb({2,i,i + 1});
+            }
+            arr[i - 1] = target;
+        }
     }
-    see(ans);
+    inc_la(i,0,n,1){
+        if(arr[i] is target and arr[i + 1] isnt target){
+            if(arr[i + 1] < arr[i]){
+                ans.pb({1,i + 2,i + 1});
+            } else {
+                ans.pb({2,i + 2,i + 1});
+            }
+            arr[i + 1] = target;
+        }
+    }
+    see(ans.sz());
+    each(step,ans){
+        writeArray(step);
+    }
     return;
 }
