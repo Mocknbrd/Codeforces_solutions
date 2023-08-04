@@ -186,27 +186,22 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vector<string>arr(n);
+    vi arr(n);
     readArray(arr);
-    bool hasodd = false;
-    each(value,arr){
-        if(value.sz() % 2 is 1){
-            hasodd = true;
-            break;
+    int operations = 0;
+    set<pii>done;
+    inc(value,1,n + 1){
+        int pos = 0;
+        while(arr[pos] isnt value){
+            pos++;
+        }
+        while(operations < n - 1 and pos - 1 >= 0 and arr[pos - 1] > arr[pos] and done.count({pos - 1,pos}) is false){
+            swap(arr[pos - 1],arr[pos]);
+            operations++;
+            done.insert({pos - 1,pos});
+            pos--;
         }
     }
-    if(hasodd is true){
-        see(n);
-    } else {
-        int bad = 0;
-        each(value,arr){
-            bad += (cnt(value,'1') isnt n and cnt(value,'1') isnt cnt(value,'0'));
-        }
-        if(mod(bad,2) is 1){
-            see(n - 1);
-        } else {
-            see(n);
-        }
-    }
+    writeArray(arr);
     return;
 }

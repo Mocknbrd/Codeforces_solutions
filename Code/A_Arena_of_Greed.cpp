@@ -174,6 +174,7 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
 void testcase();
+void solve(ll n,ll &ans,bool turn);
 int main(){
     ios;
     int t = 1;
@@ -184,29 +185,26 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
+    ll n;
     cin >> n;
-    vector<string>arr(n);
-    readArray(arr);
-    bool hasodd = false;
-    each(value,arr){
-        if(value.sz() % 2 is 1){
-            hasodd = true;
-            break;
-        }
-    }
-    if(hasodd is true){
-        see(n);
-    } else {
-        int bad = 0;
-        each(value,arr){
-            bad += (cnt(value,'1') isnt n and cnt(value,'1') isnt cnt(value,'0'));
-        }
-        if(mod(bad,2) is 1){
-            see(n - 1);
-        } else {
-            see(n);
-        }
-    }
+    ll ans = 0;
+    solve(n,ans,true);
+    see(ans);
     return;
+}
+void solve(ll n,ll &ans,bool turn){
+    if(n is 0){
+        return;
+    } elif(n % 2 is 0){
+        if(n % 4 is 0 and n > 4){
+            ans += turn is 1;
+            solve(n - 1,ans,!turn);
+        } else {
+            ans += (turn is 1) * (n >> 1);
+            solve(n >> 1,ans,!turn);
+        }
+    } else {
+        ans += turn is 1;
+        solve(n - 1,ans,!turn);
+    }
 }

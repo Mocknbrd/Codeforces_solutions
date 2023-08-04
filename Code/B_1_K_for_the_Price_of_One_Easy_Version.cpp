@@ -184,29 +184,23 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vector<string>arr(n);
+    ll n,p,k;
+    cin >> n >> p >> k;
+    vll arr(n);
     readArray(arr);
-    bool hasodd = false;
-    each(value,arr){
-        if(value.sz() % 2 is 1){
-            hasodd = true;
-            break;
-        }
+    sorted(arr);
+    vll dp(n + 1,linf);
+    dp[0] = 0;
+    inc(i,1,k){
+        dp[i] = arr[i - 1] + dp[i - 1];
     }
-    if(hasodd is true){
-        see(n);
-    } else {
-        int bad = 0;
-        each(value,arr){
-            bad += (cnt(value,'1') isnt n and cnt(value,'1') isnt cnt(value,'0'));
-        }
-        if(mod(bad,2) is 1){
-            see(n - 1);
-        } else {
-            see(n);
-        }
+    inc(i,k,dp.sz()){
+        dp[i] = min(arr[i - 1] + dp[i - 1],dp[i - k] + arr[i - 1]);
     }
+    int ans = 0;
+    inc(i,0,dp.sz()){
+        ans = dp[i] <= p ? i : ans;
+    }
+    see(ans);
     return;
 }

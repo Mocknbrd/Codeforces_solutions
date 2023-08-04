@@ -174,6 +174,7 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
 void testcase();
+int numElements(vi &arr);
 int main(){
     ios;
     int t = 1;
@@ -184,29 +185,41 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vector<string>arr(n);
+    int n,k;
+    cin >> n >> k;
+    vi arr(n);
     readArray(arr);
-    bool hasodd = false;
-    each(value,arr){
-        if(value.sz() % 2 is 1){
-            hasodd = true;
-            break;
-        }
-    }
-    if(hasodd is true){
-        see(n);
+    if(numElements(arr) > 1 and k is 1){
+        see(-1);
     } else {
-        int bad = 0;
-        each(value,arr){
-            bad += (cnt(value,'1') isnt n and cnt(value,'1') isnt cnt(value,'0'));
+        bitset<101>zeros;
+        int ans = 0;
+        while(zeros.count() < n){
+            ans++;
+            bitset<101>values;
+            int start = 0;
+            while(start < n){
+                values[arr[start]] = 1;
+                if(values.count() <= k){
+                    arr[start] = 0;
+                    zeros[start] = 1;
+                    start++;
+                } else {
+                    break;
+                }
+            }
+            inc(i,start,n){
+                arr[i] -= arr[start - 1];
+            }
         }
-        if(mod(bad,2) is 1){
-            see(n - 1);
-        } else {
-            see(n);
-        }
+        see(ans);
     }
     return;
+}
+int numElements(vi &arr){
+    bitset<101>values;
+    each(value,arr){
+        values[value] = 1;
+    }
+    return values.count();
 }

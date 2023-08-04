@@ -177,36 +177,36 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vector<string>arr(n);
-    readArray(arr);
-    bool hasodd = false;
-    each(value,arr){
-        if(value.sz() % 2 is 1){
-            hasodd = true;
-            break;
-        }
-    }
-    if(hasodd is true){
-        see(n);
+    int r,c;
+    cin >> r >> c;
+    if(r is 1 and c is 1){
+        see(0);
     } else {
-        int bad = 0;
-        each(value,arr){
-            bad += (cnt(value,'1') isnt n and cnt(value,'1') isnt cnt(value,'0'));
-        }
-        if(mod(bad,2) is 1){
-            see(n - 1);
+        vvi ans(r,vi(c,0));
+        int value = 2;
+        if(c is 1){
+            inc(i,0,r){
+                ans[i][0] = value++;
+            }
         } else {
-            see(n);
+            inc(i,0,c){
+                ans[0][i] = value++;
+            }
+            inc(i,1,r){
+                inc(j,0,c){
+                    ans[i][j] = ans[0][j] * value;
+                }
+                value++;
+            }
         }
+        writeMatrix(ans);
     }
     return;
 }
