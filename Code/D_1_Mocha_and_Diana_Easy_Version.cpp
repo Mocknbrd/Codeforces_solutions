@@ -175,91 +175,117 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
 void testcase();
+class DSU {
+    private:
+    vi parents,ranks;
+    void merge(int smaller,int larger){
+        this->parents[smaller] = larger;
+        this->ranks[larger] += this->ranks[smaller];
+    }
+    int find(int x){
+        if(this->parents[x] is x){
+            return x;
+        } else {
+            return this->parents[x] = this->find(this->parents[x]);
+        }
+    }
+    public:
+    DSU(int n){
+        this->parents = vi(n + 1,0);
+        this->ranks = vi(n + 1,1);
+        inc(i,0,this->parents.sz()){
+            this->parents[i] = i;
+        }
+    }
+    void findUnion(int x,int y){
+        int parx = this->find(x);
+        int pary = this->find(y);
+        if(parx isnt pary){
+            if(this->ranks[parx] > this->ranks[pary] or parx < pary){
+                this->merge(pary,parx);
+            } else {
+                this->merge(parx,pary);
+            }
+        }
+    }
+    bool cycle(int x,int y){
+        return this->find(x) is this->find(y);
+    }
+    vi findComponents(){
+        vi ans;
+        inc(i,1,this->parents.sz()){
+            if(i is this->parents[i]){
+                ans.pb(i);
+            }
+        }
+        return ans;
+    }
+};
+set<int>findCommon(vi &first,vi &second);
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n,k;
-    cin >> n >> k;
-    string arr;
-    cin >> arr;
-    int start = 0;
-    vpii wins;
-    while(start < n){
-        while(start < n and arr[start] is 'L'){
-            start++;
-        }
-        if(start < n){
-            int end = start;
-            while(end < n and arr[end] is 'W'){
-                end++;
-            }
-            wins.pb({start,end - 1});
-            start = end;
+    int n,m1,m2;
+    cin >> n >> m1 >> m2;
+    DSU dsu1(n),dsu2(n);
+    while(m1--){
+        int u,v;
+        cin >> u >> v;
+        dsu1.findUnion(u,v);
+    }
+    while(m2--){
+        int u,v;
+        cin >> u >> v;
+        dsu2.findUnion(u,v);
+    }
+    vi first = dsu1.findComponents(),second = dsu2.findComponents();
+    set<int>common = findCommon(first,second);
+    vi arr(all(common));
+    set<pii> edges;
+    inc(i,1,arr.sz()){
+        edges.insert({arr[0],arr[i]});
+        dsu1.findUnion(arr[0],arr[i]);
+        dsu2.findUnion(arr[0],arr[i]);
+    }
+    vi notfirst,notsecond;
+    each(vertex,first){
+        if(common.count(vertex) is false){
+            notfirst.pb(vertex);
         }
     }
-    if(wins.empty() is false){
-        min_heap(pair(int,pii))pq;
-        inc_la(i,0,wins.sz(),1){
-            int dist = wins[i + 1].f - wins[i].s - 1;
-            pq.push({dist,{wins[i].s + 1,wins[i + 1].f - 1}});
-        }
-        while(pq.empty() is false){
-            pair(int,pii)curr = pq.top(); pq.pop();
-            int begin = curr.s.f;
-            int end = curr.s.s;
-            inc(i,begin,end + 1){
-                if(k > 0){
-                    arr[i] = 'W';
-                    k--;
-                }
-            }
-        }
-        int index = wins[0].f - 1;
-        while(index >= 0){
-            if(k > 0){
-                arr[index] = 'W';
-                k--;
-            }
-            index--;
-        }
-        index = wins.back().s + 1;
-        while(index < n){
-            if(k > 0){
-                arr[index] = 'W';
-                k--;
-            }
-            index++;
+    each(vertex,second){
+        if(common.count(vertex) is false){
+            notsecond.pb(vertex);
         }
     }
-    inc(i,0,n){
-        if(arr[i] is 'L' and k > 0){
-            arr[i] = 'W';
-            k--;
-        }
-    }
-    ll ans = 2 * cnt(arr,'W'),streaks = 0;
-    start = 0;
-    while(start < n){
-        while(start < n and arr[start] is 'L'){
-            start++;
-        }
-        if(start < n){
-            int end = start;
-            while(end < n and arr[end] is 'W'){
-                end++;
+    inc(i,0,notfirst.sz()){
+        inc(j,0,notsecond.sz()){
+            if(dsu1.cycle(notfirst[i],notsecond[j]) is false and dsu2.cycle(notfirst[i],notsecond[j]) is false){
+                edges.insert({min(notfirst[i],notsecond[j]),max(notfirst[i],notsecond[j])});
+                dsu1.findUnion(notfirst[i],notsecond[j]);
+                dsu2.findUnion(notfirst[i],notsecond[j]);
             }
-            streaks++;
-            start = end;
         }
     }
-    ans -= streaks;
-    see(ans);
+    see(edges.sz());
+    each(edge,edges){
+        see(edge.f << " " << edge.s);
+    }
     return;
+}
+set<int>findCommon(vi &first,vi &second){
+    set<int>ans,ref(all(second));
+    each(vertex,first){
+        if(ref.count(vertex) is true){
+            ans.ins(vertex);
+        }
+    }
+    return ans;
 }

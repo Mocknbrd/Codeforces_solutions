@@ -185,81 +185,29 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n,k;
-    cin >> n >> k;
-    string arr;
-    cin >> arr;
-    int start = 0;
-    vpii wins;
-    while(start < n){
-        while(start < n and arr[start] is 'L'){
-            start++;
-        }
-        if(start < n){
-            int end = start;
-            while(end < n and arr[end] is 'W'){
-                end++;
-            }
-            wins.pb({start,end - 1});
-            start = end;
-        }
-    }
-    if(wins.empty() is false){
-        min_heap(pair(int,pii))pq;
-        inc_la(i,0,wins.sz(),1){
-            int dist = wins[i + 1].f - wins[i].s - 1;
-            pq.push({dist,{wins[i].s + 1,wins[i + 1].f - 1}});
-        }
-        while(pq.empty() is false){
-            pair(int,pii)curr = pq.top(); pq.pop();
-            int begin = curr.s.f;
-            int end = curr.s.s;
-            inc(i,begin,end + 1){
-                if(k > 0){
-                    arr[i] = 'W';
-                    k--;
-                }
-            }
-        }
-        int index = wins[0].f - 1;
-        while(index >= 0){
-            if(k > 0){
-                arr[index] = 'W';
-                k--;
-            }
-            index--;
-        }
-        index = wins.back().s + 1;
-        while(index < n){
-            if(k > 0){
-                arr[index] = 'W';
-                k--;
-            }
-            index++;
-        }
-    }
+    int n;
+    cin >> n;
+    vi a(n),b(n);
+    readArray(a);
+    readArray(b);
+    vi pos((n << 1) + 1,0);
     inc(i,0,n){
-        if(arr[i] is 'L' and k > 0){
-            arr[i] = 'W';
-            k--;
-        }
+        pos[a[i]] = i;
+        pos[b[i]] = i;
     }
-    ll ans = 2 * cnt(arr,'W'),streaks = 0;
-    start = 0;
-    while(start < n){
-        while(start < n and arr[start] is 'L'){
-            start++;
-        }
-        if(start < n){
-            int end = start;
-            while(end < n and arr[end] is 'W'){
-                end++;
-            }
-            streaks++;
-            start = end;
-        }
+    vi cnd((n << 1) + 1,0);
+    int even = 2,odd = 1,mn = inf;
+    while(even <= 2 * n){
+        mn = min(mn,pos[odd]);
+        cnd[even] = mn;
+        odd += 2;
+        even += 2;
     }
-    ans -= streaks;
+    int ans = inf;
+    inc(i,0,n){
+        int value = b[i];
+        ans = min(ans,i + cnd[value]);
+    }
     see(ans);
     return;
 }

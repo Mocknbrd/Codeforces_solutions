@@ -187,79 +187,54 @@ int main(){
 void testcase(){
     int n,k;
     cin >> n >> k;
-    string arr;
-    cin >> arr;
-    int start = 0;
-    vpii wins;
-    while(start < n){
-        while(start < n and arr[start] is 'L'){
-            start++;
-        }
-        if(start < n){
-            int end = start;
-            while(end < n and arr[end] is 'W'){
-                end++;
-            }
-            wins.pb({start,end - 1});
-            start = end;
+    vll arr(n);
+    readArray(arr);
+    vvll dp(n + 1,vll(n,inf));
+    ll mx = *max_element(all(arr));
+    inc(i,0,dp.sz()){
+        if(arr.back() >= mx + i){
+            dp[i].back() = 0;
         }
     }
-    if(wins.empty() is false){
-        min_heap(pair(int,pii))pq;
-        inc_la(i,0,wins.sz(),1){
-            int dist = wins[i + 1].f - wins[i].s - 1;
-            pq.push({dist,{wins[i].s + 1,wins[i + 1].f - 1}});
-        }
-        while(pq.empty() is false){
-            pair(int,pii)curr = pq.top(); pq.pop();
-            int begin = curr.s.f;
-            int end = curr.s.s;
-            inc(i,begin,end + 1){
-                if(k > 0){
-                    arr[i] = 'W';
-                    k--;
+    dec(j,dp[0].sz() - 2,0){
+        if(arr[j] >= mx){
+            dp[0][j] = 0;
+        } else {
+            ll element = mx,sum = 0;
+            bool found = false;
+            inc(jt,j,dp[0].sz() - 1){
+                if(arr[jt] < element){
+                    sum += element - arr[jt];
+                } else {
+                    found = true;
+                    break;
                 }
+                element--;
             }
-        }
-        int index = wins[0].f - 1;
-        while(index >= 0){
-            if(k > 0){
-                arr[index] = 'W';
-                k--;
+            if(found is true or arr.back() >= element){
+                dp[0][j] = sum;
             }
-            index--;
-        }
-        index = wins.back().s + 1;
-        while(index < n){
-            if(k > 0){
-                arr[index] = 'W';
-                k--;
-            }
-            index++;
         }
     }
-    inc(i,0,n){
-        if(arr[i] is 'L' and k > 0){
-            arr[i] = 'W';
-            k--;
-        }
-    }
-    ll ans = 2 * cnt(arr,'W'),streaks = 0;
-    start = 0;
-    while(start < n){
-        while(start < n and arr[start] is 'L'){
-            start++;
-        }
-        if(start < n){
-            int end = start;
-            while(end < n and arr[end] is 'W'){
-                end++;
+    inc(i,1,dp.sz()){
+        dec(j,dp[i].sz() - 2,0){
+            if(arr[j] >= mx + i){
+                dp[i][j] = 0;
+            } else {
+                dp[i][j] = mx + i - arr[j] + dp[i - 1][j + 1];
             }
-            streaks++;
-            start = end;
         }
     }
-    ans -= streaks;
+    ll ans = mx,start = 0,end = n;
+    while(start <= end){
+        ll mid = (start + end) >> 1;
+        if(*min_element(all(dp[mid])) <= k){
+            ans = mx + mid;
+            start = mid + 1;
+        } else {
+            end = mid - 1;
+        }
+    }
     see(ans);
     return;
 }
