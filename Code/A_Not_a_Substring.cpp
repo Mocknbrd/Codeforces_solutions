@@ -175,6 +175,7 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
 void testcase();
+bool isType(string &arr);
 int main(){
     ios;
     int t = 1;
@@ -185,32 +186,37 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vll weights(n);
-    readArray(weights);
-    vll degree(n,0);
-    inc(i,0,n - 1){
-        int u,v;
-        cin >> u >> v;
-        degree[u - 1]++;
-        degree[v - 1]++;
-    }
-    max_heap(pll)pq;
-    vll ans(n - 1,0);
-    inc(i,0,n){
-        if(degree[i] > 1){
-            pq.push({weights[i],degree[i]});
+    string str;
+    cin >> str;
+    int n = str.sz();
+    string ans = "";
+    if(str.substr(0,2) is ")(" or (str.substr(0,2) is "()" and isType(str) is false)){
+        inc(i,0,n){
+            ans += "(";
         }
-        ans[0] += weights[i];
-    }
-    inc(i,1,ans.sz()){
-        pll curr = pq.top(); pq.pop();
-        ans[i] = ans[i - 1] + curr.f;
-        if(--curr.s > 1){
-            pq.push(curr);
+        inc(i,0,n){
+            ans += ")";
         }
+    } else {
+        inc(i,0,n){
+            ans += "()";
+        }
+    } 
+    if(str is "()"){
+        NN; 
+    } else {
+        YY;
+        see(ans);
     }
-    writeArray(ans);
     return;
+}
+bool isType(string &arr){
+    bool ans = arr.substr(0,2) is "()";
+    inc(i,2,arr.sz()){
+        if(arr[i] isnt ')'){
+            ans = false;
+            break;
+        }
+    }
+    return ans;
 }

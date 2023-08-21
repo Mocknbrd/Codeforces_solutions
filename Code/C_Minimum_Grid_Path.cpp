@@ -187,30 +187,23 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vll weights(n);
-    readArray(weights);
-    vll degree(n,0);
-    inc(i,0,n - 1){
-        int u,v;
-        cin >> u >> v;
-        degree[u - 1]++;
-        degree[v - 1]++;
-    }
-    max_heap(pll)pq;
-    vll ans(n - 1,0);
-    inc(i,0,n){
-        if(degree[i] > 1){
-            pq.push({weights[i],degree[i]});
+    vll arr(n);
+    readArray(arr);
+    ll evensum = 0,evenmin = arr[0],evencnt = 1;
+    ll oddsum = 0,oddmin = arr[1],oddcnt = 1;
+    ll ans = evensum + evenmin * (n - evencnt + 1) + oddsum + oddmin * (n - oddcnt + 1);
+    inc(i,2,n){
+        if(mod(i,2) is 0){
+            evencnt++;
+            evensum += max(evenmin,arr[i]);
+            evenmin = min(evenmin,arr[i]);
+        } else {
+            oddcnt++;
+            oddsum += max(oddmin,arr[i]);
+            oddmin = min(oddmin,arr[i]);
         }
-        ans[0] += weights[i];
+        ans = min(ans,evensum + evenmin * (n - evencnt + 1) + oddsum + oddmin * (n - oddcnt + 1));
     }
-    inc(i,1,ans.sz()){
-        pll curr = pq.top(); pq.pop();
-        ans[i] = ans[i - 1] + curr.f;
-        if(--curr.s > 1){
-            pq.push(curr);
-        }
-    }
-    writeArray(ans);
+    see(ans);
     return;
 }

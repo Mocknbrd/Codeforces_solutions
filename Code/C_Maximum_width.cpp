@@ -178,39 +178,54 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vll weights(n);
-    readArray(weights);
-    vll degree(n,0);
-    inc(i,0,n - 1){
-        int u,v;
-        cin >> u >> v;
-        degree[u - 1]++;
-        degree[v - 1]++;
-    }
-    max_heap(pll)pq;
-    vll ans(n - 1,0);
+    int n,m;
+    cin >> n >> m;
+    string a,b;
+    cin >> a >> b;
+    vvi pos(26);
     inc(i,0,n){
-        if(degree[i] > 1){
-            pq.push({weights[i],degree[i]});
-        }
-        ans[0] += weights[i];
+        pos[char_index(a[i])].pb(i);
     }
-    inc(i,1,ans.sz()){
-        pll curr = pq.top(); pq.pop();
-        ans[i] = ans[i - 1] + curr.f;
-        if(--curr.s > 1){
-            pq.push(curr);
+    vi left(m),right(m);
+    left[0] = pos[char_index(b[0])][0];
+    right.back() = pos[char_index(b.back())].back();
+    inc(i,1,m){
+        int character = char_index(b[i]);
+        int start = 0,end = pos[character].sz() - 1;
+        while(start <= end){
+            int mid = (start + end) >> 1;
+            if(pos[character][mid] > left[i - 1]){
+                left[i] = pos[character][mid];
+                end = mid - 1;
+            } else {
+                start = mid + 1;
+            }
         }
     }
-    writeArray(ans);
+    dec(i,m - 2,0){
+        int character = char_index(b[i]);
+        int start = 0,end = pos[character].sz() - 1;
+        while(start <= end){
+            int mid = (start + end) >> 1;
+            if(pos[character][mid] < right[i + 1]){
+                right[i] = pos[character][mid];
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+            }
+        }
+    }
+    int ans = 0;
+    inc_la(i,0,m,1){
+        ans = max(ans,right[i + 1] - left[i]);
+    }
+    see(ans);
     return;
 }

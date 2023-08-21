@@ -174,6 +174,73 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 constexpr int inf = 2e9;
 constexpr ll linf = 2e18;
+class Node{
+    public:
+    int start,end,value;
+    Node*left,*right;
+    Node(int start,int end,int value){
+        this->start = start;
+        this->end = end;
+        this->value = value;
+        this->left = nullptr;
+        this->right = nullptr;
+    }
+};
+class SegmentTree{
+    private:
+    Node*root;
+    Node*__build(vi &arr,int start,int end){
+        if(start is end){
+            Node*node = new Node(start,end,arr[start]);
+            return node;
+        } else {
+            int mid = (start + end) >> 1;
+            Node*left = this->__build(arr,start,mid);
+            Node*right = this->__build(arr,mid + 1,end);
+            Node*node = new Node(start,end,max(left->value,right->value));
+            node->left = left;
+            node->right = right;
+            return node;
+        }
+    }
+    int __query(Node*node,int start,int end){
+        if(!node or start > node->end or end < node->start){
+            return -inf;
+        } elif(node->start >= start and node->end <= end){
+            return node->value;
+        } else {
+            int left = this->__query(node->left,start,end);
+            int right = this->__query(node->right,start,end);
+            return max(left,right);
+        }
+    }
+    void __update(Node*node,int pos,int value){
+        if(!node or pos < node->start or pos > node->end){
+            return;
+        } elif(node->start is node->end and node->start is pos){
+            node->value = max(node->value,value);
+        } else {
+            this->__update(node->left,pos,value);
+            this->__update(node->right,pos,value);
+            if(node->left){
+                node->value = max(node->value,node->left->value);
+            }
+            if(node->right){
+                node->value = max(node->value,node->right->value);
+            }
+        }
+    }
+    public:
+    SegmentTree(vi &arr){
+        this->root = this->__build(arr,0,arr.sz() - 1);
+    }
+    int query(int start,int end){
+        return this->__query(this->root,start,end);
+    }
+    void update(int pos,int value){
+        this->__update(this->root,pos,value);
+    }
+};
 void testcase();
 int main(){
     ios;
@@ -187,30 +254,88 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vll weights(n);
-    readArray(weights);
-    vll degree(n,0);
-    inc(i,0,n - 1){
-        int u,v;
-        cin >> u >> v;
-        degree[u - 1]++;
-        degree[v - 1]++;
-    }
-    max_heap(pll)pq;
-    vll ans(n - 1,0);
+    vec(pair(pii,pii))arr(n);
     inc(i,0,n){
-        if(degree[i] > 1){
-            pq.push({weights[i],degree[i]});
-        }
-        ans[0] += weights[i];
+        cin >> arr[i].f.f >> arr[i].f.s >> arr[i].s.f >> arr[i].s.s;
     }
-    inc(i,1,ans.sz()){
-        pll curr = pq.top(); pq.pop();
-        ans[i] = ans[i - 1] + curr.f;
-        if(--curr.s > 1){
-            pq.push(curr);
-        }
+    sorted(arr);
+    vi begin,end;
+    inc(i,0,n){
+        begin.pb(arr[i].f.f);
+        end.pb(arr[i].f.s);
     }
-    writeArray(ans);
+    int q;
+    cin >> q;
+    vi ans(begin.sz(),-inf);
+    SegmentTree tree(ans);
+    ans.back() = arr.back().s.s;
+    dec(index,n - 2,0){
+        int leftbound = inf,rightbound = -inf;
+        {
+            int left = index + 1,right = n - 1;
+            while(left <= right){
+                int mid = (left + right) >> 1;
+                if(inBetween(begin[mid],arr[index].s.f,end[mid]) or inBetween(begin[mid],arr[index].s.s,end[mid])){
+                    leftbound = mid;
+                    right = mid - 1;
+                } elif(arr[index].s.s < begin[mid]){
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            }
+        }
+        {
+            int left = index + 1,right = n - 1;
+            while(left <= right){
+                int mid = (left + right) >> 1;
+                if(inBetween(begin[mid],arr[index].s.f,end[mid]) or inBetween(begin[mid],arr[index].s.s,end[mid])){
+                    rightbound = mid;
+                    left = mid + 1;
+                } elif(arr[index].s.s < begin[mid]){
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            }
+        }
+        ans[index] = max(arr[index].s.s,tree.query(leftbound,rightbound));
+        tree.update(index,ans[index]);
+    }
+    while(q--){
+        int start;
+        cin >> start;
+        int leftBound = inf,rightBound = -inf;
+        {
+            int left = 0,right = begin.sz() - 1;
+            while(left <= right){
+                int mid = (left + right) >> 1;
+                if(start >= begin[mid] and start <= end[mid]){
+                    leftBound = mid;
+                    right = mid - 1;
+                } elif(start < begin[mid]){
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            }
+        }
+        {
+            int left = 0,right = begin.sz() - 1;
+            while(left <= right){
+                int mid = (left + right) >> 1;
+                if(start >= begin[mid] and start <= end[mid]){
+                    rightBound = mid;
+                    left = mid + 1;
+                } elif(start < begin[mid]){
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            }
+        }
+        cout << max(start,tree.query(leftBound,rightBound)) << " ";
+    }
+    br();
     return;
 }

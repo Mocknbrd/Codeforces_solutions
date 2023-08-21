@@ -187,30 +187,20 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vll weights(n);
-    readArray(weights);
-    vll degree(n,0);
-    inc(i,0,n - 1){
-        int u,v;
-        cin >> u >> v;
-        degree[u - 1]++;
-        degree[v - 1]++;
-    }
-    max_heap(pll)pq;
-    vll ans(n - 1,0);
+    vi arr(n);
+    readArray(arr);
+    int index = -1,element = -inf;
     inc(i,0,n){
-        if(degree[i] > 1){
-            pq.push({weights[i],degree[i]});
-        }
-        ans[0] += weights[i];
-    }
-    inc(i,1,ans.sz()){
-        pll curr = pq.top(); pq.pop();
-        ans[i] = ans[i - 1] + curr.f;
-        if(--curr.s > 1){
-            pq.push(curr);
+        if(arr[i] > arr.front()){
+            index = i;
+            element = arr[i];
+            break;
         }
     }
-    writeArray(ans);
+    int ans = (element isnt -inf);
+    inc(i,index + 1,n){
+        ans += arr[i] < element;
+    }
+    see(ans);
     return;
 }

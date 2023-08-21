@@ -185,32 +185,45 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vll weights(n);
-    readArray(weights);
-    vll degree(n,0);
-    inc(i,0,n - 1){
-        int u,v;
-        cin >> u >> v;
-        degree[u - 1]++;
-        degree[v - 1]++;
+    int n,l,r;
+    cin >> n >> l >> r;
+    vi arr(n);
+    readArray(arr);
+    vi left(n),right(n);
+    inc(i,0,l){
+        left[arr[i] - 1]++;
     }
-    max_heap(pll)pq;
-    vll ans(n - 1,0);
+    inc(i,l,n){
+        right[arr[i] - 1]++;
+    }
     inc(i,0,n){
-        if(degree[i] > 1){
-            pq.push({weights[i],degree[i]});
-        }
-        ans[0] += weights[i];
+        int mn = min(left[i],right[i]);
+        left[i] -= mn;
+        right[i] -= mn;
+        l -= mn;
+        r -= mn;
     }
-    inc(i,1,ans.sz()){
-        pll curr = pq.top(); pq.pop();
-        ans[i] = ans[i - 1] + curr.f;
-        if(--curr.s > 1){
-            pq.push(curr);
-        }
+    if(l < r){
+        swap(l,r);
+        swap(left,right);
     }
-    writeArray(ans);
+    int ans = 0;
+    inc(i,0,n){
+        int mx = (l - r) >> 1;
+        int cnd = left[i] >> 1;
+        int subtract = min(mx,cnd);
+        l -= left[i];
+        r -= right[i];
+        left[i] -= subtract;
+        right[i] += subtract;
+        int common = min(left[i],right[i]);
+        left[i] -= common;
+        right[i] -= common;
+        l += left[i];
+        r += right[i];
+        ans += subtract;
+    }
+    ans +=l;
+    see(ans);
     return;
 }

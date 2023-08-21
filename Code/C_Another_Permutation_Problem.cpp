@@ -187,30 +187,38 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vll weights(n);
-    readArray(weights);
-    vll degree(n,0);
-    inc(i,0,n - 1){
-        int u,v;
-        cin >> u >> v;
-        degree[u - 1]++;
-        degree[v - 1]++;
-    }
-    max_heap(pll)pq;
-    vll ans(n - 1,0);
-    inc(i,0,n){
-        if(degree[i] > 1){
-            pq.push({weights[i],degree[i]});
+    ll ans = 0;
+    dec(target,n,1){
+        dec(maxpos,n,1){
+            if(maxpos < target){
+                break;
+            } else {
+                set<int>elements;
+                inc(element,1,n + 1){
+                    if(element isnt target){
+                        elements.ins(element);
+                    }
+                }
+                bool isans = true;
+                ll cnd = 0;
+                dec(pos,n,1){
+                    if(pos isnt maxpos){
+                        if(*elements.begin() > (target * maxpos) / pos){
+                            isans = false;
+                            break;
+                        } else {
+                            int value = *--elements.upper_bound((target * maxpos) / pos);
+                            cnd += value * pos;
+                            elements.erase(value);
+                        }
+                    }
+                }
+                if(isans is true){
+                    ans = max(ans,cnd);
+                }
+            }
         }
-        ans[0] += weights[i];
     }
-    inc(i,1,ans.sz()){
-        pll curr = pq.top(); pq.pop();
-        ans[i] = ans[i - 1] + curr.f;
-        if(--curr.s > 1){
-            pq.push(curr);
-        }
-    }
-    writeArray(ans);
+    see(ans);
     return;
 }

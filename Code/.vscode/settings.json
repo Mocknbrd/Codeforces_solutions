@@ -22,5 +22,6 @@
         "ostream": "cpp",
         "bitset": "cpp",
         "numeric": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

@@ -178,7 +178,7 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
@@ -187,30 +187,26 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vll weights(n);
-    readArray(weights);
-    vll degree(n,0);
-    inc(i,0,n - 1){
-        int u,v;
-        cin >> u >> v;
-        degree[u - 1]++;
-        degree[v - 1]++;
+    vll arr(n);
+    readArray(arr);
+    int ans = 0;
+    each(value,arr){
+        ans += value >= 0;
     }
-    max_heap(pll)pq;
-    vll ans(n - 1,0);
-    inc(i,0,n){
-        if(degree[i] > 1){
-            pq.push({weights[i],degree[i]});
+    ll pos = 0,neg = 0;
+    min_heap(int)pq;
+    inc(index,0,n){
+        pos += (arr[index] >= 0) * arr[index];
+        neg += (arr[index] < 0) * arr[index];
+        if(arr[index] < 0){
+            pq.push(arr[index]);
         }
-        ans[0] += weights[i];
-    }
-    inc(i,1,ans.sz()){
-        pll curr = pq.top(); pq.pop();
-        ans[i] = ans[i - 1] + curr.f;
-        if(--curr.s > 1){
-            pq.push(curr);
+        while(pos + neg < 0){
+            neg -= pq.top();
+            pq.pop();
         }
     }
-    writeArray(ans);
+    ans += pq.sz();
+    see(ans);
     return;
 }

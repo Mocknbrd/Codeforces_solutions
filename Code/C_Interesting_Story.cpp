@@ -187,30 +187,37 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vll weights(n);
-    readArray(weights);
-    vll degree(n,0);
-    inc(i,0,n - 1){
-        int u,v;
-        cin >> u >> v;
-        degree[u - 1]++;
-        degree[v - 1]++;
-    }
-    max_heap(pll)pq;
-    vll ans(n - 1,0);
+    vvi arr(n,vi(5,0));
+    vi lengths(n);
     inc(i,0,n){
-        if(degree[i] > 1){
-            pq.push({weights[i],degree[i]});
-        }
-        ans[0] += weights[i];
-    }
-    inc(i,1,ans.sz()){
-        pll curr = pq.top(); pq.pop();
-        ans[i] = ans[i - 1] + curr.f;
-        if(--curr.s > 1){
-            pq.push(curr);
+        string str;
+        cin >> str;
+        lengths[i] = str.sz();
+        each(character,str){
+            arr[i][char_index(character)]++;
         }
     }
-    writeArray(ans);
+    int ans = 0;
+    inc(character,0,5){
+        max_heap(vi)order;
+        min_heap(vi)elements;
+        inc(i,0,n){
+            order.push({2 * arr[i][character] - lengths[i],arr[i][character],lengths[i] - arr[i][character]});
+        }
+        int focus = 0,other = 0;
+        while(order.empty() is false){
+            vi curr = order.top(); order.pop();
+            focus += curr[1];
+            other += curr.back();
+            elements.push(curr);
+            while(elements.sz() and focus <= other){
+                focus -= elements.top()[1];
+                other -= elements.top().back();
+                elements.pop();
+            }
+        }
+        ans = max(ans,cast(elements.sz(),int));
+    }
+    see(ans);
     return;
 }
