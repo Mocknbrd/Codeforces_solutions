@@ -188,32 +188,33 @@ int main(){
     return 0;
 }
 void testcase(){
-    int q;
-    cin >> q;
-    ll scnt = 0,tcnt = 0;
-    bool schar = false,tchar = false;
-    while(q--){
-        int d,k;
-        string str;
-        cin >> d >> k >> str;
-        if(tchar is false){
-            each(character,str){
-                scnt += (d is 1 and character is 'a') * k;
-                tcnt += (d is 2 and character is 'a') * k;
-                tchar = (tchar or (d is 2 and character isnt 'a'));
-                schar = (schar or (d is 1 and character isnt 'a'));
+    int n;
+    cin >> n;
+    multiset<int>values;
+    inc(i,0,n){
+        int value;
+        cin >> value;
+        values.ins(value);
+    }
+    vi ans;
+    int prefix = 0;
+    inc(_,0,32){
+        if(values.empty() is false){
+            auto cnd = --values.end();
+            iter_for(it,values){
+                if((prefix | (*it)) > (prefix | (*cnd))){
+                    cnd = it;
+                }
             }
-        }
-        if(tchar is true){
-            YY;
-        } else {
-            if(schar is true){
-                NN;
-            } else {
-                scnt < tcnt ? YY : NN;
-            }
+            ans.pb(*cnd);
+            values.erase(cnd);
+            prefix |= ans.back();
         }
     }
+    each(value,values){
+        ans.pb(value);
+    }
+    writeArray(ans);
     return;
 }
 #pragma GCC diagnostic pop

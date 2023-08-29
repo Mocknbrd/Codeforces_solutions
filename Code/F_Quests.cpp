@@ -188,31 +188,40 @@ int main(){
     return 0;
 }
 void testcase(){
-    int q;
-    cin >> q;
-    ll scnt = 0,tcnt = 0;
-    bool schar = false,tchar = false;
-    while(q--){
-        int d,k;
-        string str;
-        cin >> d >> k >> str;
-        if(tchar is false){
-            each(character,str){
-                scnt += (d is 1 and character is 'a') * k;
-                tcnt += (d is 2 and character is 'a') * k;
-                tchar = (tchar or (d is 2 and character isnt 'a'));
-                schar = (schar or (d is 1 and character isnt 'a'));
+    ll n,c,d;
+    cin >> n >> c >> d;
+    vll arr(n);
+    readArray(arr);
+    rsort(arr);
+    while(arr.sz() <= d){
+        arr.pb(0);
+    }
+    ll add = 0;
+    inc(i,0,d){
+        add += arr[i];
+    }
+    if(add >= c){
+        see("Infinity");
+    } elif(arr.front() * d < c){
+        see("Impossible");
+    } else {
+        ll ans = 0;
+        ll start = 0,end = d;
+        while(start <= end){
+            ll mid = (start + end) >> 1;
+            ll coins = 0,length = mid + 1,index = 0;
+            inc(day,0,d){
+                coins += arr[index];
+                index = mod(index + 1,length);
             }
-        }
-        if(tchar is true){
-            YY;
-        } else {
-            if(schar is true){
-                NN;
+            if(coins >= c){
+                ans = mid;
+                start = mid + 1;
             } else {
-                scnt < tcnt ? YY : NN;
+                end = mid - 1;
             }
         }
+        see(ans);
     }
     return;
 }

@@ -181,39 +181,14 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int q;
-    cin >> q;
-    ll scnt = 0,tcnt = 0;
-    bool schar = false,tchar = false;
-    while(q--){
-        int d,k;
-        string str;
-        cin >> d >> k >> str;
-        if(tchar is false){
-            each(character,str){
-                scnt += (d is 1 and character is 'a') * k;
-                tcnt += (d is 2 and character is 'a') * k;
-                tchar = (tchar or (d is 2 and character isnt 'a'));
-                schar = (schar or (d is 1 and character isnt 'a'));
-            }
-        }
-        if(tchar is true){
-            YY;
-        } else {
-            if(schar is true){
-                NN;
-            } else {
-                scnt < tcnt ? YY : NN;
-            }
-        }
-    }
+    
     return;
 }
 #pragma GCC diagnostic pop
