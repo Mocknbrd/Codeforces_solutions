@@ -190,19 +190,17 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vvll arr(n,vll(n,0));
-    readMatrix(arr);
-    ll sum = 0;
-    inc(i,0,n){
-        inc(j,0,n){
-            sum += arr[i][j];
-        }
+    string arr;
+    cin >> arr;
+    int ones = 0,zeros = 0;
+    each(round,arr){
+        ones += round is '1';
+        zeros += round is '0';
     }
-    ll mn = inf;
-    inc(i,0,n){
-        mn = min(mn,arr[i][n - i - 1]);
+    inc(ans,(1 << ones),(1 << n) - (1 << zeros) + 2){
+        cout << ans << " ";
     }
-    see(sum - mn);
+    br();
     return;
 }
 #pragma GCC diagnostic pop

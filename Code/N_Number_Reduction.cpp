@@ -181,28 +181,35 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vvll arr(n,vll(n,0));
-    readMatrix(arr);
-    ll sum = 0;
-    inc(i,0,n){
-        inc(j,0,n){
-            sum += arr[i][j];
+    string number;
+    int k;
+    cin >> number >> k;
+    map<char,deque<int> >pos;
+    inc(i,0,number.sz()){
+        pos[i + '0'].pb(i);
+    }
+    vec(pair(int,char))digits;
+    int start = 0;
+    bool first = true;
+    while(start < number.sz() and k > 0){
+        inc(i,0,10){
+            char digit = cast(i,char);
+            
         }
     }
-    ll mn = inf;
-    inc(i,0,n){
-        mn = min(mn,arr[i][n - i - 1]);
+    sorted(digits);
+    string ans;
+    each(digit,digits){
+        ans += to_string(digit.s);
     }
-    see(sum - mn);
+    see(ans);
     return;
 }
 #pragma GCC diagnostic pop

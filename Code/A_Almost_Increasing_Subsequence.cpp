@@ -178,6 +178,8 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 const int inf = 2e9;
 const ll linf = 2e18;
 void testcase();
+int findLeft(vpii &cnds,pii cnd);
+int findRight(vpii &cnds,pii cnd);
 int main(){
     ios;
     int t = 1;
@@ -188,21 +190,57 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vvll arr(n,vll(n,0));
-    readMatrix(arr);
-    ll sum = 0;
-    inc(i,0,n){
-        inc(j,0,n){
-            sum += arr[i][j];
+    int n,q;
+    cin >> n >> q;
+    vi arr(n);
+    readArray(arr);
+    vpii cnds;
+    inc_la(i,0,n,2){
+        if(arr[i] >= arr[i + 1] and arr[i + 1] >= arr[i + 2]){
+            cnds.pb(make_pair(i + 1,i + 3));
         }
     }
-    ll mn = inf;
-    inc(i,0,n){
-        mn = min(mn,arr[i][n - i - 1]);
+    sorted(cnds);
+    while(q--){
+        pii cnd;
+        cin >> cnd.f >> cnd.s;
+        int length = cnd.s - cnd.f + 1;
+        int left = findLeft(cnds,cnd),right = findRight(cnds,cnd);
+        int exclude = right - left + 1;
+        see(length - exclude);
     }
-    see(sum - mn);
     return;
+}
+int findLeft(vpii &cnds,pii cnd){
+    int ans = -1;
+    int start = 0,end = cnds.sz() - 1;
+    while(start <= end){
+        int mid = (start + end) >> 1;
+        if(cnds[mid].f >= cnd.f and cnds[mid].s <= cnd.s){
+            ans = mid;
+            end = mid - 1;
+        } elif(cnds[mid].f < cnd.f){
+            start = mid + 1;
+        } else {
+            end = mid - 1;
+        }
+    }
+    return ans;
+}
+int findRight(vpii &cnds,pii cnd){
+    int ans = -2;
+    int start = 0,end = cnds.sz() - 1;
+    while(start <= end){
+        int mid = (start + end) >> 1;
+        if(cnds[mid].f >= cnd.f and cnds[mid].s <= cnd.s){
+            ans = mid;
+            start = mid + 1;
+        } elif(cnds[mid].f < cnd.f){
+            start = mid + 1;
+        } else {
+            end = mid - 1;
+        }
+    }
+    return ans;
 }
 #pragma GCC diagnostic pop

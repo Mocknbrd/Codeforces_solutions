@@ -181,28 +181,43 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vvll arr(n,vll(n,0));
-    readMatrix(arr);
-    ll sum = 0;
-    inc(i,0,n){
-        inc(j,0,n){
-            sum += arr[i][j];
+    string a,b;
+    cin >> a >> b;
+    if(a.front() isnt b.front() or a.back() isnt b.back()){
+        NN;
+    } else {
+        int right = a.sz() - 1;
+        while(right > 0 and a[right] is b[right]){
+            right--;
+        }
+        if(right is 0){
+            YY;
+            return;
+        }
+        right++;
+        if(a[right] is b[right] and a[right] is a.front()){
+            YY;
+        } else {
+            int left = 0;
+            while(left < a.sz() - 1 and a[left] is b[left]){
+                left++;
+            }
+            if(left is )
+            left--;
+            if(a[left] is b[left] and a[left] is a.back()){
+                YY;
+            } else {
+                NN;
+            }
         }
     }
-    ll mn = inf;
-    inc(i,0,n){
-        mn = min(mn,arr[i][n - i - 1]);
-    }
-    see(sum - mn);
     return;
 }
 #pragma GCC diagnostic pop

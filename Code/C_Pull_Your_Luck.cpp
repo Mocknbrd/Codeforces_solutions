@@ -181,28 +181,29 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vvll arr(n,vll(n,0));
-    readMatrix(arr);
-    ll sum = 0;
-    inc(i,0,n){
-        inc(j,0,n){
-            sum += arr[i][j];
+    ll n,x,p;
+    cin >> n >> x >> p;
+    ll alpha = 0;
+    while(alpha <= min(n,p)){
+        ll discriminant = 1 + 8 * (n * alpha + n - x);
+        ll root = sqrt(discriminant);
+        if(root * root is discriminant and mod(root - 1,2ll) is 0){
+            ll cnd = (root - 1) >> 1;
+            if(cnd <= p and cnd > 0){
+                yy;
+                return;
+            }
         }
+        alpha++;
     }
-    ll mn = inf;
-    inc(i,0,n){
-        mn = min(mn,arr[i][n - i - 1]);
-    }
-    see(sum - mn);
+    nn;
     return;
 }
 #pragma GCC diagnostic pop

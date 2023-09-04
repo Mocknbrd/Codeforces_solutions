@@ -178,31 +178,68 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 const int inf = 2e9;
 const ll linf = 2e18;
 void testcase();
+string ans;
+bool solve(string &number,string &curr,int index);
+bool isPrime(string &curr);
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vvll arr(n,vll(n,0));
-    readMatrix(arr);
-    ll sum = 0;
-    inc(i,0,n){
-        inc(j,0,n){
-            sum += arr[i][j];
-        }
+    string number;
+    cin >> number;
+    ans = "lol";
+    string curr = "";
+    if(solve(number,curr,0) is true){
+        see(ans);
+    } else {
+        see(-1);
     }
-    ll mn = inf;
-    inc(i,0,n){
-        mn = min(mn,arr[i][n - i - 1]);
-    }
-    see(sum - mn);
     return;
+}
+bool solve(string &number,string &curr,int index){
+    if(index is number.sz()){
+        if(curr.sz() < 2){
+            return false;
+        } else {
+            if(isPrime(curr) is true){
+                ans = curr;
+                return true;
+            }
+            return false;
+        }
+    } else {
+        bool ans1 = solve(number,curr,index + 1);
+        if(ans1 is true){
+            return true;
+        }
+        curr.pb(number[index]);
+        bool ans2 = solve(number,curr,index + 1);
+        curr.rb();
+        if(ans2 is true){
+            return true;
+        }
+        return false;
+    }
+}
+bool isPrime(string &curr){
+    ll number = stoll(curr);
+    if(number is 1){
+        return false;
+    }  else {
+        ll prime = 2;
+        while(prime * prime <= number){
+            if(number % prime is 0){
+                return false;
+            }
+            prime++;
+        }
+        return true;
+    }
 }
 #pragma GCC diagnostic pop

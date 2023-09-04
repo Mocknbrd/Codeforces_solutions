@@ -178,31 +178,35 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 const int inf = 2e9;
 const ll linf = 2e18;
 void testcase();
+vi solve(int n,int k);
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vvll arr(n,vll(n,0));
-    readMatrix(arr);
-    ll sum = 0;
-    inc(i,0,n){
-        inc(j,0,n){
-            sum += arr[i][j];
-        }
-    }
-    ll mn = inf;
-    inc(i,0,n){
-        mn = min(mn,arr[i][n - i - 1]);
-    }
-    see(sum - mn);
+    int n,k;
+    cin >> n >> k;
+    vi arr = solve(n,k);
+    writeArray(arr);
     return;
+}
+vi solve(int n,int k){
+    if(k is 0){
+        return vi(n,-1);
+    } elif(k < n){
+        vi ans(n,-1);
+        ans[k - 1] = 800;
+        ans[k] = -900;
+        return ans;
+    } else {
+        vi ans = solve(n - 1,k - n);
+        ans.pb(1000);
+        return ans;
+    }
 }
 #pragma GCC diagnostic pop

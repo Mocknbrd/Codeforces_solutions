@@ -181,28 +181,26 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vvll arr(n,vll(n,0));
-    readMatrix(arr);
-    ll sum = 0;
-    inc(i,0,n){
-        inc(j,0,n){
-            sum += arr[i][j];
+    int n,m,k;
+    cin >> n >> m >> k;
+    vi arr(m);
+    readArray(arr);
+    if(*max_element(all(arr)) > ceil(n,k)){
+        NN;
+    } else {
+        if(mod(n,k) isnt 0 and cnt(arr,ceil(n,k)) > mod(n,k)){
+            NN;
+        } else {
+            YY;
         }
     }
-    ll mn = inf;
-    inc(i,0,n){
-        mn = min(mn,arr[i][n - i - 1]);
-    }
-    see(sum - mn);
     return;
 }
 #pragma GCC diagnostic pop
