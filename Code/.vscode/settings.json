@@ -21,7 +21,8 @@
         "valarray": "cpp",
         "ostream": "cpp",
         "bitset": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "__availability": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
