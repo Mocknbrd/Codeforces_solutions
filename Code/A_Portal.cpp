@@ -209,81 +209,9 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
-class Node {
-    public:
-    int start,end,cnt;
-    Node *left,*right;
-    Node(int start,int end,int cnt){
-        self.start = start;
-        self.end = end;
-        self.cnt = cnt;
-        self.left = nullptr;
-        self.right = nullptr;
-    }
-};
-class SegmentTree {
-    private:
-    Node *root;
-    Node* __build(int start,int end){
-        if(start is end){
-            Node *node = new Node(start,end,0);
-            return node;
-        } else {
-            int mid = (start + end) >> 1;
-            Node *left = self.__build(start,mid);
-            Node *right = self.__build(mid + 1,end);
-            Node *node = new Node(start,end,0);
-            node->left = left;
-            node->right = right;
-            return node;
-        }
-    }
-    int __lower(Node *node,int value){
-        if(!node or node->start >= value){
-            return 0;
-        } elif(node->end < value){
-            return node->cnt;
-        } else {
-            return self.__lower(node->left,value) + self.__lower(node->right,value);
-        }
-    }
-    int __upper(Node *node,int value){
-        if(!node or node->end <= value){
-            return 0;
-        } elif(node->start > value){
-            return node->cnt;
-        } else {
-            return self.__upper(node->left,value) + self.__upper(node->right,value);
-        }
-    }
-    void __increment(Node *node,int value){
-        if(!node or value > node->end or value < node->start){
-            return;
-        } elif(node->start is node->end){
-            node->cnt += (node->start is value);
-        } else {
-            self.__increment(node->left,value);
-            self.__increment(node->right,value);
-            int left = (node->left ? node->left->cnt : 0);
-            int right = (node->right ? node->right->cnt : 0);
-            node->cnt = left + right;
-        }
-    }
-    public:
-    SegmentTree(int n){
-        self.root = self.__build(0,n - 1);
-    }
-    int lower(int value){
-        return self.__lower(self.root,value);
-    }
-    int upper(int value){
-        return self.__upper(self.root,value);
-    }
-    void increment(int value){
-        self.__increment(self.root,value);
-    }
-};
 void testcase();
+inline int getSum(vvi &dp,int tlr,int tlc,int brr,int brc);
+inline int inversion(vvi &dp,int tlr,int tlc,int brr,int brc);
 int main(){
     ios;
     int t = 1;
@@ -294,36 +222,47 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi arr(n);
-    map(int,int)assign;
-    inc(i,0,n){
-        cin >> arr[i];
-        assign[arr[i]] = 0;
-    }
-    int index = 0;
-    each(entry,assign){
-        entry.sc = index++;
-    }
-    inc(i,0,n){
-        arr[i] = assign[arr[i]];
-    }
-    deque<int>dq;
-    SegmentTree tree(n);
-    ll ans = 0;
-    inc(i,0,n){
-        int front = tree.lower(arr[i]);
-        int back = tree.upper(arr[i]);
-        if(front <= back){
-            dq.pf(arr[i]);
-        } else {
-            dq.pb(arr[i]);
+    int n,m;
+    cin >> n >> m;
+    vec(string)arr(n);
+    readArray(arr);
+    vvi dp(n + 1,vi(m + 1,0));
+    inc(i,1,dp.sz()){
+        inc(j,1,dp[i].sz()){
+            dp[i][j] = dp[i][j - 1] + (arr[i - 1][j - 1] is '1');
         }
-        ans += min(front,back);
-        tree.increment(arr[i]);
+    }
+    inc(j,1,dp[0].sz()){
+        inc(i,1,dp.sz()){
+            dp[i][j] += dp[i - 1][j];
+        }
+    }
+    int ans = n * m;
+    inc(r1,0,n){
+        inc(c1,0,m){
+            inc(r2,r1 + 4,n){
+                inc(c2,c1 + 3,m){
+                    int cnd = getSum(dp,r1 + 1,c1 + 1,r2 - 1,c2 - 1);
+                    if(cnd > ans){
+                        break;
+                    }
+                    cnd += inversion(dp,r1,c1 + 1,r1,c2 - 1) + inversion(dp,r2,c1 + 1,r2,c2 - 1);
+                    if(cnd > ans){
+                        break;
+                    }
+                    cnd += inversion(dp,r1 + 1,c1,r2 - 1,c1) + inversion(dp,r1 + 1,c2,r2 - 1,c2);
+                    ans = cnd;
+                }
+            }
+        }
     }
     see(ans);
     return;
+}
+inline int getSum(vvi &dp,int tlr,int tlc,int brr,int brc){
+    return dp[brr + 1][brc + 1] - dp[tlr][brc + 1] - dp[brr + 1][tlc] + dp[tlr][tlc];
+}
+inline int inversion(vvi &dp,int tlr,int tlc,int brr,int brc){
+    return (brr - tlr + 1) * (brc - tlc + 1) - getSum(dp,tlr,tlc,brr,brc);
 }
 #pragma GCC diagnostic pop

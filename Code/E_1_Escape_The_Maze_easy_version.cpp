@@ -185,6 +185,20 @@ template<typename tmp> tmp power(tmp base,tmp exponent){
         return ans;
     }
 }
+template<typename tmp>
+void coordinateCompress(vec(tmp)&arr){
+    map(tmp,int)pos;
+    inc(i,0,arr.sz()){
+        pos[arr[i]] = 0;
+    }
+    int index = 0;
+    each(entry,pos){
+        entry.sc = index++;
+    }
+    inc(i,0,arr.sz()){
+        arr[i] = pos[arr[i]];
+    }
+}
 template<typename tmp> tmp mod(tmp number,tmp base){
     while(number < 0){
         number += base;
@@ -209,81 +223,8 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
-class Node {
-    public:
-    int start,end,cnt;
-    Node *left,*right;
-    Node(int start,int end,int cnt){
-        self.start = start;
-        self.end = end;
-        self.cnt = cnt;
-        self.left = nullptr;
-        self.right = nullptr;
-    }
-};
-class SegmentTree {
-    private:
-    Node *root;
-    Node* __build(int start,int end){
-        if(start is end){
-            Node *node = new Node(start,end,0);
-            return node;
-        } else {
-            int mid = (start + end) >> 1;
-            Node *left = self.__build(start,mid);
-            Node *right = self.__build(mid + 1,end);
-            Node *node = new Node(start,end,0);
-            node->left = left;
-            node->right = right;
-            return node;
-        }
-    }
-    int __lower(Node *node,int value){
-        if(!node or node->start >= value){
-            return 0;
-        } elif(node->end < value){
-            return node->cnt;
-        } else {
-            return self.__lower(node->left,value) + self.__lower(node->right,value);
-        }
-    }
-    int __upper(Node *node,int value){
-        if(!node or node->end <= value){
-            return 0;
-        } elif(node->start > value){
-            return node->cnt;
-        } else {
-            return self.__upper(node->left,value) + self.__upper(node->right,value);
-        }
-    }
-    void __increment(Node *node,int value){
-        if(!node or value > node->end or value < node->start){
-            return;
-        } elif(node->start is node->end){
-            node->cnt += (node->start is value);
-        } else {
-            self.__increment(node->left,value);
-            self.__increment(node->right,value);
-            int left = (node->left ? node->left->cnt : 0);
-            int right = (node->right ? node->right->cnt : 0);
-            node->cnt = left + right;
-        }
-    }
-    public:
-    SegmentTree(int n){
-        self.root = self.__build(0,n - 1);
-    }
-    int lower(int value){
-        return self.__lower(self.root,value);
-    }
-    int upper(int value){
-        return self.__upper(self.root,value);
-    }
-    void increment(int value){
-        self.__increment(self.root,value);
-    }
-};
 void testcase();
+bool bfs(vvi &tree,vi &color,vi &arr);
 int main(){
     ios;
     int t = 1;
@@ -294,36 +235,44 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi arr(n);
-    map(int,int)assign;
-    inc(i,0,n){
-        cin >> arr[i];
-        assign[arr[i]] = 0;
+    int n,k;
+    cin >> n >> k;
+    vi arr(k);
+    readArray(arr);
+    vvi tree(n + 1);
+    inc(i,0,n - 1){
+        int u,v;
+        cin >> u >> v;
+        tree[u].pb(v);
+        tree[v].pb(u);
     }
-    int index = 0;
-    each(entry,assign){
-        entry.sc = index++;
-    }
-    inc(i,0,n){
-        arr[i] = assign[arr[i]];
-    }
-    deque<int>dq;
-    SegmentTree tree(n);
-    ll ans = 0;
-    inc(i,0,n){
-        int front = tree.lower(arr[i]);
-        int back = tree.upper(arr[i]);
-        if(front <= back){
-            dq.pf(arr[i]);
-        } else {
-            dq.pb(arr[i]);
-        }
-        ans += min(front,back);
-        tree.increment(arr[i]);
-    }
-    see(ans);
+    vi color(n + 1,-1);
+    bfs(tree,color,arr) ? YY : NN;
     return;
+}
+bool bfs(vvi &tree,vi &color,vi &arr){
+    queue<int>q;
+    each(value,arr){
+        q.push(value);
+        color[value] = 0;
+    }
+    q.push(1);
+    color[1] = 1;
+    while(q.empty() is false){
+        int vertex = q.front();
+        q.pop();
+        each(neighbour,tree[vertex]){
+            if(color[neighbour] is -1){
+                color[neighbour] = color[vertex];
+                q.push(neighbour);
+            }
+        }
+    }
+    inc(vertex,2,color.sz()){
+        if(tree[vertex].sz() is 1 and color[vertex] is 1){
+            return true;
+        }
+    }
+    return false;
 }
 #pragma GCC diagnostic pop

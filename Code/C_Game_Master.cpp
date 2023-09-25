@@ -185,6 +185,20 @@ template<typename tmp> tmp power(tmp base,tmp exponent){
         return ans;
     }
 }
+template<typename tmp>
+void coordinateCompress(vec(tmp)&arr){
+    map(tmp,int)pos;
+    inc(i,0,arr.sz()){
+        pos[arr[i]] = 0;
+    }
+    int index = 0;
+    each(entry,pos){
+        entry.sc = index++;
+    }
+    inc(i,0,arr.sz()){
+        arr[i] = pos[arr[i]];
+    }
+}
 template<typename tmp> tmp mod(tmp number,tmp base){
     while(number < 0){
         number += base;
@@ -213,10 +227,10 @@ class Node {
     public:
     int start,end,cnt;
     Node *left,*right;
-    Node(int start,int end,int cnt){
+    Node(int start,int end){
         self.start = start;
         self.end = end;
-        self.cnt = cnt;
+        self.cnt = 0;
         self.left = nullptr;
         self.right = nullptr;
     }
@@ -226,44 +240,35 @@ class SegmentTree {
     Node *root;
     Node* __build(int start,int end){
         if(start is end){
-            Node *node = new Node(start,end,0);
+            Node *node = new Node(start,end);
             return node;
         } else {
             int mid = (start + end) >> 1;
             Node *left = self.__build(start,mid);
             Node *right = self.__build(mid + 1,end);
-            Node *node = new Node(start,end,0);
+            Node *node = new Node(start,end);
             node->left = left;
             node->right = right;
             return node;
         }
     }
-    int __lower(Node *node,int value){
-        if(!node or node->start >= value){
+    int __query(Node *node,int value){
+        if(!node or node->start > value){
             return 0;
         } elif(node->end < value){
             return node->cnt;
         } else {
-            return self.__lower(node->left,value) + self.__lower(node->right,value);
+            return self.__query(node->left,value) + self.__query(node->right,value);
         }
     }
-    int __upper(Node *node,int value){
-        if(!node or node->end <= value){
-            return 0;
-        } elif(node->start > value){
-            return node->cnt;
-        } else {
-            return self.__upper(node->left,value) + self.__upper(node->right,value);
-        }
-    }
-    void __increment(Node *node,int value){
+    void __update(Node *node,int value){
         if(!node or value > node->end or value < node->start){
             return;
         } elif(node->start is node->end){
-            node->cnt += (node->start is value);
+            node->cnt += node->start is value;
         } else {
-            self.__increment(node->left,value);
-            self.__increment(node->right,value);
+            self.__update(node->left,value);
+            self.__update(node->right,value);
             int left = (node->left ? node->left->cnt : 0);
             int right = (node->right ? node->right->cnt : 0);
             node->cnt = left + right;
@@ -273,14 +278,11 @@ class SegmentTree {
     SegmentTree(int n){
         self.root = self.__build(0,n - 1);
     }
-    int lower(int value){
-        return self.__lower(self.root,value);
+    int query(int value){
+        return self.__query(self.root,value);
     }
-    int upper(int value){
-        return self.__upper(self.root,value);
-    }
-    void increment(int value){
-        self.__increment(self.root,value);
+    void update(int value){
+        self.__update(self.root,value);
     }
 };
 void testcase();
@@ -296,32 +298,32 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vi arr(n);
-    map(int,int)assign;
+    vi a(n),b(n);
+    readArray(a);
+    readArray(b);
+    coordinateCompress(a);
+    coordinateCompress(b);
+    vec(pair(pii,int))data;
     inc(i,0,n){
-        cin >> arr[i];
-        assign[arr[i]] = 0;
+        data.pb(make_pair(make_pair(a[i],b[i]),i));
     }
-    int index = 0;
-    each(entry,assign){
-        entry.sc = index++;
-    }
+    sorted(data);
+    vi indices;
+    set(int)highest;
     inc(i,0,n){
-        arr[i] = assign[arr[i]];
+        b[i] = data[i].fr.sc;
+        indices.pb(data[i].sc);
+        highest.ins(b[i]);
     }
-    deque<int>dq;
     SegmentTree tree(n);
-    ll ans = 0;
-    inc(i,0,n){
-        int front = tree.lower(arr[i]);
-        int back = tree.upper(arr[i]);
-        if(front <= back){
-            dq.pf(arr[i]);
-        } else {
-            dq.pb(arr[i]);
+    string ans(n,'0');
+    dec(i,n - 1,0){
+        int curr = *highest.rbegin();
+        if(i is n - 1 or tree.query(curr) > 0){
+            ans[indices[i]] = '1';
+            tree.update(b[i]);
         }
-        ans += min(front,back);
-        tree.increment(arr[i]);
+        highest.erase(b[i]);
     }
     see(ans);
     return;
