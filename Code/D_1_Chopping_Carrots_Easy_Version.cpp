@@ -243,26 +243,27 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
-    inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+    int n,k;
+    cin >> n >> k;
+    vi arr(n);
+    readArray(arr);
+    int ans = arr.back() - arr.front();
+    inc(mini,0,arr.front() + 1){
+        int maxi = -inf;
+        inc(i,0,n){
+            int denominator = (mini is 0 ? k : min(k,arr[i] / mini));
+            maxi = max(maxi,arr[i] / denominator);
+        }
+        ans = min(ans,maxi - mini);
     }
-    if(cnt > req){
-        YY;
-    } else {
-        NN;
-    }
+    see(ans);
     return;
 }
 #pragma GCC diagnostic pop

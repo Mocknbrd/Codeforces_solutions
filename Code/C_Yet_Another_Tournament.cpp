@@ -243,25 +243,30 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
-    inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+    int n,m;
+    cin >> n >> m;
+    vi a(n);
+    readArray(a);
+    vi cpy = a;
+    sorted(cpy);
+    int sum = 0,index = 0;
+    while(index < n and sum + cpy[index] <= m){
+        sum += cpy[index++];
     }
-    if(cnt > req){
-        YY;
+    if(index is 0){
+        see(n + 1);
+    } elif(index is n){
+        see(1);
     } else {
-        NN;
+        sum += a[index] - cpy[index - 1];
+        see(n - index + (sum > m));
     }
     return;
 }

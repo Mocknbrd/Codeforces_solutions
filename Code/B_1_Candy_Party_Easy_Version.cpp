@@ -227,8 +227,7 @@ template<typename tmp> tmp gcd(tmp a, tmp b){
     return gcd(b % a, a);
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    tmp divide = gcd(a,b);
-    return (a / divide) * (b / divide);
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -243,7 +242,7 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
@@ -252,16 +251,42 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
+    vll arr(n);
+    ll sum = 0;
     inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+        cin >> arr[i];
+        sum += arr[i];
     }
-    if(cnt > req){
-        YY;
+    if(mod(sum,cast(n,ll)) isnt 0){
+        nn;
     } else {
-        NN;
+        ll target = sum / n;
+        vi bits(32,0);
+        each(value,arr){
+            if(value isnt target){
+                int diff = abs(value - target);
+                int x = 32 - __builtin_clz(diff),y = log2(diff & (-diff));
+                if((1 << x) - (1 << y) isnt diff){
+                    nn;
+                    return;
+                } else {
+                    if(value > target){
+                        bits[x]--;
+                        bits[y]++;
+                    } else {
+                        bits[y]--;
+                        bits[x]++;
+                    }
+                }
+            }
+        }
+        inc(bit,0,32){
+            if(bits[bit] isnt 0){
+                nn;
+                return;
+            }
+        }
+        yy;
     }
     return;
 }

@@ -227,8 +227,7 @@ template<typename tmp> tmp gcd(tmp a, tmp b){
     return gcd(b % a, a);
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    tmp divide = gcd(a,b);
-    return (a / divide) * (b / divide);
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -243,7 +242,7 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
@@ -252,17 +251,22 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
+    vll a(n),b(n);
     inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+        cin >> a[i] >> b[i];
     }
-    if(cnt > req){
-        YY;
-    } else {
-        NN;
+    ll gcd_ = a[0] * b[0],lcm_ = b[0];
+    int ans = 1;
+    inc(i,1,n){
+        gcd_ = gcd(a[i] * b[i],gcd_);
+        lcm_ = lcm(lcm_,b[i]);
+        if(mod(gcd_,lcm_) isnt 0){
+            ans++;
+            gcd_ = a[i] * b[i];
+            lcm_ = b[i];
+        }
     }
+    see(ans);
     return;
 }
 #pragma GCC diagnostic pop

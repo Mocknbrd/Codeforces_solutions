@@ -227,8 +227,7 @@ template<typename tmp> tmp gcd(tmp a, tmp b){
     return gcd(b % a, a);
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    tmp divide = gcd(a,b);
-    return (a / divide) * (b / divide);
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -243,26 +242,50 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
     string s;
     cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
-    inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+    int pos;
+    cin >> pos;
+    int n = s.sz();
+    vi prefix;
+    prefix.pb(0);
+    while(n){
+        prefix.pb(prefix.back() + n--);
     }
-    if(cnt > req){
-        YY;
-    } else {
-        NN;
+    int index = lower_bound(all(prefix),pos) - prefix.begin();
+    int offset = pos - prefix[index - 1];
+    int length = prefix[index] - prefix[index - 1];
+    set(pair(int,char))charset;
+    queue<int>inversions;
+    inc_la(i,0,s.sz(),1){
+        if(s[i] > s[i + 1]){
+            inversions.push(i);
+        }
     }
+    inc(i,0,s.sz()){
+        charset.ins(make_pair(i,s[i]));
+    }
+    inc(i,0,index - 1){
+        if(inversions.empty() is false){
+            int curr = inversions.front(); inversions.pop();
+            charset.erase(make_pair(curr,s[curr]));
+        } else {
+            charset.erase(--charset.end());
+        }
+    }
+    string res(charset.sz(),'0');
+    int start = 0;
+    each(element,charset){
+        res[start++] = element.sc;
+    }
+    cout << res[offset - 1];
     return;
 }
 #pragma GCC diagnostic pop

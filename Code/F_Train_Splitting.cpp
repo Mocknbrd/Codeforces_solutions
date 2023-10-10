@@ -240,29 +240,82 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 const int inf = 2e9;
 const ll linf = 2e18;
 void testcase();
+class DSU {
+    private:
+    vi parents,ranks;
+    int total = 0,limit = 0;
+    void __merge(int large,int small){
+        self.total += (self.ranks[large] is 1) + (self.ranks[small] is 1);
+        self.parents[small] = large;
+        self.ranks[large] += self.ranks[small];
+    }
+    int __find(int x){
+        if(self.parents[x] == x){
+            return x;
+        } else {
+            return self.parents[x] = self.__find(self.parents[x]);
+        }
+    }
+    public:
+    DSU(int n){
+        self.parents = vi(n);
+        self.ranks = vi(n,1);
+        inc(i,0,n){
+            self.parents[i] = i;
+        }
+        self.total = 0;
+        self.limit = n - 1;
+    }
+    bool canJoin(int x,int y){
+        int parx = self.__find(x);
+        int pary = self.__find(y);
+        if(self.total is self.limit){
+            return false;
+        } else {
+            if(self.ranks[parx] >= self.ranks[pary]){
+                self.__merge(parx,pary);
+            } else {
+                self.__merge(pary,parx);
+            }
+            return true;
+        }
+    }
+};
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
-    inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+    int n,m;
+    cin >> n >> m;
+    vpii edges(m);
+    inc(i,0,m){
+        cin >> edges[i].fr >> edges[i].sc;
+        edges[i].fr--;
+        edges[i].sc--;
     }
-    if(cnt > req){
-        YY;
-    } else {
-        NN;
+    vec(DSU)arr;
+    while(arr.sz() isnt m){
+        DSU dsu(n);
+        arr.pb(dsu);
     }
+    vi ans(m,0);
+    inc(i,0,m){
+        pii edge = edges[i];
+        inc(j,0,m){
+            if(arr[j].canJoin(edge.fr,edge.sc) is true){
+                ans[i] = j + 1;
+                break;
+            }
+        }
+    }
+    see(*max_element(all(ans)));
+    writeArray(ans);
     return;
 }
 #pragma GCC diagnostic pop

@@ -243,7 +243,7 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
@@ -252,17 +252,34 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
+    vi a(n),b(n);
+    readArray(a);
+    readArray(b);
     inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+        while(mod(a[i],2) is 0){
+            a[i] /= 2;
+        }
+        while(mod(b[i],2) is 0){
+            b[i] /= 2;
+        }
     }
-    if(cnt > req){
-        YY;
-    } else {
-        NN;
+    mmset(int)first(all(a)),second(all(b));
+    while(first.empty() is false){
+        int value = *--second.end();
+        second.erase(--second.end());
+        while(value >= 1){
+            if(first.find(value) isnt first.end()){
+                first.erase(first.find(value));
+                break;
+            }
+            value /= 2;
+        }
+        if(value is 0){
+            NN;
+            return;
+        }
     }
+    YY;
     return;
 }
 #pragma GCC diagnostic pop

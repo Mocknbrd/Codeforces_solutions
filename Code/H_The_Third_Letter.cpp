@@ -227,8 +227,7 @@ template<typename tmp> tmp gcd(tmp a, tmp b){
     return gcd(b % a, a);
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    tmp divide = gcd(a,b);
-    return (a / divide) * (b / divide);
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -243,26 +242,49 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
+    int n,m;
+    cin >> n >> m;
+    map(ll,vpll)graph;
     inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+        graph[i + 1] = vpll();
     }
-    if(cnt > req){
-        YY;
-    } else {
-        NN;
+    inc(i,0,m){
+        ll a,b,d;
+         cin >> a >> b >> d;
+         graph[a].pb(make_pair(b,d));
+         graph[b].pb(make_pair(a,-d));
     }
+    vll positions(n + 1,-1);
+    inc(vertex,1,n + 1){
+        if(positions[vertex] is -1){
+            positions[vertex] = 0;
+            queue<ll>q;
+            q.push(vertex);
+            while(q.empty() is false){
+                ll curr = q.front(); q.pop();
+                while(graph[curr].empty() is false){
+                    pll next = graph[curr].back();
+                    graph[curr].rb();
+                    ll nextpos = positions[curr] + next.sc;
+                    if(positions[next.fr] is -1 or positions[next.fr] is nextpos){
+                        positions[next.fr] = nextpos;
+                        q.push(next.fr);
+                    } else {
+                        NN;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    YY;
     return;
 }
 #pragma GCC diagnostic pop

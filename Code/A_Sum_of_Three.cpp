@@ -227,8 +227,7 @@ template<typename tmp> tmp gcd(tmp a, tmp b){
     return gcd(b % a, a);
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    tmp divide = gcd(a,b);
-    return (a / divide) * (b / divide);
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -240,10 +239,13 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 const int inf = 2e9;
 const ll linf = 2e18;
 void testcase();
+bool cond(int first,int second,int third){
+    return min(first,min(second,third)) > 0 and mod(third,3) isnt 0 and first isnt third and second isnt third;
+}
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
@@ -252,16 +254,37 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
-    inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
-    }
-    if(cnt > req){
-        YY;
+    int first = 0,second = 0,third = 0;
+    if(mod(n,3) is 0){
+        first = 1,second = 4,third = n - first - second;
+        if(cond(first,second,third) is true){
+            YY;
+            see(first << " " << second << " " << third);
+        } else {
+            first = 2,second = 5,third = n - first - second;
+            if(cond(first,second,third) is true){
+                YY;
+                see(first << " " << second << " " << third);
+            } else {
+                NN;
+            }
+        }
+    } elif(mod(n,3) is 1){
+        int first = 1,second = 4,third = n - first - second;
+        if(cond(first,second,third) is true){
+            YY;
+            see(first << " " << second << " " << third);
+        } else {
+            NN;
+        }
     } else {
-        NN;
+        int first = 2,second = 5,third = n - first - second;
+        if(cond(first,second,third) is true){
+            YY;
+            see(first << " " << second << " " << third);
+        } else {
+            NN;
+        }
     }
     return;
 }

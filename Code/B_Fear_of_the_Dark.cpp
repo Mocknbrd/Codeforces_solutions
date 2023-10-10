@@ -227,8 +227,7 @@ template<typename tmp> tmp gcd(tmp a, tmp b){
     return gcd(b % a, a);
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    tmp divide = gcd(a,b);
-    return (a / divide) * (b / divide);
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -240,29 +239,63 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 const int inf = 2e9;
 const ll linf = 2e18;
 void testcase();
+ld distance(pii first,pii second);
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
-    inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+    pii target,first,second,origin;
+    origin.fr = 0,origin.sc = 0;
+    cin >> target.fr >> target.sc;
+    cin >> first.fr >> first.sc;
+    cin >> second.fr >> second.sc;
+    ld ans = min(max(distance(first,origin),distance(first,target)),max(distance(second,origin),distance(second,target)));
+    ld start = 0,end = ans;
+    ld add = powl(10,-9);
+    while(start < end){
+        ld radius = (start + end) / 2;
+        if(distance(first,origin) <= radius and distance(first,target) <= radius){
+            end = radius - add;
+            ans = radius;
+        } elif(distance(second,origin) <= radius and distance(second,target) <= radius){
+            ans = radius;
+            end = radius - add;
+        } else {
+            if(distance(origin,first) <= radius or distance(origin,second) <= radius){
+                if(distance(origin,first) <= radius){
+                    if(distance(target,second) <= radius and distance(second,first) <= 2 * radius){
+                        end = radius - add;
+                        ans = radius;
+                    } else {
+                        start = radius + add;
+                    }
+                } elif(distance(origin,second) <= radius){
+                    if(distance(target,first) <= radius and distance(second,first) <= 2 * radius){
+                        end = radius - add;
+                        ans = radius;
+                    } else {
+                        start = radius + add;
+                    }
+                } else {
+                    start = radius + add;
+                }
+            } else {
+                start = radius + add;
+            }
+        }
     }
-    if(cnt > req){
-        YY;
-    } else {
-        NN;
-    }
+    cout << setprecision(20) << ans << endl;
     return;
+}
+ld distance(pii first,pii second){
+    ll value1 = first.fr - second.fr;
+    ll value2 = first.sc - second.sc;
+    return sqrtl(value1 * value1 + value2 * value2);
 }
 #pragma GCC diagnostic pop

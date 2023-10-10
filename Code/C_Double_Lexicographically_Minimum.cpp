@@ -227,8 +227,7 @@ template<typename tmp> tmp gcd(tmp a, tmp b){
     return gcd(b % a, a);
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    tmp divide = gcd(a,b);
-    return (a / divide) * (b / divide);
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -243,26 +242,45 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
     string s;
     cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
-    inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+    int n = s.sz();
+    sorted(s);
+    string ans = s;
+    int start = 0,end = n - 1,index = 0;
+    while(index < n){
+        if(index is n - 1){
+            ans[start++] = s[index++];
+        } elif(s[index] is s[index + 1]){
+            ans[start++] = s[index++];
+            ans[end--] = s[index++];
+        } elif(s[index + 1] is s.back()){
+            int length = n - index - 1;
+            inc(_,0,ceil(length,2)){
+                ans[start++] = s[index + 1];
+            }
+            ans[start++] = s[index];
+            inc(_,0,length / 2){
+                ans[start++] = s[index + 1];
+            }
+            index = n;
+        } else {
+            ans[start++] = s[index + 1];
+            ans[end--] = s[index];
+            index += 2;
+            while(index < n){
+                ans[start++] = s[index++];
+            }
+        }
     }
-    if(cnt > req){
-        YY;
-    } else {
-        NN;
-    }
+    see(ans);
     return;
 }
 #pragma GCC diagnostic pop

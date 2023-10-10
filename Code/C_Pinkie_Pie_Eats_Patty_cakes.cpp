@@ -227,8 +227,7 @@ template<typename tmp> tmp gcd(tmp a, tmp b){
     return gcd(b % a, a);
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    tmp divide = gcd(a,b);
-    return (a / divide) * (b / divide);
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -243,7 +242,7 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
@@ -252,17 +251,48 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
+    map(int,int)counts;
     inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+        int value;
+        cin >> value;
+        counts[value]++;
     }
-    if(cnt > req){
-        YY;
-    } else {
-        NN;
+    int start = 0,end = n,ans = 0;
+    while(start <= end){
+        int curr = (start + end) >> 1;
+        set(pii)cnds;
+        map(int,int)cnts = counts,release;
+        each(entry,counts){
+            cnds.ins(make_pair(entry.sc,entry.fr));
+        }
+        bool done = true;
+        inc(i,0,n){
+            if(release.count(i) is true){
+                int value = release[i];
+                cnds.ins(make_pair(cnts[value],value));
+                release.erase(i);
+            }
+            if(cnds.empty() is true){
+                done = false;
+                break;
+            } else {
+                int value = (*--cnds.end()).sc;
+                cnds.erase(--cnds.end());
+                if(--cnts[value] is 0){
+                    cnts.erase(value);
+                } else {
+                    release[i + curr + 1] = value;
+                }
+            }
+        }
+        if(done is true){
+            ans = curr;
+            start = curr + 1;
+        } else {
+            end = curr - 1;
+        }
     }
+    see(ans);
     return;
 }
 #pragma GCC diagnostic pop

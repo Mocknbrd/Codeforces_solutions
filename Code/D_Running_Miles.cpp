@@ -227,8 +227,7 @@ template<typename tmp> tmp gcd(tmp a, tmp b){
     return gcd(b % a, a);
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    tmp divide = gcd(a,b);
-    return (a / divide) * (b / divide);
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -240,10 +239,60 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 const int inf = 2e9;
 const ll linf = 2e18;
 void testcase();
+class Node {
+    public:
+    int start,end,first,second;
+    Node *left,*right;
+    Node(int start,int end,int first,int second){
+        self.start = start;
+        self.end = end;
+        self.first = first;
+        self.second = second;
+        self.left = nullptr;
+        self.right = nullptr;
+    }
+};
+class SegmentTree {
+    private:
+    Node *root;
+    Node* __build(vi &arr,int start,int end){
+        if(start is end){
+            Node *node = new Node(start,end,arr[start] + start,arr[start] - start);
+            return node;
+        } else {
+            int mid = (start + end) >> 1;
+            Node *left = self.__build(arr,start,mid);
+            Node *right = self.__build(arr,mid + 1,end);
+            Node *node = new Node(start,end,max(left->first,right->first),max(left->second,right->second));
+            node->left = left;
+            node->right = right;
+            return node;
+        }
+    }
+    int __find(Node *node,int start,int end,bool first){
+        if(!node or start > node->end or end < node->start){
+            return -inf;
+        } elif(node->start >= start and node->end <= end){
+            return first is true ? node->first : node->second;
+        } else {
+            return max(self.__find(node->left,start,end,first),self.__find(node->right,start,end,first));
+        }
+    }
+    public:
+    SegmentTree(vi &arr){
+        self.root = self.__build(arr,0,arr.sz() - 1);
+    }
+    int findRight(int start,int end){
+        return self.__find(self.root,start,end,false);
+    }
+    int findLeft(int start,int end){
+        return self.__find(self.root,start,end,true);
+    }
+};
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
@@ -252,17 +301,14 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
-    inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+    vi arr(n);
+    readArray(arr);
+    SegmentTree tree(arr);
+    int ans = 0;
+    inc(mid,1,n - 1){
+        ans = max(ans,tree.findLeft(0,mid - 1) + arr[mid] + tree.findRight(mid + 1,n - 1));
     }
-    if(cnt > req){
-        YY;
-    } else {
-        NN;
-    }
+    see(ans);
     return;
 }
 #pragma GCC diagnostic pop

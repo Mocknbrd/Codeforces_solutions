@@ -227,8 +227,7 @@ template<typename tmp> tmp gcd(tmp a, tmp b){
     return gcd(b % a, a);
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    tmp divide = gcd(a,b);
-    return (a / divide) * (b / divide);
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -240,10 +239,11 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 const int inf = 2e9;
 const ll linf = 2e18;
 void testcase();
+bool flip(char value,int count);
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
@@ -252,17 +252,45 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
+    vec(string)arr(n);
+    readArray(arr);
+    vvi counts(n,vi(n,0));
+    int ans = 0;
     inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
+        inc(j,0,n){
+            if(counts[i][j] >= 0){
+                if(i + 1 < n){
+                    counts[i + 1][max(0,j - 1)] += counts[i][j];
+                }
+            } else {
+                if(i + 1 < n and j + 1 < n){
+                    counts[i + 1][j + 1] += counts[i][j];
+                }
+            }
+            if(j isnt 0){
+                counts[i][j] += counts[i][j - 1];
+            }
+        }
+        inc(j,0,n){
+            if(flip(arr[i][j],counts[i][j]) is true){
+                ans++;
+                if(i + 1 < n){
+                    counts[i + 1][max(0,j - 1)]++;
+                    if(j + 2 < n){
+                        counts[i + 1][j + 2]--;
+                    }
+                }
+            }
+        }
     }
-    if(cnt > req){
-        YY;
-    } else {
-        NN;
-    }
+    see(ans);
     return;
+}
+bool flip(char value,int count){
+    if(mod(count,2) is 0){
+        return value is '1';
+    } else {
+        return value is '0';
+    }
 }
 #pragma GCC diagnostic pop

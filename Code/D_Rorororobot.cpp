@@ -239,6 +239,53 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
+class Node {
+    public:
+    int start,end,maxi;
+    Node *left,*right;
+    Node(int start,int end,int maxi){
+        self.start = start;
+        self.end = end;
+        self.maxi = maxi;
+        self.maxi = maxi;
+        self.left = nullptr;
+        self.right = nullptr;
+    }
+};
+class SegmentTree {
+    private:
+    Node *root;
+    Node* __build(vi &arr,int start,int end){
+        if(start is end){
+            Node *node = new Node(start,end,arr[start] + 1);
+            return node;
+        } else {
+            int mid = (start + end) >> 1;
+            Node *left = self.__build(arr,start,mid);
+            Node *right = self.__build(arr,mid + 1,end);
+            Node *node = new Node(start,end,max(left->maxi,right->maxi));
+            node->left = left;
+            node->right = right;
+            return node;
+        }
+    }
+    int __query(Node *node,int start,int end){
+        if(!node or start > node->end or end < node->start){
+            return -inf;
+        } elif(node->start >= start and node->end <= end){
+            return node->maxi;
+        } else {
+            return max(self.__query(node->left,start,end),self.__query(node->right,start,end));
+        }
+    }
+    public:
+    SegmentTree(vi &arr){
+        self.root = self.__build(arr,0,arr.sz() - 1);
+    }
+    int query(int start,int end){
+        return self.__query(self.root,start,end);
+    }
+};
 void testcase();
 int main(){
     ios;
@@ -250,18 +297,28 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    int moves = n - 11, req = moves >> 1,cnt = 0;
-    inc(i,0,n){
-        cnt += (i <= moves and s[i] is '8');
-    }
-    if(cnt > req){
-        YY;
-    } else {
-        NN;
+    int n,m;
+    cin >> n >> m;
+    vi arr(m);
+    readArray(arr);
+    SegmentTree tree(arr);
+    int q;
+    cin >> q;
+    while(q--){
+        int xs,ys,xf,yf,k;
+        cin >> xs >> ys >> xf >> yf >> k;
+        if(mod(xs,k) isnt mod(xf,k) or mod(ys,k) isnt mod(yf,k)){
+            NN;
+        } else {
+            if(ys > yf){
+                swap(ys,yf);
+            }
+            if(xs > xf){
+                swap(xs,xf);
+            }
+            int maxi = (n - xs) / k * k + xs;
+            tree.query(ys - 1,yf - 1) <= maxi ? YY : NN;
+        }
     }
     return;
 }
