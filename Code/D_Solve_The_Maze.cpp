@@ -239,37 +239,110 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 const int inf = 2e9;
 const ll linf = 2e18;
 void testcase();
+int findCode(int r,int c,int cols);
+class DSU {
+    private:
+    vi parent,ranks;
+    void merge(int large,int small){
+        self.parent[small] = large;
+        self.ranks[large] += self.ranks[small];
+    }
+    public:
+    DSU(int n,int m){
+        self.parent = vi(n * m,0);
+        self.ranks = vi(n * m,1);
+        inc(i,0,n){
+            inc(j,0,m){
+                int code = i * m + j;
+                self.parent[code] = code;
+            }
+        }
+    }
+    int find(int x){
+        if(self.parent[x] is x){
+            return x;
+        } else {
+            return self.parent[x] = self.find(self.parent[x]);
+        }
+    }
+    void findUnion(int x,int y){
+        int parx = self.find(x);
+        int pary = self.find(y);
+        if(parx isnt pary){
+            if(self.ranks[parx] >= self.ranks[pary]){
+                self.merge(parx,pary);
+            } else {
+                self.merge(pary,parx);
+            }
+        }
+    }
+};
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi bits(20,0);
+    int n,m;
+    cin >> n >> m;
+    vec(string)arr(n);
+    readArray(arr);
     inc(i,0,n){
-        int value;
-        cin >> value;
-        inc(pos,0,20){
-            bits[pos] += (value >> pos) & 1;
-        }
-    }
-    ll ans = 0;
-    inc(i,0,n){
-        ll value = 0;
-        inc(pos,0,20){
-            if(bits[pos]-- > 0){
-                value |= (1 << pos);
+        inc(j,0,m){
+            if(arr[i][j] is 'B'){
+                if(i + 1 < n and arr[i + 1][j] is '.'){
+                    arr[i + 1][j] = '#';
+                }
+                if(i - 1 >= 0 and arr[i - 1][j] is '.'){
+                    arr[i - 1][j] = '#';
+                }
+                if(j + 1 < m and arr[i][j + 1] is '.'){
+                    arr[i][j + 1] = '#';
+                }
+                if(j - 1 >= 0 and arr[i][j - 1] is '.'){
+                    arr[i][j - 1] = '#';
+                }
             }
         }
-        ans += value * value;
     }
-    see(ans);
+    DSU dsu(n,m);
+    inc(i,0,n){
+        inc(j,0,m){
+            if(arr[i][j] isnt '#'){
+                if(i + 1 < n and arr[i + 1][j] isnt '#'){
+                    dsu.findUnion(findCode(i,j,m),findCode(i + 1,j,m));
+                }
+                if(i - 1 >= 0 and arr[i - 1][j] isnt '#'){
+                    dsu.findUnion(findCode(i,j,m),findCode(i - 1,j,m));
+                }
+                if(j + 1 < m and arr[i][j + 1] isnt '#'){
+                    dsu.findUnion(findCode(i,j,m),findCode(i,j + 1,m));
+                }
+                if(j - 1 >= 0 and arr[i][j - 1] isnt '#'){
+                    dsu.findUnion(findCode(i,j,m),findCode(i,j - 1,m));
+                }
+            }
+        }
+    }
+    inc(i,0,n){
+        inc(j,0,m){
+            if(arr[i][j] is 'G' and dsu.find(findCode(i,j,m)) isnt dsu.find(findCode(n - 1,m - 1,m))){
+                nn;
+                return;
+            } elif(arr[i][j] is 'B' and dsu.find(findCode(i,j,m)) is dsu.find(findCode(n - 1,m - 1,m))){
+                nn;
+                return;
+            }
+        }
+    }
+    yy;
     return;
+}
+int findCode(int r,int c,int cols){
+    return r * cols + c;
 }
 #pragma GCC diagnostic pop

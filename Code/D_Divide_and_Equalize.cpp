@@ -242,7 +242,7 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
@@ -251,25 +251,30 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vi bits(20,0);
+    map(int,int)primes;
     inc(i,0,n){
         int value;
         cin >> value;
-        inc(pos,0,20){
-            bits[pos] += (value >> pos) & 1;
-        }
-    }
-    ll ans = 0;
-    inc(i,0,n){
-        ll value = 0;
-        inc(pos,0,20){
-            if(bits[pos]-- > 0){
-                value |= (1 << pos);
+        int prime = 2;
+        while(prime * prime <= value){
+            while(mod(value,prime) is 0){
+                value /= prime;
+                primes[prime]++;
             }
+            prime++;
         }
-        ans += value * value;
+        if(value isnt 1){
+            primes[value]++;
+        }
     }
-    see(ans);
+    each(entry,primes){
+        int count = entry.sc;
+        if(mod(count,n) isnt 0){
+            NN;
+            return;
+        }
+    }
+    YY;
     return;
 }
 #pragma GCC diagnostic pop

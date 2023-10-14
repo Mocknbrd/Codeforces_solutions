@@ -238,38 +238,80 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
+bool solve(vvll &dp,vec(vpii)&transition,vi &digits,vi &arr,int index,int left);
 void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi bits(20,0);
+    int n,k;
+    cin >> n >> k;
+    vec(string)strings(n);
+    readArray(strings);
+    vi arr(n,0);
     inc(i,0,n){
-        int value;
-        cin >> value;
-        inc(pos,0,20){
-            bits[pos] += (value >> pos) & 1;
-        }
-    }
-    ll ans = 0;
-    inc(i,0,n){
-        ll value = 0;
-        inc(pos,0,20){
-            if(bits[pos]-- > 0){
-                value |= (1 << pos);
+        string s = strings[i];
+        inc(pos,0,s.sz()){
+            if(s[pos] is '1'){
+                arr[i] |= (1 << pos);
             }
         }
-        ans += value * value;
+    }
+    vec(string)digitString;
+    digitString.pb("1110111");digitString.pb("0010010");digitString.pb("1011101");
+    digitString.pb("1011011");digitString.pb("0111010");digitString.pb("1101011");digitString.pb("1101111");
+    digitString.pb("1010010");digitString.pb("1111111");digitString.pb("1111011");
+    vi digits(10,0);
+    inc(i,0,10){
+        int digit = 0;
+        inc(pos,0,7){
+            digit ^= ((digitString[i][pos] is '1') << pos);
+        }
+        digits[i] = digit;
+    }
+    vvll dp(n,vll(k + 1,-1));
+    vec(vpii)transition(n,vpii(k + 1,make_pair(-inf,-inf)));
+    solve(dp,transition,digits,arr,0,k);
+    string ans;
+    int start = -1;
+    dec(i,transition[0].sz() - 1,0){
+        if(transition[0][i].fr isnt -inf){
+            start = i;
+            break;
+        }
+    }
+    if(start is -1){
+        see(-1);
+    } else {
+        inc(i,0,n){
+            char digit = '0' + transition[i][start].fr;
+            start = transition[i][start].sc;
+            ans.pb(digit);
+        }
     }
     see(ans);
     return;
+}
+bool solve(vvll &dp,vec(vpii)&transition,vi &digits,vi &arr,int index,int left){
+    if(index is dp.sz()){
+        return left is 0;
+    } elif(dp[index][left] isnt -1){
+        return dp[index][left];
+    } else {
+        dec(digit,9,0){
+            int dist = __builtin_popcount(digits[digit]) - __builtin_popcount(arr[index]);
+            bool submask = ((digits[digit] & arr[index]) is arr[index]);
+            if(submask is true and dist <= left and solve(dp,transition,digits,arr,index + 1,left - dist) is true){
+                transition[index][left] = make_pair(digit,left - dist);
+                return dp[index][left] = true;
+            }
+        }
+        return dp[index][left] = false;
+    }
 }
 #pragma GCC diagnostic pop

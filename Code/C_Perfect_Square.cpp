@@ -238,11 +238,65 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
+class DSU {
+    private:
+    vi parent,ranks;
+    vec(char)largest;
+    void merge(int l,int s){
+        self.parent[s] = l;
+        self.ranks[l] += self.ranks[s];
+        self.largest[l] = max(self.largest[l],self.largest[s]);
+    }
+    public:
+    DSU(vec(string) &arr){
+        int n = arr.sz();
+        self.parent = vi(n * n,1);
+        self.ranks = self.parent;
+        self.largest = vec(char)(n * n,'a');
+        inc(i,0,n){
+            inc(j,0,n){
+                int code = i * n + j;
+                self.parent[code] = code;
+                self.largest[code] = arr[i][j];
+            }
+        }
+    }
+    int find(int x){
+        if(self.parent[x] is x){
+            return x;
+        } else {
+            return self.parent[x] = self.find(self.parent[x]);
+        }
+    }
+    void u(int x,int y){
+        int parx = self.find(x);
+        int pary = self.find(y);
+        if(parx isnt pary){
+            if(self.ranks[parx] >= self.ranks[pary]){
+                self.merge(parx,pary);
+            } else {
+                self.merge(pary,parx);
+            }
+        }
+    }
+    int solve(vec(string)&arr){
+        int ans = 0;
+        int n = arr.sz();
+        inc(i,0,n){
+            inc(j,0,n){
+                int code = i * n + j;
+                char target = self.largest[self.parent[code]];
+                ans += cast(target - arr[i][j],int);
+            }
+        }
+        return ans;
+    }
+};
 void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
@@ -251,25 +305,19 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vi bits(20,0);
+    vec(string)arr(n);
+    readArray(arr);
+    DSU dsu(arr);
     inc(i,0,n){
-        int value;
-        cin >> value;
-        inc(pos,0,20){
-            bits[pos] += (value >> pos) & 1;
+        inc(j,0,n){
+            pii first = make_pair(i,j);
+            pii second = make_pair(n - j - 1,i);
+            int x = first.fr * n + first.sc;
+            int y = second.fr * n + second.sc;
+            dsu.u(x,y);
         }
     }
-    ll ans = 0;
-    inc(i,0,n){
-        ll value = 0;
-        inc(pos,0,20){
-            if(bits[pos]-- > 0){
-                value |= (1 << pos);
-            }
-        }
-        ans += value * value;
-    }
-    see(ans);
+    see(dsu.solve(arr));
     return;
 }
 #pragma GCC diagnostic pop

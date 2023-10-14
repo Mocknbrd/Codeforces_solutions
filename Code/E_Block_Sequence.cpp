@@ -242,7 +242,7 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
@@ -251,23 +251,24 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vi bits(20,0);
-    inc(i,0,n){
-        int value;
-        cin >> value;
-        inc(pos,0,20){
-            bits[pos] += (value >> pos) & 1;
+    vi arr(n);
+    readArray(arr);
+    vvll dp(n,vll(2,inf));
+    dp.back()[0] = 1;
+    dec(i,n - 2,0){
+        dp[i][0] = 1 + min(dp[i + 1][0],dp[i + 1][1]);
+        if(i + 1 + arr[i] > n){
+            dp[i][1] = inf;
+        } elif(i + arr[i] + 1 is n){
+            dp[i][1] = 0;
+        } else {
+            dp[i][1] = min(dp[i + arr[i] + 1][0],dp[i + arr[i] + 1][1]);
         }
     }
-    ll ans = 0;
+    ll ans = inf;
     inc(i,0,n){
-        ll value = 0;
-        inc(pos,0,20){
-            if(bits[pos]-- > 0){
-                value |= (1 << pos);
-            }
-        }
-        ans += value * value;
+        ll cnd = i + min(dp[i][0],dp[i][1]);
+        ans = min(ans,cnd);
     }
     see(ans);
     return;

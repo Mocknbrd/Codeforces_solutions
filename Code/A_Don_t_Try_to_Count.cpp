@@ -242,34 +242,43 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi bits(20,0);
-    inc(i,0,n){
-        int value;
-        cin >> value;
-        inc(pos,0,20){
-            bits[pos] += (value >> pos) & 1;
-        }
-    }
-    ll ans = 0;
-    inc(i,0,n){
-        ll value = 0;
-        inc(pos,0,20){
-            if(bits[pos]-- > 0){
-                value |= (1 << pos);
+    int n,m;
+    cin >> n >> m;
+    string x,s;
+    cin >> x >> s;
+    int ans = 0;
+    do {
+        inc_la(i,0,x.sz(),s.sz() - 1){
+            if(x.substr(i,s.sz()) is s){
+                see(ans);
+                return;
             }
         }
-        ans += value * value;
+        ans++;
+        x += x;
+    } while(x.sz() <= s.sz());
+    inc_la(i,0,x.sz(),s.sz() - 1){
+        if(x.substr(i,s.sz()) is s){
+            see(ans);
+            return;
+        }
     }
-    see(ans);
+    ans++;
+    x += x;
+    inc_la(i,0,x.sz(),s.sz() - 1){
+        if(x.substr(i,s.sz()) is s){
+            see(ans);
+            return;
+        }
+    }
+    see(-1);
     return;
 }
 #pragma GCC diagnostic pop

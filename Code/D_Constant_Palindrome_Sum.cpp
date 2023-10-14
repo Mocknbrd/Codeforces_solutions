@@ -242,32 +242,31 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi bits(20,0);
-    inc(i,0,n){
-        int value;
-        cin >> value;
-        inc(pos,0,20){
-            bits[pos] += (value >> pos) & 1;
-        }
+    int n,k;
+    cin >> n >> k;
+    vi arr(n);
+    readArray(arr);
+    map(int,int)cnts;
+    vi prefix((k << 1) + 2,0);
+    int start = 0,end = n - 1;
+    while(start < end){
+        prefix[min(arr[start],arr[end]) + 1]++;
+        prefix[max(arr[start],arr[end]) + k + 1]--;
+        cnts[arr[start++] + arr[end--]]++;
     }
-    ll ans = 0;
-    inc(i,0,n){
-        ll value = 0;
-        inc(pos,0,20){
-            if(bits[pos]-- > 0){
-                value |= (1 << pos);
-            }
-        }
-        ans += value * value;
+    inc(i,1,prefix.sz()){
+        prefix[i] += prefix[i - 1];
+    }
+    int ans = inf;
+    inc(x,2,prefix.sz() - 1){
+        ans = min(ans,n - prefix[x] - cnts[x]);
     }
     see(ans);
     return;

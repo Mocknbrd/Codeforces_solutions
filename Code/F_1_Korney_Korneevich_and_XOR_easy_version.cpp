@@ -242,7 +242,6 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
     while(t--){
         testcase();
     }
@@ -251,25 +250,26 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vi bits(20,0);
-    inc(i,0,n){
-        int value;
-        cin >> value;
-        inc(pos,0,20){
-            bits[pos] += (value >> pos) & 1;
-        }
-    }
-    ll ans = 0;
-    inc(i,0,n){
-        ll value = 0;
-        inc(pos,0,20){
-            if(bits[pos]-- > 0){
-                value |= (1 << pos);
+    vi arr(n);
+    readArray(arr);
+    vi largest(512,-inf);
+    dec(i,n - 1,0){
+        largest[arr[i]] = max(largest[arr[i]],arr[i]);
+        largest[0] = max(largest[0],arr[i]);
+        inc(value,0,512){
+            if(largest[value] > arr[i]){
+                largest[value ^ arr[i]] = max(largest[value ^ arr[i]],arr[i]);
             }
         }
-        ans += value * value;
     }
-    see(ans);
+    vi ans;
+    inc(i,0,512){
+        if(largest[i] isnt -inf){
+            ans.pb(i);
+        }
+    }
+    see(ans.sz());
+    writeArray(ans);
     return;
 }
 #pragma GCC diagnostic pop

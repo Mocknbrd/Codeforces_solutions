@@ -249,27 +249,41 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi bits(20,0);
-    inc(i,0,n){
-        int value;
-        cin >> value;
-        inc(pos,0,20){
-            bits[pos] += (value >> pos) & 1;
-        }
+    int n,m;
+    cin >> n >> m;
+    vvi graph(n);
+    inc(i,0,m){
+        int u,v;
+        cin >> u >> v;
+        graph[--u].pb(--v);
+        graph[v].pb(u);
     }
-    ll ans = 0;
-    inc(i,0,n){
-        ll value = 0;
-        inc(pos,0,20){
-            if(bits[pos]-- > 0){
-                value |= (1 << pos);
+    vi colors(n);
+    readArray(colors);
+    inc(vertex,0,n){
+        set(int)seen;
+        each(neighbour,graph[vertex]){
+            if(colors[neighbour] is colors[vertex]){
+                see(-1);
+                return;
+            } elif(colors[neighbour] < colors[vertex]){
+                seen.ins(colors[neighbour]);
             }
         }
-        ans += value * value;
+        if(seen.sz() isnt colors[vertex] - 1){
+            see(-1);
+            return;
+        }
     }
-    see(ans);
+    vpii ans;
+    inc(i,0,n){
+        ans.pb(make_pair(colors[i],i + 1));
+    }
+    sorted(ans);
+    each(value,ans){
+        cout << value.sc << " ";
+    }
+    br();
     return;
 }
 #pragma GCC diagnostic pop

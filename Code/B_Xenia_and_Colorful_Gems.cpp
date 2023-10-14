@@ -239,37 +239,29 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 const int inf = 2e9;
 const ll linf = 2e18;
 void testcase();
+ll find(ll first,ll second,ll third);
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi bits(20,0);
-    inc(i,0,n){
-        int value;
-        cin >> value;
-        inc(pos,0,20){
-            bits[pos] += (value >> pos) & 1;
-        }
-    }
-    ll ans = 0;
-    inc(i,0,n){
-        ll value = 0;
-        inc(pos,0,20){
-            if(bits[pos]-- > 0){
-                value |= (1 << pos);
-            }
-        }
-        ans += value * value;
-    }
-    see(ans);
-    return;
+    int nr,ng,nb;
+    cin >> nr >> ng >> nb;
+    vll red(nr),green(ng),blue(nb);
+    readArray(red);
+    readArray(green);
+    readArray(blue);
+    max_heap(pii)pq;
+}
+ll find(ll first,ll second,ll third){
+    ll diff1 = first - second;
+    ll diff2 = first - third;
+    ll diff3 = second - third;
+    return power(diff1,2ll) + power(diff2,2ll) + power(diff3,2ll);
 }
 #pragma GCC diagnostic pop

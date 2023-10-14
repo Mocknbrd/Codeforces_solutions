@@ -242,34 +242,28 @@ void testcase();
 int main(){
     ios;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi bits(20,0);
-    inc(i,0,n){
-        int value;
-        cin >> value;
-        inc(pos,0,20){
-            bits[pos] += (value >> pos) & 1;
-        }
+    vi arr(3);
+    readArray(arr);
+    sorted(arr);
+    int first = arr[0],second = arr[1],third = arr[2];
+    if(first is second and second is third){
+        YY;
+    } elif(first is second and third is 2 * first){
+        YY;
+    } elif((first is second and third is 3 * second) or (second is third and second is 2 * first)){
+        YY;
+    } elif((second is 2 * first and third is 3 * first) or (first is second and third is 4 * first)){
+        YY;
+    } else {
+        NN;
     }
-    ll ans = 0;
-    inc(i,0,n){
-        ll value = 0;
-        inc(pos,0,20){
-            if(bits[pos]-- > 0){
-                value |= (1 << pos);
-            }
-        }
-        ans += value * value;
-    }
-    see(ans);
     return;
 }
 #pragma GCC diagnostic pop
