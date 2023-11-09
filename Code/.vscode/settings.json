@@ -52,7 +52,22 @@
         "variant": "cpp",
         "istream": "cpp",
         "queue": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "iosfwd": "cpp",
+        "complex": "cpp",
+        "ccomplex": "cpp",
+        "version": "cpp",
+        "algorithm": "cpp",
+        "limits": "cpp",
+        "__memory": "cpp",
+        "ratio": "cpp",
+        "system_error": "cpp",
+        "cstddef": "cpp"
     },
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "cSpell.words": [
+        "arrxor",
+        "cnts",
+        "mindex"
+    ]
 }
