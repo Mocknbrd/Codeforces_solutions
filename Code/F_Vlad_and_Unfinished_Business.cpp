@@ -13,7 +13,7 @@ using namespace std;
 #define nn see("No")
 #define is ==
 #define isnt !=
-#define fr first
+#define fi first
 #define sc second
 #define Aa see("Alice")
 #define AA see("ALICE")
@@ -23,10 +23,15 @@ using namespace std;
 #define pf(value) push_front(value)
 #define rb() pop_back()
 #define rf() pop_front()
-#define self (*this)
+#define this (*this)
 #define sz() size()
 #define vt(type) vector<type>
 #define ins(element) insert(element)
+#define bg() begin()
+#define bk() back()
+#define fr() front()
+#define ed() end()
+#define mp(value1,value2) make_pair(value1,value2)
 #define br() cout << endl
 #define cast(element,type) static_cast<type>(element)
 #define ll long long
@@ -221,6 +226,9 @@ template<typename tmp> tmp mod(tmp number,tmp base){
     }
     return number % base;
 }
+template<typename tmp> inline tmp manhattanDist(pair(tmp,tmp) &first,pair(tmp,tmp) &second){
+    return abs(first.fi - second.fi) + abs(first.sc - second.sc);
+}
 template<typename tmp> tmp gcd(tmp a, tmp b){
     if (a is 0)
         return b;
@@ -249,7 +257,6 @@ int main(){
     return 0;
 }
 void testcase(){
-    
     return;
 }
 #pragma GCC diagnostic pop

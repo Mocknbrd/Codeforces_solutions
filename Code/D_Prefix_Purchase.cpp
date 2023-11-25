@@ -13,20 +13,26 @@ using namespace std;
 #define nn see("No")
 #define is ==
 #define isnt !=
-#define fr first
+#define fi first
 #define sc second
 #define Aa see("Alice")
 #define AA see("ALICE")
 #define Bb see("Bob")
 #define BB see("BOB")
-#define pb push_back
-#define rb pop_back
-#define rf pop_front
+#define pb(value) push_back(value)
+#define pf(value) push_front(value)
+#define rb() pop_back()
+#define rf() pop_front()
 #define self (*this)
 #define sz() size()
-#define vec(type) vector<type>
+#define vt(type) vector<type>
 #define ins(element) insert(element)
-#define br() cout<<endl
+#define bg() begin()
+#define bk() back()
+#define fr() front()
+#define ed() end()
+#define mp(value1,value2) make_pair(value1,value2)
+#define br() cout << endl
 #define cast(element,type) static_cast<type>(element)
 #define ll long long
 #define cd complex<double>
@@ -44,7 +50,7 @@ using namespace std;
 #define pld pair(ll,ld)
 #define vpii vector<pii>
 #define vpll vector<pll>
-#define check(statement) cout<<"**************Check: "<<statement<<" **************"<<endl;
+#define debug(statement) cout<<"**************Debug: "<<statement<<" **************"<<endl;
 #define pi 2*acos(0.0)
 #define max_heap(tmp) priority_queue<tmp>
 #define min_heap(tmp) priority_queue<tmp,vector<tmp>,greater<tmp> >
@@ -54,8 +60,8 @@ using namespace std;
 #define ummap(type1,type2) unordered_multimap<type1,type2>
 #define set(type) set<type>
 #define uset(type) unordered_set<type>
-#define mmset(type) multiset<type>
-#define ummset(type) unordered_multiset<type>
+#define mset(type) multiset<type>
+#define umset(type) unordered_multiset<type>
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define elif else if
@@ -103,8 +109,8 @@ vector<pair<tmp1,tmp2> >zipped(vector<tmp1>&arr1,vector<tmp2>&arr2){
     return ans;
 }
 template<typename tmp>
-vec(tmp)uniqueConsec(vector<tmp>&arr){
-    vec(tmp)ans;
+vt(tmp)uniqueConsec(vector<tmp>&arr){
+    vt(tmp)ans;
     inc(i,0,arr.sz()){
         if(ans.sz() is 0 or ans.back() isnt arr[i]){
             ans.pb(arr[i]);
@@ -113,7 +119,7 @@ vec(tmp)uniqueConsec(vector<tmp>&arr){
     return ans;
 }
 template<typename tmp>
-vector<pair<int,tmp> >enumerated(vec(tmp)&arr){
+vector<pair<int,tmp> >enumerated(vt(tmp)&arr){
     vector<pair<int,tmp> >ans;
     inc(i,0,arr.sz()){
         ans.pb(make_pair(i,arr[i]));
@@ -121,13 +127,13 @@ vector<pair<int,tmp> >enumerated(vec(tmp)&arr){
     return ans;
 }
 template<typename tmp>
-inline void readArray(vec(tmp)&arr,int start = 0){
+inline void readArray(vt(tmp)&arr,int start = 0){
     inc(i,start,arr.size()){
         cin >> arr[i];
     }
 }
 template<typename tmp>
-inline void readMatrix(vec(tmp)&matrix,int r = 0,int c = 0){
+inline void readMatrix(vt(tmp)&matrix,int r = 0,int c = 0){
     inc(i,r,matrix.size()){
         inc(j,c,matrix[i].size()){
             cin >> matrix[i][j];
@@ -135,14 +141,14 @@ inline void readMatrix(vec(tmp)&matrix,int r = 0,int c = 0){
     }
 }
 template<typename tmp>
-inline void writeArray(vec(tmp)&arr,int start = 0){
+inline void writeArray(vt(tmp)&arr,int start = 0){
     inc(i,start,arr.size()){
         cout << arr[i] << " ";
     }
     br();
 }
 template<typename tmp>
-inline tmp findMaxIndex(vec(tmp)&arr,int start = 0){
+inline tmp findMaxIndex(vt(tmp)&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
         ans = (arr[ans] > arr[i] ? ans : i);
@@ -150,7 +156,7 @@ inline tmp findMaxIndex(vec(tmp)&arr,int start = 0){
     return ans;
 }
 template<typename tmp>
-inline tmp findMinIndex(vec(tmp)&arr,int start = 0){
+inline tmp findMinIndex(vt(tmp)&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
         ans = (arr[ans] < arr[i] ? ans : i);
@@ -158,7 +164,7 @@ inline tmp findMinIndex(vec(tmp)&arr,int start = 0){
     return ans;
 }
 template<typename tmp>
-inline void writeMatrix(vec(vec(tmp))&matrix,int r = 0,int c = 0){
+inline void writeMatrix(vt(vt(tmp))&matrix,int r = 0,int c = 0){
     inc(i,r,matrix.size()){
         inc(j,c,matrix[i].size()){
             cout << matrix[i][j] << " ";
@@ -166,11 +172,62 @@ inline void writeMatrix(vec(vec(tmp))&matrix,int r = 0,int c = 0){
         br();
     }
 }
+template<typename tmp> tmp power(tmp base,tmp exponent){
+    if(exponent is 0){
+        return 1;
+    } else {
+        vt(tmp)dp(log2(exponent) + 1,0);
+        dp[0] = base;
+        inc(i,1,dp.sz()){
+            dp[i] = dp[i - 1] * dp[i - 1];
+        }
+        tmp ans = 1;
+        while(exponent){
+            int pos = log2(exponent & (-exponent));
+            exponent ^= (1 << pos);
+            ans *= dp[pos];
+        }
+        return ans;
+    }
+}
+template<typename tmp>
+void coordinateCompressInplace(vt(tmp)&arr){
+    map(tmp,int)pos;
+    inc(i,0,arr.sz()){
+        pos[arr[i]] = 0;
+    }
+    int index = 0;
+    each(entry,pos){
+        entry.sc = index++;
+    }
+    inc(i,0,arr.sz()){
+        arr[i] = pos[arr[i]];
+    }
+}
+template<typename tmp>
+vt(tmp) coordinateCompress(vt(tmp)&arr){
+    vt(tmp)ans = arr;
+    map(tmp,int)pos;
+    inc(i,0,ans.sz()){
+        pos[ans[i]] = i;
+    }
+    int index = 0;
+    each(entry,pos){
+        entry.sc = index++;
+    }
+    inc(i,0,ans.sz()){
+        ans[i] = pos[ans[i]];
+    }
+    return ans;
+}
 template<typename tmp> tmp mod(tmp number,tmp base){
     while(number < 0){
         number += base;
     }
     return number % base;
+}
+template<typename tmp> inline tmp manhattanDist(pair(tmp,tmp) &first,pair(tmp,tmp) &second){
+    return abs(first.fi - second.fi) + abs(first.sc - second.sc);
 }
 template<typename tmp> tmp gcd(tmp a, tmp b){
     if (a is 0)
@@ -178,8 +235,7 @@ template<typename tmp> tmp gcd(tmp a, tmp b){
     return gcd(b % a, a);
 }
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    tmp divide = gcd(a,b);
-    return (a / divide) * (b / divide);
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -191,52 +247,6 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 const int inf = 2e9;
 const ll linf = 2e18;
 void testcase();
-class Node {
-    public:
-    int start,end,mini;
-    Node *left,*right;
-    Node(int start,int end,int mini){
-        self.start = start;
-        self.end = end;
-        self.mini = mini;
-        self.left = nullptr;
-        self.right = nullptr;
-    }
-};
-class SegmentTree {
-    private:
-    Node *root;
-    Node* __build(vi &arr,int start,int end){
-        if(start is end){
-            Node *node = new Node(start,end,arr[start]);
-            return node;
-        } else {
-            int mid = (start + end) >> 1;
-            Node *left = self.__build(arr,start,mid);
-            Node *right = self.__build(arr,mid + 1,end);
-            Node *node = new Node(start,end,min(left->mini,right->mini));
-            node->left = left;
-            node->right = right;
-            return node;
-        }
-    }
-    int __query(Node *node,int start,int end){
-        if(!node or start > node->end or end < node->start){
-            return inf;
-        } elif(node->start >= start and node->end <= end){
-            return node->mini;
-        } else {
-            return min(self.__query(node->left,start,end),self.__query(node->right,start,end));
-        }
-    }
-    public:
-    SegmentTree(vi &arr){
-        self.root = self.__build(arr,0,arr.sz() - 1);
-    }
-    int query(int start,int end){
-        return self.__query(self.root,start,end);
-    }
-};
 int main(){
     ios;
     int t = 1;
@@ -249,36 +259,48 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vi cost(n);
-    readArray(cost);
+    vi arr(n);
+    map(int,int)pos;
+    inc(i,0,n){
+        int value;
+        cin >> value;
+        pos[value] = i + 1;
+    }
     int k;
     cin >> k;
-    map(int,int)last;
-    inc(i,0,n){
-        last[cost[i]] = i;
+    min_heap(pii)pq;
+    each(entry,pos){
+        pq.push(entry);
     }
-    vi arr(n + 1,0);
-    SegmentTree tree(cost);
-    int value = tree.query(0,n - 1);
-    int index = last[value];
-    arr.front() += k / value;
-    arr[index + 1] -= k / value;
-    k %= value;
-    index++;
-    while(index < n){
-        int nextValue = tree.query(index,n - 1);
-        int next = last[nextValue];
-        arr[index] += k / (nextValue - value);
-        arr[next + 1] -= k / (nextValue - value);
-        k -= k / (nextValue - value);
-        index = next + 1;
-        value = nextValue;
+    vi ans(n + 1,0);
+    int alpha = -1,pRange = -1,purchases = 0;
+    while(pq.empty() is false and k > 0){
+        pii curr = pq.top(); pq.pop();
+        int gamma = curr.fi,range = curr.sc;
+        if(alpha is -1){
+            int num = k / gamma;
+            ans.fr() += num;
+            ans[range] -= num;
+            k -= num * gamma;
+            alpha = gamma;
+            pRange = range;
+            purchases = num;
+        } elif(range > pRange){
+            int num = k / (gamma - alpha);
+            purchases = min(purchases,num);
+            k -= purchases * (gamma - alpha);
+            ans[pRange] += purchases;
+            ans[range] -= purchases;
+            pRange = range;
+            alpha = gamma;
+            pRange = range;
+        }
     }
-    inc(i,1,arr.sz()){
-        arr[i] += arr[i - 1];
+    ans.rb();
+    inc(i,1,ans.sz()){
+        ans[i] += ans[i - 1];
     }
-    arr.rb();
-    writeArray(arr);
+    writeArray(ans);
     return;
 }
 #pragma GCC diagnostic pop

@@ -246,66 +246,30 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
-class DSU {
-    public:  
-    vi ranks,parents;
-
-    private:  
-    void _merge(int large,int small){
-        this.parents[small] = large;
-        this.ranks[large] += this.ranks[small];
-    }
-
-    public:  
-    DSU(int n){
-        this.ranks = vi(n,1);
-        this.parents = vi(n,1);
-        inc(i,0,n){
-            this.parents[i] = i;
-        }
-    }
-    int find(int x){
-        if(x is this.parents[x]){
-            return x;
-        } else {
-            return this.parents[x] = this.find(this.parents[x]);
-        }
-    }
-    void findUnion(int x,int y){
-        int parx = this.find(x),pary = this.find(y);
-        if(parx isnt pary){
-            if(this.ranks[parx] >= this.ranks[pary]){
-                this._merge(parx,pary);
-            } else {
-                this._merge(pary,parx);
-            }
-        }
-    }
-};
 class Node {
     public:  
-    int start,end,maxi;
+    int start,end,mini;
     Node *left,*right;
-    Node(int start,int end,int maxi){
+    Node(int start,int end,int mini){
         this.start = start;
         this.end = end;
-        this.maxi = maxi;
+        this.mini = mini;
         this.left = nullptr;
         this.right = nullptr;
     }
 };
-class SegmentTree{
+class SegmentTree {
     private:  
     Node *root;
-    Node* _build(int start,int end,DSU &dsu,map(int,int)&teleport){
+    Node* _build(vi &arr,int start,int end){
         if(start is end){
-            Node *node = new Node(start,end,teleport[dsu.find(start)]);
+            Node *node = new Node(start,end,arr[start]);
             return node;
         } else {
             int mid = (start + end) >> 1;
-            Node *left = this._build(start,mid,dsu,teleport);
-            Node *right = this._build(mid + 1,end,dsu,teleport);
-            Node *node = new Node(start,end,max(left->maxi,right->maxi));
+            Node *left = this._build(arr,start,mid);
+            Node *right = this._build(arr,mid + 1,end);
+            Node *node = new Node(start,end,min(left->mini,right->mini));
             node->left = left;
             node->right = right;
             return node;
@@ -313,23 +277,24 @@ class SegmentTree{
     }
     int _query(Node *node,int start,int end){
         if(!node or start > node->end or end < node->start){
-            return -inf;
+            return inf;
         } elif(node->start >= start and node->end <= end){
-            return node->maxi;
+            return node->mini;
         } else {
-            return max(this._query(node->left,start,end),this._query(node->right,start,end));
+            return min(this._query(node->left,start,end),this._query(node->right,start,end));
         }
     }
 
     public:  
-    SegmentTree(DSU &dsu,map(int,int)&teleport,int end){
-        this.root = this._build(0,end,dsu,teleport);
+    SegmentTree(vi &arr){
+        this.root = this._build(arr,0,arr.sz() - 1);
     }
     int query(int start,int end){
         return this._query(this.root,start,end);
     }
 };
 void testcase();
+bool isValid(vi &arr,int size);
 int main(){
     ios;
     int t = 1;
@@ -342,47 +307,37 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vpii input(n);
-    inc(i,0,n){
-        int l,r,a,b;
-        cin >> l >> r >> a >> b;
-        input[i] = mp(l,b);
-    }
-    sorted(input);
-    int index = 0,left = input[0].fi,right = input[0].sc;
-    DSU dsu(n);
-    inc(i,1,n){
-        if(input[i].fi > right){
-            index = i;
-            left = input[i].fi,right = input[i].sc;
+    vi arr(n);
+    readArray(arr);
+    string ans(n,'0');
+    SegmentTree tree(arr);
+    int start = 2,end = n,res = n + 1;
+    while(start <= end){
+        int cnd = (start + end) >> 1;
+        vi tmp;
+        inc_la(i,0,n,cnd - 1){
+            tmp.pb(tree.query(i,i + cnd - 1));
+        }
+        if(isValid(tmp,n - cnd + 1) is true){
+            res = cnd;
+            end = cnd - 1;
         } else {
-            dsu.findUnion(index,i);
-            right = max(right,input[i].sc);
+            start = cnd + 1;
         }
     }
-    map(int,int)teleport;
-    inc(i,0,n){
-        teleport[dsu.find(i)] = max(teleport[dsu.find(i)],input[i].sc);
+    inc(i,res - 1,n){
+        ans[i] = '1';
     }
-    SegmentTree tree(dsu,teleport,n - 1);
-    int q;
-    cin >> q;
-    while(q--){
-        int x;
-        cin >> x;
-        int left = (input[0].fi <= x) ? 0 : n + 1,right = -1,start = 0,end = n - 1;
-        while(start <= end){
-            int mid = (start + end) >> 1;
-            if(input[mid].fi <= x){
-                right = mid;
-                start = mid + 1;
-            } else {
-                end = mid - 1;
-            }
-        }
-        cout << max(x,tree.query(left,right)) << " ";
-    }
-    br();
+    ans[0] = '0' + isValid(arr,n);
+    see(ans);
     return;
+}
+bool isValid(vi &arr,int size){
+    set(int)values(all(arr));
+    if(*values.bg() is 1 and *--values.end() is size and values.sz() is size){
+        return true;
+    } else {
+        return false;
+    }
 }
 #pragma GCC diagnostic pop

@@ -246,94 +246,10 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
-class DSU {
-    public:  
-    vi ranks,parents;
-
-    private:  
-    void _merge(int large,int small){
-        this.parents[small] = large;
-        this.ranks[large] += this.ranks[small];
-    }
-
-    public:  
-    DSU(int n){
-        this.ranks = vi(n,1);
-        this.parents = vi(n,1);
-        inc(i,0,n){
-            this.parents[i] = i;
-        }
-    }
-    int find(int x){
-        if(x is this.parents[x]){
-            return x;
-        } else {
-            return this.parents[x] = this.find(this.parents[x]);
-        }
-    }
-    void findUnion(int x,int y){
-        int parx = this.find(x),pary = this.find(y);
-        if(parx isnt pary){
-            if(this.ranks[parx] >= this.ranks[pary]){
-                this._merge(parx,pary);
-            } else {
-                this._merge(pary,parx);
-            }
-        }
-    }
-};
-class Node {
-    public:  
-    int start,end,maxi;
-    Node *left,*right;
-    Node(int start,int end,int maxi){
-        this.start = start;
-        this.end = end;
-        this.maxi = maxi;
-        this.left = nullptr;
-        this.right = nullptr;
-    }
-};
-class SegmentTree{
-    private:  
-    Node *root;
-    Node* _build(int start,int end,DSU &dsu,map(int,int)&teleport){
-        if(start is end){
-            Node *node = new Node(start,end,teleport[dsu.find(start)]);
-            return node;
-        } else {
-            int mid = (start + end) >> 1;
-            Node *left = this._build(start,mid,dsu,teleport);
-            Node *right = this._build(mid + 1,end,dsu,teleport);
-            Node *node = new Node(start,end,max(left->maxi,right->maxi));
-            node->left = left;
-            node->right = right;
-            return node;
-        }
-    }
-    int _query(Node *node,int start,int end){
-        if(!node or start > node->end or end < node->start){
-            return -inf;
-        } elif(node->start >= start and node->end <= end){
-            return node->maxi;
-        } else {
-            return max(this._query(node->left,start,end),this._query(node->right,start,end));
-        }
-    }
-
-    public:  
-    SegmentTree(DSU &dsu,map(int,int)&teleport,int end){
-        this.root = this._build(0,end,dsu,teleport);
-    }
-    int query(int start,int end){
-        return this._query(this.root,start,end);
-    }
-};
 void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
     while(t--){
         testcase();
     }
@@ -342,47 +258,71 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vpii input(n);
-    inc(i,0,n){
-        int l,r,a,b;
-        cin >> l >> r >> a >> b;
-        input[i] = mp(l,b);
-    }
-    sorted(input);
-    int index = 0,left = input[0].fi,right = input[0].sc;
-    DSU dsu(n);
-    inc(i,1,n){
-        if(input[i].fi > right){
-            index = i;
-            left = input[i].fi,right = input[i].sc;
-        } else {
-            dsu.findUnion(index,i);
-            right = max(right,input[i].sc);
-        }
-    }
-    map(int,int)teleport;
-    inc(i,0,n){
-        teleport[dsu.find(i)] = max(teleport[dsu.find(i)],input[i].sc);
-    }
-    SegmentTree tree(dsu,teleport,n - 1);
-    int q;
-    cin >> q;
-    while(q--){
-        int x;
-        cin >> x;
-        int left = (input[0].fi <= x) ? 0 : n + 1,right = -1,start = 0,end = n - 1;
-        while(start <= end){
-            int mid = (start + end) >> 1;
-            if(input[mid].fi <= x){
-                right = mid;
-                start = mid + 1;
+    vll arr(n);
+    readArray(arr);
+    if(n is 1){
+        see(arr[0]);
+    } else {
+        max_heap(pair(vi,int))pq;
+        inc(i,0,n){
+            vi cnd;
+            cnd.pb(arr[i]);
+            if(i is 0){
+                cnd.pb(arr[i + 1]);
+            } elif(i is n - 1){
+                cnd.pb(arr[i - 1]);
             } else {
-                end = mid - 1;
+                cnd.pb(min(arr[i - 1],arr[i + 1]));
+            }
+            pq.push(mp(cnd,i));
+        }
+        int start = pq.top().sc;
+        vll order;
+        min_heap(pii)q;
+        q.push(mp(arr[start],start));
+        set(int)seen;
+        seen.ins(start);
+        while(q.empty() is false){
+            int curr = q.top().fi,index = q.top().sc;
+            q.pop();
+            seen.ins(index);
+            order.pb(curr);
+            if(index - 1 >= 0 and seen.count(index - 1) is false){
+                q.push(mp(arr[index - 1],index - 1));
+                seen.insert(index - 1);
+            }
+            if(index + 1 < n and seen.count(index + 1) is false){
+                q.push(mp(arr[index + 1],index + 1));
+                seen.ins(index + 1);
             }
         }
-        cout << max(x,tree.query(left,right)) << " ";
+        ll sum = 0;
+        inc(i,0,n){
+            sum += arr[i];
+        }
+        ll left = 0,right = sum,ans = sum;
+        while(left <= right){
+            ll mid = (left + right);
+            vi cnd;
+            ll curr = mid;
+            while(cnd.sz() < order.sz()) {
+                cnd.pb(curr--);
+            }
+            bool ok = true;
+            inc(i,0,order.sz()){
+                if(order[i] > cnd[i]){
+                    ok = false;
+                }
+            }
+            if(ok is false){
+                left = mid + 1;
+            } else {
+                ans = mid;
+                right = mid - 1;
+            }
+        }
+        see(ans);
     }
-    br();
     return;
 }
 #pragma GCC diagnostic pop

@@ -23,7 +23,7 @@ using namespace std;
 #define pf(value) push_front(value)
 #define rb() pop_back()
 #define rf() pop_front()
-#define this (*this)
+#define self (*this)
 #define sz() size()
 #define vt(type) vector<type>
 #define ins(element) insert(element)
@@ -246,143 +246,35 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
-class DSU {
-    public:  
-    vi ranks,parents;
-
-    private:  
-    void _merge(int large,int small){
-        this.parents[small] = large;
-        this.ranks[large] += this.ranks[small];
-    }
-
-    public:  
-    DSU(int n){
-        this.ranks = vi(n,1);
-        this.parents = vi(n,1);
-        inc(i,0,n){
-            this.parents[i] = i;
-        }
-    }
-    int find(int x){
-        if(x is this.parents[x]){
-            return x;
-        } else {
-            return this.parents[x] = this.find(this.parents[x]);
-        }
-    }
-    void findUnion(int x,int y){
-        int parx = this.find(x),pary = this.find(y);
-        if(parx isnt pary){
-            if(this.ranks[parx] >= this.ranks[pary]){
-                this._merge(parx,pary);
-            } else {
-                this._merge(pary,parx);
-            }
-        }
-    }
-};
-class Node {
-    public:  
-    int start,end,maxi;
-    Node *left,*right;
-    Node(int start,int end,int maxi){
-        this.start = start;
-        this.end = end;
-        this.maxi = maxi;
-        this.left = nullptr;
-        this.right = nullptr;
-    }
-};
-class SegmentTree{
-    private:  
-    Node *root;
-    Node* _build(int start,int end,DSU &dsu,map(int,int)&teleport){
-        if(start is end){
-            Node *node = new Node(start,end,teleport[dsu.find(start)]);
-            return node;
-        } else {
-            int mid = (start + end) >> 1;
-            Node *left = this._build(start,mid,dsu,teleport);
-            Node *right = this._build(mid + 1,end,dsu,teleport);
-            Node *node = new Node(start,end,max(left->maxi,right->maxi));
-            node->left = left;
-            node->right = right;
-            return node;
-        }
-    }
-    int _query(Node *node,int start,int end){
-        if(!node or start > node->end or end < node->start){
-            return -inf;
-        } elif(node->start >= start and node->end <= end){
-            return node->maxi;
-        } else {
-            return max(this._query(node->left,start,end),this._query(node->right,start,end));
-        }
-    }
-
-    public:  
-    SegmentTree(DSU &dsu,map(int,int)&teleport,int end){
-        this.root = this._build(0,end,dsu,teleport);
-    }
-    int query(int start,int end){
-        return this._query(this.root,start,end);
-    }
-};
 void testcase();
 int main(){
     ios;
     int t = 1;
-    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vpii input(n);
-    inc(i,0,n){
-        int l,r,a,b;
-        cin >> l >> r >> a >> b;
-        input[i] = mp(l,b);
-    }
-    sorted(input);
-    int index = 0,left = input[0].fi,right = input[0].sc;
-    DSU dsu(n);
-    inc(i,1,n){
-        if(input[i].fi > right){
-            index = i;
-            left = input[i].fi,right = input[i].sc;
-        } else {
-            dsu.findUnion(index,i);
-            right = max(right,input[i].sc);
+    ll x,d;
+    cin >> x >> d;
+    vll ans;
+    ll value = 1,cnt = 0;
+    while(x){
+        int pos = log2(x & (-x));
+        x ^= (1 << pos);
+        inc(_,0,pos){
+            ans.pb(value);
         }
+        cnt++;
+        value += d;
     }
-    map(int,int)teleport;
-    inc(i,0,n){
-        teleport[dsu.find(i)] = max(teleport[dsu.find(i)],input[i].sc);
+    while(cnt--){
+        ans.pb(value);
+        value += d;
     }
-    SegmentTree tree(dsu,teleport,n - 1);
-    int q;
-    cin >> q;
-    while(q--){
-        int x;
-        cin >> x;
-        int left = (input[0].fi <= x) ? 0 : n + 1,right = -1,start = 0,end = n - 1;
-        while(start <= end){
-            int mid = (start + end) >> 1;
-            if(input[mid].fi <= x){
-                right = mid;
-                start = mid + 1;
-            } else {
-                end = mid - 1;
-            }
-        }
-        cout << max(x,tree.query(left,right)) << " ";
-    }
-    br();
+    see(ans.sz());
+    writeArray(ans);
     return;
 }
 #pragma GCC diagnostic pop

@@ -246,87 +246,84 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
-class DSU {
+class Node {
     public:  
-    vi ranks,parents;
-
+    int position,cnt,bit;
+    Node *zero,*one;
+    Node(int position,int cnt,int bit){
+        this.position = position;
+        this.cnt = cnt;
+        this.bit = bit;
+        this.zero = nullptr;
+        this.one = nullptr;
+    }
+};
+class BitMaskTree {
     private:  
-    void _merge(int large,int small){
-        this.parents[small] = large;
-        this.ranks[large] += this.ranks[small];
-    }
-
-    public:  
-    DSU(int n){
-        this.ranks = vi(n,1);
-        this.parents = vi(n,1);
-        inc(i,0,n){
-            this.parents[i] = i;
-        }
-    }
-    int find(int x){
-        if(x is this.parents[x]){
-            return x;
+    Node *root;
+    Node* _insert(Node *node,int value,int position){
+        if(!node){
+            node = new Node(position,1,(value >> position) & 1);
         } else {
-            return this.parents[x] = this.find(this.parents[x]);
+            node->cnt++;
         }
-    }
-    void findUnion(int x,int y){
-        int parx = this.find(x),pary = this.find(y);
-        if(parx isnt pary){
-            if(this.ranks[parx] >= this.ranks[pary]){
-                this._merge(parx,pary);
+        if(position isnt 0){
+            int prevBit = (value >> (position - 1)) & 1;
+            if(prevBit is 1){
+                node->one = this._insert(node->one,value,position - 1);
             } else {
-                this._merge(pary,parx);
+                node->zero = this._insert(node->zero,value,position - 1);
+            }
+        }
+        return node;
+    }
+    bool _exists(Node *node,int value,int position){
+        if(!node){
+            return false;
+        } else {
+            int curr = (value >> node->position) & 1;
+            if(curr isnt node->bit or node->cnt is 0){
+                return false;
+            } elif(node->position is position){
+                node->cnt--;
+                return true;
+            } else {
+                node->cnt--;
+                int nextBit = (value >> (node->position - 1)) & 1;
+                if(nextBit is 1){
+                    return this._exists(node->one,value,position);
+                } else {
+                    return this._exists(node->zero,value,position);
+                }
             }
         }
     }
-};
-class Node {
-    public:  
-    int start,end,maxi;
-    Node *left,*right;
-    Node(int start,int end,int maxi){
-        this.start = start;
-        this.end = end;
-        this.maxi = maxi;
-        this.left = nullptr;
-        this.right = nullptr;
-    }
-};
-class SegmentTree{
-    private:  
-    Node *root;
-    Node* _build(int start,int end,DSU &dsu,map(int,int)&teleport){
-        if(start is end){
-            Node *node = new Node(start,end,teleport[dsu.find(start)]);
-            return node;
-        } else {
-            int mid = (start + end) >> 1;
-            Node *left = this._build(start,mid,dsu,teleport);
-            Node *right = this._build(mid + 1,end,dsu,teleport);
-            Node *node = new Node(start,end,max(left->maxi,right->maxi));
-            node->left = left;
-            node->right = right;
-            return node;
-        }
-    }
-    int _query(Node *node,int start,int end){
-        if(!node or start > node->end or end < node->start){
-            return -inf;
-        } elif(node->start >= start and node->end <= end){
-            return node->maxi;
-        } else {
-            return max(this._query(node->left,start,end),this._query(node->right,start,end));
+    void _delete(Node *node,int value){
+        node->cnt--;
+        if(node->position isnt 0){
+            int nextBit = (value >> (node->position - 1)) & 1;
+            if(nextBit is 1){
+                this._delete(node->one,value);
+            } else {
+                this._delete(node->zero,value);
+            }
         }
     }
 
     public:  
-    SegmentTree(DSU &dsu,map(int,int)&teleport,int end){
-        this.root = this._build(0,end,dsu,teleport);
+    BitMaskTree(){
+        this.root = nullptr;
     }
-    int query(int start,int end){
-        return this._query(this.root,start,end);
+    void add(int value){
+        this.root = this._insert(this.root,value,31);
+    }
+    bool count(int value,int position){
+        return this._exists(this.root,value,position);
+    }
+    void remove(int value){
+        if(this.count(value,0) is true){
+            this._delete(this.root,value);
+        }
     }
 };
 void testcase();
@@ -342,47 +339,41 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vpii input(n);
-    inc(i,0,n){
-        int l,r,a,b;
-        cin >> l >> r >> a >> b;
-        input[i] = mp(l,b);
+    vi a(n),b(n);
+    readArray(a);
+    readArray(b);
+    BitMaskTree tree;
+    each(value,b){
+        tree.add(value);
     }
-    sorted(input);
-    int index = 0,left = input[0].fi,right = input[0].sc;
-    DSU dsu(n);
-    inc(i,1,n){
-        if(input[i].fi > right){
-            index = i;
-            left = input[i].fi,right = input[i].sc;
-        } else {
-            dsu.findUnion(index,i);
-            right = max(right,input[i].sc);
+    int ans = (1 << 30) - 1;
+    dec(bit,30,0){
+        BitMaskTree tree;
+        each(value,b){
+            tree.add(value);
         }
-    }
-    map(int,int)teleport;
-    inc(i,0,n){
-        teleport[dsu.find(i)] = max(teleport[dsu.find(i)],input[i].sc);
-    }
-    SegmentTree tree(dsu,teleport,n - 1);
-    int q;
-    cin >> q;
-    while(q--){
-        int x;
-        cin >> x;
-        int left = (input[0].fi <= x) ? 0 : n + 1,right = -1,start = 0,end = n - 1;
-        while(start <= end){
-            int mid = (start + end) >> 1;
-            if(input[mid].fi <= x){
-                right = mid;
-                start = mid + 1;
-            } else {
-                end = mid - 1;
+        bool ok = true;
+        each(value,a){
+            int cnd = (value ^ ans ^ (1 << bit));
+            if(tree.count(cnd,bit) is false){
+                ok = false;
+                break;
             }
         }
-        cout << max(x,tree.query(left,right)) << " ";
+        if(ok is true){
+            ans ^= (1 << bit);
+        } else {
+            inc(i,0,n){
+                if((a[i] >> bit) & 1){
+                    a[i] ^= (1 << bit);
+                }
+                if((b[i] >> bit) & 1){
+                    b[i] ^= (1 << bit);
+                }
+            }
+        }
     }
-    br();
+    see(ans);
     return;
 }
 #pragma GCC diagnostic pop

@@ -13,7 +13,7 @@ using namespace std;
 #define nn see("No")
 #define is ==
 #define isnt !=
-#define fr first
+#define fi first
 #define sc second
 #define Aa see("Alice")
 #define AA see("ALICE")
@@ -23,10 +23,15 @@ using namespace std;
 #define pf(value) push_front(value)
 #define rb() pop_back()
 #define rf() pop_front()
-#define self (*this)
+#define this (*this)
 #define sz() size()
 #define vt(type) vector<type>
 #define ins(element) insert(element)
+#define bg() begin()
+#define bk() back()
+#define fr() front()
+#define ed() end()
+#define mp(value1,value2) make_pair(value1,value2)
 #define br() cout << endl
 #define cast(element,type) static_cast<type>(element)
 #define ll long long
@@ -221,6 +226,9 @@ template<typename tmp> tmp mod(tmp number,tmp base){
     }
     return number % base;
 }
+template<typename tmp> inline tmp manhattanDist(pair(tmp,tmp) &first,pair(tmp,tmp) &second){
+    return abs(first.fi - second.fi) + abs(first.sc - second.sc);
+}
 template<typename tmp> tmp gcd(tmp a, tmp b){
     if (a is 0)
         return b;
@@ -238,55 +246,6 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
-class Node {
-    public:
-    int start,end,mini,maxi;
-    Node *left,*right;
-    Node(int start,int end,int mini,int maxi){
-        self.start = start;
-        self.end = end;
-        self.mini = mini;
-        self.maxi = maxi;
-        self.left = nullptr;
-        self.right = nullptr;
-    }
-};
-class SegmentTree {
-    private:  
-    Node *root;
-    Node* __build(vi &arr,int start,int end){
-        if(start is end){
-            Node *node = new Node(start,end,arr[start],arr[end]);
-            return node;
-        } else {
-            int mid = (start + end) >> 1;
-            Node *left = self.__build(arr,start,mid);
-            Node *right = self.__build(arr,mid + 1,end);
-            Node *node = new Node(start,end,min(left->mini,right->mini),max(left->maxi,right->maxi));
-            node->left = left;
-            node->right = right;
-            return node;
-        }
-    }
-    int __query(Node *node,int left,int right){
-        if(!node){
-            return 0;
-        } elif(left > node->maxi or right < node->mini){
-            return -1 * (node->end - node->start + 1);
-        } elif(node->mini >= left and node->maxi <= right){
-            return node->end - node->start + 1;
-        } else {
-            return self.__query(node->left,left,right) + self.__query(node->right,left,right);
-        }
-    }
-    public:  
-    SegmentTree(vi &arr){
-        self.root = self.__build(arr,0,arr.sz() - 1);
-    }
-    int query(int left,int right){
-        return self.__query(self.root,left,right);
-    }
-};
 void testcase();
 int main(){
     ios;
@@ -300,52 +259,38 @@ int main(){
 void testcase(){
     int n,k;
     cin >> n >> k;
-    vi arr(n);
-    readArray(arr);
-    pii ans = make_pair(*min_element(all(arr)),*max_element(all(arr)));
-    SegmentTree tree(arr);
-    inc(left,1,n){
-        int start = 1,end = n,right = left;
-        while(start <= end){
-            int cnd = (start + end) >> 1;
-            if(tree.query(left,cnd) >= k){
-                right = cnd;
-                end = cnd - 1;
-            } else {
-                start = cnd + 1;
-            }
-        }
-        if(ans.sc - ans.fr > right - left){
-            ans = make_pair(left,right);
-        }
+    vi input(n);
+    readArray(input);
+    vi temp = input;
+    sorted(temp);
+    int length = ceil(k + n,2);
+    min_heap(pair(int,pii))pq;
+    inc_la(i,0,n,length - 1){
+        pq.push(mp(temp[i + length - 1] - temp[i],mp(temp[i],temp[i + length - 1])));
     }
-    see(ans.fr << " " << ans.sc);
-    vi prefix;
+    int left = pq.top().sc.fi,right = pq.top().sc.sc;
+    vi status(n);
     inc(i,0,n){
-        if(inBetween(ans.fr,arr[i],ans.sc) is true){
-            prefix.pb(1);
-        } else {
-            prefix.pb(-1);
-        }
+        status[i] = -1 + 2 * inBetween(left,input[i],right);
     }
-    inc(i,1,n){
-        prefix[i] += prefix[i - 1];
+    vi prefix(n + 1,0);
+    inc(i,1,prefix.sz()){
+        prefix[i] = prefix[i - 1] + status[i - 1];
     }
-    int value = 1;
     map(int,int)first;
-    first[0] = 0;
     inc(i,0,n){
-        if(prefix[i] is value){
-            first[value++] = i + 1;
+        if(first.count(prefix[i]) is false){
+            first[prefix[i]] = i;
         }
     }
-    vpii ranges;
-    inc(i,1,k){
-        ranges.pb(make_pair(first[i - 1] + 1,first[i]));
+    vpii ans;
+    inc(i,0,k){
+        ans.pb(mp(first[i] + 1,first[i + 1]));
     }
-    ranges.pb(make_pair(first[k - 1] + 1,n));
-    each(range,ranges){
-        see(range.fr << " " << range.sc);
+    ans.bk().sc = n;
+    see(left << " " << right);
+    each(cnd,ans){
+        see(cnd.fi << " " << cnd.sc);
     }
     return;
 }
