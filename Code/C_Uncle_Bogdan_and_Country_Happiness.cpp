@@ -246,77 +246,65 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
-class Node {
-    public:  
-    int start,end,maxi;
-    Node *left,*right;
-    Node(int start,int end,int maxi){
-        this.start = start;
-        this.end = end;
-        this.maxi = maxi;
-    }
-};
-class SegmentTree {
-    private:  
-    Node *root;
-    Node* _build(vi &arr,int start,int end){
-        if(start is end){
-            Node *node = new Node(start,end,arr[start]);
-            return node;
-        } else {
-            int mid = (start + end) >> 1;
-            Node *left = this._build(arr,start,mid);
-            Node *right = this._build(arr,mid + 1,end);
-            Node *node = new Node(start,end,max(left->maxi,right->maxi));
-            node->left = left;
-            node->right = right;
-            return node;
-        }
-    }
-    int _query(Node *node,int start,int end){
-        if(!node or start > node->end or end < node->start){
-            return -inf;
-        } elif(node->start >= start and node->end <= end){
-            return node->maxi;
-        } else {
-            return max(this._query(node->left,start,end),this._query(node->right,start,end));
-        }
-    }
-
-    public:  
-    SegmentTree(vi &arr){
-        this.root = this._build(arr,0,arr.sz() - 1);
-    }
-    int query(int start,int end){
-        return this._query(this.root,start,end);
-    }
-};
 void testcase();
+ll findPeople(vvi &tree,vll &counts,vll &people,int vertex,int parent);
+bool dfs(vvi &tree,vll &good,int vertex,int parent);
 int main(){
     ios;
     int t = 1;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi input(n);
-    readArray(input);
-    vi left,right;
-    inc(i,0,n){
-        left.pb(input[i] + n - i - 1);
-        right.pb(input[i] + i);
+    int n,m;
+    cin >> n >> m;
+    vll people(n + 1,0),happiness(n + 1,0);
+    readArray(people,1);
+    readArray(happiness,1);
+    vvi tree(n + 1);
+    inc(i,0,n - 1){
+        int u,v;
+        cin >> u >> v;
+        tree[u].pb(v);
+        tree[v].pb(u);
     }
-    SegmentTree less(left),more(right);
-    int ans = inf;
-    inc(i,0,n){
-        int l = less.query(0,i - 1),r = more.query(i + 1,n - 1);
-        ans = min(ans,max(max(input[i],l),r));
+    vll counts(n + 1,0);
+    findPeople(tree,counts,people,1,0);
+    vll good(n + 1,0);
+    inc(i,1,good.sz()){
+        if(mod(happiness[i] + counts[i],2ll) isnt 0){
+            NN;
+            return;
+        } 
+        good[i] = (happiness[i] + counts[i]) / 2;
+        if(inBetween(0ll,good[i],counts[i]) is false){
+            NN;
+            return;
+        }
     }
-    see(ans);
+    dfs(tree,good,1,0) is true ? YY: NN;
     return;
+}
+ll findPeople(vvi &tree,vll &counts,vll &people,int vertex,int parent){
+    ll ans = people[vertex];
+    each(child,tree[vertex]){
+        if(child isnt parent){
+            ans += findPeople(tree,counts,people,child,vertex);
+        }
+    }
+    return counts[vertex] = ans;
+}
+bool dfs(vvi &tree,vll &good,int vertex,int parent){
+    ll ans = 0;
+    each(child,tree[vertex]){
+        ans += (child isnt parent) * good[child];
+        if(child isnt parent and dfs(tree,good,child,vertex) is false){
+            return false;
+        }
+    }
+    return ans <= good[vertex];
 }
 #pragma GCC diagnostic pop

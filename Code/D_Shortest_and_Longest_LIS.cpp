@@ -246,55 +246,13 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
-class Node {
-    public:  
-    int start,end,maxi;
-    Node *left,*right;
-    Node(int start,int end,int maxi){
-        this.start = start;
-        this.end = end;
-        this.maxi = maxi;
-    }
-};
-class SegmentTree {
-    private:  
-    Node *root;
-    Node* _build(vi &arr,int start,int end){
-        if(start is end){
-            Node *node = new Node(start,end,arr[start]);
-            return node;
-        } else {
-            int mid = (start + end) >> 1;
-            Node *left = this._build(arr,start,mid);
-            Node *right = this._build(arr,mid + 1,end);
-            Node *node = new Node(start,end,max(left->maxi,right->maxi));
-            node->left = left;
-            node->right = right;
-            return node;
-        }
-    }
-    int _query(Node *node,int start,int end){
-        if(!node or start > node->end or end < node->start){
-            return -inf;
-        } elif(node->start >= start and node->end <= end){
-            return node->maxi;
-        } else {
-            return max(this._query(node->left,start,end),this._query(node->right,start,end));
-        }
-    }
-
-    public:  
-    SegmentTree(vi &arr){
-        this.root = this._build(arr,0,arr.sz() - 1);
-    }
-    int query(int start,int end){
-        return this._query(this.root,start,end);
-    }
-};
 void testcase();
+void findMin(vvi &dag);
+void findMax(vvi &dag);
 int main(){
     ios;
     int t = 1;
+    cin >> t;
     while(t--){
         testcase();
     }
@@ -302,21 +260,72 @@ int main(){
 }
 void testcase(){
     int n;
-    cin >> n;
-    vi input(n);
-    readArray(input);
-    vi left,right;
-    inc(i,0,n){
-        left.pb(input[i] + n - i - 1);
-        right.pb(input[i] + i);
+    string s;
+    cin >> n >> s;
+    vvi dag(n);
+    inc(i,0,s.sz()){
+        if(s[i] is '>'){
+            dag[i + 1].pb(i);
+        } else {
+            dag[i].pb(i + 1);
+        }
     }
-    SegmentTree less(left),more(right);
-    int ans = inf;
-    inc(i,0,n){
-        int l = less.query(0,i - 1),r = more.query(i + 1,n - 1);
-        ans = min(ans,max(max(input[i],l),r));
-    }
-    see(ans);
+    findMin(dag);
+    findMax(dag);
     return;
+}
+void findMin(vvi &dag){
+    vi degree(dag.sz());
+    inc(vertex,0,dag.sz()){
+        each(child,dag[vertex]){
+            degree[child]++;
+        }
+    }
+    max_heap(int)pq;
+    inc(vertex,0,degree.sz()){
+        if(degree[vertex] is 0){
+            pq.push(vertex);
+        }
+    }
+    vi ans(degree.sz());
+    int value = 1;
+    while(pq.empty() is false){
+        int curr = pq.top();
+        pq.pop();
+        ans[curr] = value++;
+        each(child,dag[curr]){
+            if(--degree[child] is 0){
+                pq.push(child);
+            }
+        }
+    }
+    writeArray(ans);
+}
+void findMax(vvi &dag){
+    vi degree(dag.sz());
+    inc(vertex,0,dag.sz()){
+        each(child,dag[vertex]){
+            degree[child]++;
+        }
+    }
+    min_heap(int)pq;
+    inc(vertex,0,degree.sz()){
+        if(degree[vertex] is 0){
+            pq.push(vertex);
+        }
+    }
+    vi ans(degree.sz());
+    int value = 1;
+    while(pq.empty() is false){
+        int curr = pq.top();
+        pq.pop();
+        ans[curr] = value++;
+        each(child,dag[curr]){
+            if(--degree[child] is 0){
+                pq.push(child);
+            }
+        }
+    }
+    writeArray(ans);
 }
 #pragma GCC diagnostic pop

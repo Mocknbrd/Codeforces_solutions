@@ -246,51 +246,7 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
-class Node {
-    public:  
-    int start,end,maxi;
-    Node *left,*right;
-    Node(int start,int end,int maxi){
-        this.start = start;
-        this.end = end;
-        this.maxi = maxi;
-    }
-};
-class SegmentTree {
-    private:  
-    Node *root;
-    Node* _build(vi &arr,int start,int end){
-        if(start is end){
-            Node *node = new Node(start,end,arr[start]);
-            return node;
-        } else {
-            int mid = (start + end) >> 1;
-            Node *left = this._build(arr,start,mid);
-            Node *right = this._build(arr,mid + 1,end);
-            Node *node = new Node(start,end,max(left->maxi,right->maxi));
-            node->left = left;
-            node->right = right;
-            return node;
-        }
-    }
-    int _query(Node *node,int start,int end){
-        if(!node or start > node->end or end < node->start){
-            return -inf;
-        } elif(node->start >= start and node->end <= end){
-            return node->maxi;
-        } else {
-            return max(this._query(node->left,start,end),this._query(node->right,start,end));
-        }
-    }
-
-    public:  
-    SegmentTree(vi &arr){
-        this.root = this._build(arr,0,arr.sz() - 1);
-    }
-    int query(int start,int end){
-        return this._query(this.root,start,end);
-    }
-};
+void dfs(vvi &tree,vi &distances,int vertex,int parent,int curr);
 void testcase();
 int main(){
     ios;
@@ -303,20 +259,43 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vi input(n);
-    readArray(input);
-    vi left,right;
-    inc(i,0,n){
-        left.pb(input[i] + n - i - 1);
-        right.pb(input[i] + i);
+    vvi tree(n + 1);
+    inc(_,0,n - 1){
+        int x,y;
+        cin >> x >> y;
+        tree[x].pb(y);
+        tree[y].pb(x);
     }
-    SegmentTree less(left),more(right);
-    int ans = inf;
-    inc(i,0,n){
-        int l = less.query(0,i - 1),r = more.query(i + 1,n - 1);
-        ans = min(ans,max(max(input[i],l),r));
+    vi distances(n + 1);
+    dfs(tree,distances,1,0,0);
+    set(int)parity;
+    inc(vertex,1,tree.sz()){
+        if(tree[vertex].sz() is 1){
+            parity.ins(mod(distances[vertex],2));
+        }
     }
-    see(ans);
+    int mini = (parity.sz() is 2) ? 3 : 1;
+    int maxi = n - 1,leaves = 0,neighbour = 0;
+    inc(vertex,1,tree.sz()){
+        leaves += tree[vertex].sz() is 1;
+        each(child,tree[vertex]){
+            if(tree[child].sz() is 1){
+                neighbour++;
+                break;
+            }
+        }
+    }
+    maxi += neighbour - leaves;
+    see(mini << " " << maxi);
+    return;
+}
+void dfs(vvi &tree,vi &distances,int vertex,int parent,int curr){
+    distances[vertex] = curr++;
+    each(child,tree[vertex]){
+        if(child isnt parent){
+            dfs(tree,distances,child,vertex,curr);
+        }
+    }
     return;
 }
 #pragma GCC diagnostic pop

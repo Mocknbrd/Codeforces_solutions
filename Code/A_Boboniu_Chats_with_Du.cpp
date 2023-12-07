@@ -246,51 +246,6 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
-class Node {
-    public:  
-    int start,end,maxi;
-    Node *left,*right;
-    Node(int start,int end,int maxi){
-        this.start = start;
-        this.end = end;
-        this.maxi = maxi;
-    }
-};
-class SegmentTree {
-    private:  
-    Node *root;
-    Node* _build(vi &arr,int start,int end){
-        if(start is end){
-            Node *node = new Node(start,end,arr[start]);
-            return node;
-        } else {
-            int mid = (start + end) >> 1;
-            Node *left = this._build(arr,start,mid);
-            Node *right = this._build(arr,mid + 1,end);
-            Node *node = new Node(start,end,max(left->maxi,right->maxi));
-            node->left = left;
-            node->right = right;
-            return node;
-        }
-    }
-    int _query(Node *node,int start,int end){
-        if(!node or start > node->end or end < node->start){
-            return -inf;
-        } elif(node->start >= start and node->end <= end){
-            return node->maxi;
-        } else {
-            return max(this._query(node->left,start,end),this._query(node->right,start,end));
-        }
-    }
-
-    public:  
-    SegmentTree(vi &arr){
-        this.root = this._build(arr,0,arr.sz() - 1);
-    }
-    int query(int start,int end){
-        return this._query(this.root,start,end);
-    }
-};
 void testcase();
 int main(){
     ios;
@@ -301,20 +256,34 @@ int main(){
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi input(n);
-    readArray(input);
-    vi left,right;
+    int n,d,m;
+    cin >> n >> d >> m;
+    vll greater,smaller;
     inc(i,0,n){
-        left.pb(input[i] + n - i - 1);
-        right.pb(input[i] + i);
+        ll value;
+        cin >> value;
+        if(value > m){
+            greater.pb(value);
+        } else {
+            smaller.pb(value);
+        }
     }
-    SegmentTree less(left),more(right);
-    int ans = inf;
-    inc(i,0,n){
-        int l = less.query(0,i - 1),r = more.query(i + 1,n - 1);
-        ans = min(ans,max(max(input[i],l),r));
+    rsort(greater);
+    rsort(smaller);
+    vll greaterPref(greater.sz() + 1,0),smallerPref(smaller.sz() + 1,0);
+    inc(i,1,greaterPref.sz()){
+        greaterPref[i] = greaterPref[i - 1] + greater[i - 1];
+    }
+    inc(i,1,smallerPref.sz()){
+        smallerPref[i] = smallerPref[i - 1] + smaller[i - 1];
+    }
+    ll ans = smallerPref.bk();
+    inc(x,1,greaterPref.sz()){
+        ll days = (x - 1) * (d + 1) + 1;
+        if(n - days >= 0){
+            ll target = min(cast(smallerPref.sz(),ll) - 1,n - days);
+            ans = max(ans,greaterPref[x] + smallerPref[target]);
+        }
     }
     see(ans);
     return;

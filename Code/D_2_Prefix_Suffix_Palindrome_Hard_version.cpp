@@ -246,77 +246,83 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 }
 const int inf = 2e9;
 const ll linf = 2e18;
-class Node {
-    public:  
-    int start,end,maxi;
-    Node *left,*right;
-    Node(int start,int end,int maxi){
-        this.start = start;
-        this.end = end;
-        this.maxi = maxi;
-    }
-};
-class SegmentTree {
-    private:  
-    Node *root;
-    Node* _build(vi &arr,int start,int end){
-        if(start is end){
-            Node *node = new Node(start,end,arr[start]);
-            return node;
-        } else {
-            int mid = (start + end) >> 1;
-            Node *left = this._build(arr,start,mid);
-            Node *right = this._build(arr,mid + 1,end);
-            Node *node = new Node(start,end,max(left->maxi,right->maxi));
-            node->left = left;
-            node->right = right;
-            return node;
-        }
-    }
-    int _query(Node *node,int start,int end){
-        if(!node or start > node->end or end < node->start){
-            return -inf;
-        } elif(node->start >= start and node->end <= end){
-            return node->maxi;
-        } else {
-            return max(this._query(node->left,start,end),this._query(node->right,start,end));
-        }
-    }
-
-    public:  
-    SegmentTree(vi &arr){
-        this.root = this._build(arr,0,arr.sz() - 1);
-    }
-    int query(int start,int end){
-        return this._query(this.root,start,end);
-    }
-};
 void testcase();
+string manacher(string &s);
 int main(){
     ios;
     int t = 1;
+    cin >> t;
     while(t--){
         testcase();
     }
     return 0;
 }
 void testcase(){
-    int n;
-    cin >> n;
-    vi input(n);
-    readArray(input);
-    vi left,right;
-    inc(i,0,n){
-        left.pb(input[i] + n - i - 1);
-        right.pb(input[i] + i);
+    string s;
+    cin >> s;
+    string front,back;
+    int start = 0,end = s.sz() - 1;
+    while(start < end and s[start] is s[end]){
+        front += s[start++];
+        back += s[end--];
     }
-    SegmentTree less(left),more(right);
-    int ans = inf;
-    inc(i,0,n){
-        int l = less.query(0,i - 1),r = more.query(i + 1,n - 1);
-        ans = min(ans,max(max(input[i],l),r));
+    rev(back);
+    string input = "#";
+    each(character,s.slice(start,end)){
+        input += character;
+        input += "#";
     }
-    see(ans);
+    string middle = manacher(input);
+    see(front + middle + back);
     return;
+}
+string manacher(string &s){
+    int n = s.sz();
+    vi span(n,0);
+    int left = 0,right = - 1;
+    inc(i,0,n){
+        int cnd;
+        if(i > right){
+            cnd = 0;
+        } else {
+            int mirror = right - i + left;
+            cnd = min(span[mirror],right - i);
+        }
+        while(i - cnd >= 0 and i + cnd < n and s[i - cnd] is s[i + cnd]){
+            cnd++;
+        }
+        span[i] = --cnd;
+        if(i + cnd > right){
+            left = i - cnd;
+            right = i + cnd;
+        }
+    }
+    string ans = "";
+    int maxPrefixInd = 0,maxSuffixInd = n - 1;
+    inc(i,0,n){
+        if(i - span[i] <= 0){
+            maxPrefixInd = i;
+        }
+    }
+    dec(i,n - 1,0){
+        if(i + span[i] >= n - 1){
+            maxSuffixInd = i;
+        }
+    }
+    int prefix = 2 * span[maxPrefixInd] + 1, suffix = 2 * span[maxSuffixInd] + 1;
+    if(prefix > suffix){
+        inc(i,0,prefix){
+            if(s[i] isnt '#'){
+                ans += s[i];
+            }
+        }
+    } else {
+        inc(i,n - suffix,n){
+            if(s[i] isnt '#'){
+                ans += s[i];
+            }
+        }
+    }
+    return ans;
 }
 #pragma GCC diagnostic pop
