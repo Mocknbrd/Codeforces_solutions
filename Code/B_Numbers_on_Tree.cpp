@@ -247,7 +247,8 @@ inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRig
 const int inf = 2e9;
 const ll linf = 2e18;
 void testcase();
-bool dfs(vvi &input,vi &arr,vi &ans,set(int)&tree,int vertex);
+int subtreeSize(vvi &tree,vi &subtree,int vertex);
+bool dfs(vvi &tree,vi &ans,vi &arr,vi &subtree,set(int)&cnds,int vertex);
 int main(){
     ios;
     int t = 1;
@@ -259,37 +260,46 @@ int main(){
 void testcase(){
     int n;
     cin >> n;
-    vvi input(n + 1);
-    vi arr(n + 1);
-    set(int)tree;
     int root = 1;
-    inc(vertex,1,n + 1){
+    vi arr(n + 1);
+    vvi tree(n + 1);
+    set(int)cnds;
+    inc(i,1,n + 1){
+        cnds.ins(i);
         int parent;
-        cin >> parent >> arr[vertex];
-        if(parent isnt 0){
-            input[parent].pb(vertex);
+        cin >> parent >> arr[i];
+        if(parent is 0){
+            root = i;
         } else {
-            root = vertex;
+            tree[parent].pb(i);
         }
-        tree.ins(vertex);
     }
-    vi ans(n + 1);
-    if(dfs(input,arr,ans,tree,root) is false){
-        NN;
-    } else {
+    vi subtree(n + 1),ans(n + 1);
+    subtreeSize(tree,subtree,root);
+    if(dfs(tree,ans,arr,subtree,cnds,root) is true){
         YY;
         writeArray(ans,1);
+    } else {
+        NN;
     }
     return;
 }
-bool dfs(vvi &input,vi &arr,vi &ans,set(int)&tree,int vertex){
-    if(tree.sz() <= arr[vertex]){
+int subtreeSize(vvi &tree,vi &subtree,int vertex){
+    subtree[vertex] = 1;
+    each(child,tree[vertex]){
+        subtree[vertex] += subtreeSize(tree,subtree,child);
+    }
+    return subtree[vertex];
+}
+bool dfs(vvi &tree,vi &ans,vi &arr,vi &subtree,set(int)&cnds,int vertex){
+    if(arr[vertex] >= subtree[vertex]){
         return false;
     } else {
-        ans[vertex] = *std::next(tree.begin(),arr[vertex]);
-        tree.erase(ans[vertex]);
-        each(child,input[vertex]){
-            if(dfs(input,arr,ans,tree,child) is false){
+        int cnd = *std::next(cnds.begin(),arr[vertex]);
+        ans[vertex] = cnd;
+        cnds.erase(cnd);
+        each(child,tree[vertex]){
+            if(dfs(tree,ans,arr,subtree,cnds,child) is false){
                 return false;
             }
         }

@@ -1,7 +1,10 @@
 #include <bits/stdc++.h>
-#pragma GCC optimize("O2")
-#pragma GCC optimize("Ofast")
+#pragma GCC optimize("O3,unroll-loops")
 #pragma GCC target("avx,avx2,fma")
+#pragma GCC optimize("Ofast")
+#pragma GCC target("sse4,popcnt,abm,mmx,tune=native")
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wc++11-extensions"
 using namespace std;
 #define ios ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 #define see(statement) cout << statement << endl
@@ -11,20 +14,26 @@ using namespace std;
 #define nn see("No")
 #define is ==
 #define isnt !=
-#define f first
+#define fi first
+#define sc second
 #define Aa see("Alice")
 #define AA see("ALICE")
 #define Bb see("Bob")
 #define BB see("BOB")
-#define s second
-#define pb push_back
-#define rb pop_back
-#define rf pop_front
-#define gcd(a,b) __gcd(a,b)
+#define pb(value) push_back(value)
+#define pf(value) push_front(value)
+#define rb() pop_back()
+#define rf() pop_front()
+#define this (*this)
 #define sz() size()
-#define vec(type) vector<type>
+#define vt(type) vector<type>
 #define ins(element) insert(element)
-#define br() cout<<endl
+#define bg() begin()
+#define bk() back()
+#define fr() front()
+#define ed() end()
+#define mp(value1,value2) make_pair(value1,value2)
+#define br() cout << endl
 #define cast(element,type) static_cast<type>(element)
 #define ll long long
 #define cd complex<double>
@@ -42,10 +51,18 @@ using namespace std;
 #define pld pair(ll,ld)
 #define vpii vector<pii>
 #define vpll vector<pll>
-#define check(statement) cout<<"**************Check: "<<statement<<" **************"<<endl;
+#define debug(statement) cout<<"**************Debug: "<<statement<<" **************"<<endl;
 #define pi 2*acos(0.0)
 #define max_heap(tmp) priority_queue<tmp>
-#define min_heap(tmp) priority_queue<tmp,vector<tmp>,greater<tmp>>
+#define min_heap(tmp) priority_queue<tmp,vector<tmp>,greater<tmp> >
+#define map(type1,type2) map<type1,type2>
+#define umap(type1,type2) unordered_map<type1,type2>
+#define mmap(type1,type2) multimap<type1,type2>
+#define ummap(type1,type2) unordered_multimap<type1,type2>
+#define set(type) set<type>
+#define uset(type) unordered_set<type>
+#define mset(type) multiset<type>
+#define umset(type) unordered_multiset<type>
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define elif else if
@@ -75,7 +92,7 @@ using namespace std;
 #define cnt(container,value) count(all(container),value)
 #define isSorted(container) is_sorted(all(container))
 #define rev(arr) reverse(all(arr))
-#define rsort(arr) sorted(arr); rev(arr);
+#define rsort(arr) sort(rall(arr));
 #define slice(start,end) substr(start,end - (start) + 1)
 #define char_index(c) (c >= 'A' and c <= 'Z' ? c - 'A' : c - 'a')
 inline ll llmax(ll a,ll b){
@@ -85,16 +102,16 @@ inline ll llmin(ll a,ll b){
     return a<b?a:b;
 }
 template<typename tmp1,typename tmp2>
-vector<pair<tmp1,tmp2>>zipped(vector<tmp1>&arr1,vector<tmp2>&arr2){
-    vector<pair<tmp1,tmp2>>ans;
+vector<pair<tmp1,tmp2> >zipped(vector<tmp1>&arr1,vector<tmp2>&arr2){
+    vector<pair<tmp1,tmp2> >ans;
     inc(i,0,arr1.sz()){
-        ans.pb({arr1[i],arr2[i]});
+        ans.pb(make_pair(arr1[i],arr2[i]));
     }
     return ans;
 }
 template<typename tmp>
-vec(tmp)uniqueConsec(vector<tmp>&arr){
-    vec(tmp)ans;
+vt(tmp)uniqueConsec(vector<tmp>&arr){
+    vt(tmp)ans;
     inc(i,0,arr.sz()){
         if(ans.sz() is 0 or ans.back() isnt arr[i]){
             ans.pb(arr[i]);
@@ -103,21 +120,21 @@ vec(tmp)uniqueConsec(vector<tmp>&arr){
     return ans;
 }
 template<typename tmp>
-vector<pair<int,tmp>>enumerated(vec(tmp)&arr){
-    vector<pair<int,tmp>>ans;
+vector<pair<int,tmp> >enumerated(vt(tmp)&arr){
+    vector<pair<int,tmp> >ans;
     inc(i,0,arr.sz()){
-        ans.pb({i,arr[i]});
+        ans.pb(make_pair(i,arr[i]));
     }
     return ans;
 }
 template<typename tmp>
-inline void readArray(vec(tmp)&arr,int start = 0){
+inline void readArray(vt(tmp)&arr,int start = 0){
     inc(i,start,arr.size()){
         cin >> arr[i];
     }
 }
 template<typename tmp>
-inline void readMatrix(vec(tmp)&matrix,int r = 0,int c = 0){
+inline void readMatrix(vt(tmp)&matrix,int r = 0,int c = 0){
     inc(i,r,matrix.size()){
         inc(j,c,matrix[i].size()){
             cin >> matrix[i][j];
@@ -125,14 +142,14 @@ inline void readMatrix(vec(tmp)&matrix,int r = 0,int c = 0){
     }
 }
 template<typename tmp>
-inline void writeArray(vec(tmp)&arr,int start = 0){
+inline void writeArray(vt(tmp)&arr,int start = 0){
     inc(i,start,arr.size()){
         cout << arr[i] << " ";
     }
     br();
 }
 template<typename tmp>
-inline tmp findMaxIndex(vec(tmp)&arr,int start = 0){
+inline tmp findMaxIndex(vt(tmp)&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
         ans = (arr[ans] > arr[i] ? ans : i);
@@ -140,7 +157,7 @@ inline tmp findMaxIndex(vec(tmp)&arr,int start = 0){
     return ans;
 }
 template<typename tmp>
-inline tmp findMinIndex(vec(tmp)&arr,int start = 0){
+inline tmp findMinIndex(vt(tmp)&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
         ans = (arr[ans] < arr[i] ? ans : i);
@@ -148,7 +165,7 @@ inline tmp findMinIndex(vec(tmp)&arr,int start = 0){
     return ans;
 }
 template<typename tmp>
-inline void writeMatrix(vec(vec(tmp))&matrix,int r = 0,int c = 0){
+inline void writeMatrix(vt(vt(tmp))&matrix,int r = 0,int c = 0){
     inc(i,r,matrix.size()){
         inc(j,c,matrix[i].size()){
             cout << matrix[i][j] << " ";
@@ -156,14 +173,70 @@ inline void writeMatrix(vec(vec(tmp))&matrix,int r = 0,int c = 0){
         br();
     }
 }
+template<typename tmp> tmp power(tmp base,tmp exponent){
+    if(exponent is 0){
+        return 1;
+    } else {
+        vt(tmp)dp(log2(exponent) + 1,0);
+        dp[0] = base;
+        inc(i,1,dp.sz()){
+            dp[i] = dp[i - 1] * dp[i - 1];
+        }
+        tmp ans = 1;
+        while(exponent){
+            int pos = log2(exponent & (-exponent));
+            exponent ^= (1 << pos);
+            ans *= dp[pos];
+        }
+        return ans;
+    }
+}
+template<typename tmp>
+void coordinateCompressInplace(vt(tmp)&arr){
+    map(tmp,int)pos;
+    inc(i,0,arr.sz()){
+        pos[arr[i]] = 0;
+    }
+    int index = 0;
+    each(entry,pos){
+        entry.sc = index++;
+    }
+    inc(i,0,arr.sz()){
+        arr[i] = pos[arr[i]];
+    }
+}
+template<typename tmp>
+vt(tmp) coordinateCompress(vt(tmp)&arr){
+    vt(tmp)ans = arr;
+    map(tmp,int)pos;
+    inc(i,0,ans.sz()){
+        pos[ans[i]] = i;
+    }
+    int index = 0;
+    each(entry,pos){
+        entry.sc = index++;
+    }
+    inc(i,0,ans.sz()){
+        ans[i] = pos[ans[i]];
+    }
+    return ans;
+}
 template<typename tmp> tmp mod(tmp number,tmp base){
     while(number < 0){
         number += base;
     }
     return number % base;
 }
+template<typename tmp> inline tmp manhattanDist(pair(tmp,tmp) &first,pair(tmp,tmp) &second){
+    return abs(first.fr - second.fr) + abs(first.sc - second.sc);
+}
+template<typename tmp> tmp gcd(tmp a, tmp b){
+    if (a is 0)
+        return b;
+    return gcd(b % a, a);
+}
 template<typename tmp> tmp lcm(tmp a,tmp b){
-    return (a / gcd(a,b)) * (b / gcd(a,b));
+    return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
     return (num / den) + (num % den != 0);
@@ -172,9 +245,10 @@ template<typename tmp>
 inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRight = true){
     return (incLeft ? mid >= left : mid > left) and (incRight ? mid <= right : mid < right);
 }
-constexpr int inf = 2e9;
-constexpr ll linf = 2e18;
+const int inf = 2e9;
+const ll linf = 2e18;
 void testcase();
+int f(int m,int k,int a1,int ak,int x);
 int main(){
     ios;
     int t = 1;
@@ -187,13 +261,23 @@ int main(){
 void testcase(){
     int m,k,a1,ak;
     cin >> m >> k >> a1 >> ak;
+    int left = 0,right = m / k;
+    while(right - left > 2){
+        int mid = (left + right) >> 1;
+        if(f(m,k,a1,ak,mid) < f(m,k,a1,ak,mid + 1)){
+            right = mid + 1;
+        } else {
+            left = mid;
+        }
+    }
     int ans = inf;
-    inc(num,0,m / k + 1){
-        int kFancy = max(0,num - ak);
-        int next = m - num * k;
-        int oneFancy = max(0,next - a1);
-        ans = min(kFancy + oneFancy,ans);
+    inc(i,left,right + 1){
+        ans = min(ans,f(m,k,a1,ak,i));
     }
     see(ans);
     return;
 }
+int f(int m,int k,int a1,int ak,int x){
+    return max(0,m - k * x - a1) + max(0,x - ak);
+}
+#pragma GCC diagnostic pop
