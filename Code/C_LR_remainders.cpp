@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
-// #pragma GCC optimize("O3,unroll-loops")
-// #pragma GCC target("avx,avx2,fma")
-// #pragma GCC optimize("Ofast")
-// #pragma GCC target("sse4,popcnt,abm,mmx,tune=native")
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("avx,avx2,fma")
+#pragma GCC optimize("Ofast")
+#pragma GCC target("sse4,popcnt,abm,mmx,tune=native")
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wc++11-extensions"
 using namespace std;
@@ -14,6 +14,7 @@ using namespace std;
 #define nn see("No")
 #define is ==
 #define isnt !=
+#define None nullptr
 #define fi first
 #define sc second
 #define Aa see("Alice")
@@ -258,29 +259,29 @@ int main(){
     return 0;
 }
 void testcase(){
-    ll n,k;
-    cin >> n >> k;
-    deque<ll>dq;
-    ll prod = 1;
-    inc(i,0,n){
-        ll value;
-        cin >> value;
-        prod *= value;
-        dq.pb(value);
-    }
+    ll n,m;
+    cin >> n >> m;
+    vll arr(n);
+    readArray(arr);
     string s;
     cin >> s;
-    inc(i,0,n){
-        cout << mod(prod,k) << " ";
+    int left = 0,right = n - 1;
+    inc(i,0,n - 1){
+        left += (s[i] is 'L');
+        right -= (s[i] is 'R');
+    }
+    assert(left is right);
+    vll ans(n);
+    ans.back() = mod(arr[left],m);
+    dec(i,n - 2,0){
         if(s[i] is 'L'){
-            prod /= dq.front();
-            dq.rf();
+            ans[i] = mod(ans[i + 1] * arr[--left],m);
         } else {
-            prod /= dq.back();
-            dq.rb();
+            ans[i] = mod(ans[i + 1] * arr[++right],m);
         }
     }
-    br();
+    assert(left is 0 and right is n - 1);
+    writeArray(ans);
     return;
 }
 #pragma GCC diagnostic pop

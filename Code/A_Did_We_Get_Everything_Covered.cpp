@@ -1,8 +1,4 @@
 #include <bits/stdc++.h>
-#pragma GCC optimize("O3,unroll-loops")
-#pragma GCC target("avx,avx2,fma")
-#pragma GCC optimize("Ofast")
-#pragma GCC target("sse4,popcnt,abm,mmx,tune=native")
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wc++11-extensions"
 using namespace std;
@@ -14,6 +10,7 @@ using namespace std;
 #define nn see("No")
 #define is ==
 #define isnt !=
+#define None nullptr
 #define fi first
 #define sc second
 #define Aa see("Alice")
@@ -51,7 +48,7 @@ using namespace std;
 #define pld pair(ll,ld)
 #define vpii vector<pii>
 #define vpll vector<pll>
-#define debug(statement) cout<<"**************Debug: "<<statement<<" **************"<<endl;
+#define debug(statement) cerr<<"**************Debug: "<<statement<<" **************"<<endl;
 #define pi 2*acos(0.0)
 #define max_heap(tmp) priority_queue<tmp>
 #define min_heap(tmp) priority_queue<tmp,vector<tmp>,greater<tmp> >
@@ -87,12 +84,6 @@ using namespace std;
 #define iter_for(it,container) for(auto it = container.begin();it != container.end();it++)
 #define iter_rev(it,container) for(auto it = container.rbegin();it != container.rend();it++)
 #define until(condition) while(!(condition))
-#define sorted(arr) sort(all(arr))
-#define custSort(container,comparator) sort(all(container),comparator)
-#define cnt(container,value) count(all(container),value)
-#define isSorted(container) is_sorted(all(container))
-#define rev(arr) reverse(all(arr))
-#define rsort(arr) sort(rall(arr));
 #define slice(start,end) substr(start,end - (start) + 1)
 #define char_index(c) (c >= 'A' and c <= 'Z' ? c - 'A' : c - 'a')
 inline ll llmax(ll a,ll b){
@@ -101,6 +92,21 @@ inline ll llmax(ll a,ll b){
 inline ll llmin(ll a,ll b){
     return a<b?a:b;
 }
+template<typename tmp> inline void sorted(vt(tmp)&arr){
+    sort(all(arr));
+};
+template <typename tmp> inline bool isSorted(vt(tmp)&arr){
+    return is_sorted(all(arr));
+};
+template <typename tmp> inline void rsort(vt(tmp)&arr){
+    sort(rall(arr));
+};
+template<typename tmp> inline void rev(vt(tmp)&arr){
+    reverse(all(arr));
+};
+template <typename tmp> inline int cnt(vt(tmp)&arr,tmp value){
+    return count(all(arr),value);
+};
 template<typename tmp1,typename tmp2>
 vector<pair<tmp1,tmp2> >zipped(vector<tmp1>&arr1,vector<tmp2>&arr2){
     vector<pair<tmp1,tmp2> >ans;
@@ -152,7 +158,7 @@ template<typename tmp>
 inline tmp findMaxIndex(vt(tmp)&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
-        ans = (arr[ans] > arr[i] ? ans : i);
+        ans = (arr[ans] >= arr[i] ? ans : i);
     }
     return ans;
 }
@@ -160,7 +166,7 @@ template<typename tmp>
 inline tmp findMinIndex(vt(tmp)&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
-        ans = (arr[ans] < arr[i] ? ans : i);
+        ans = (arr[ans] <= arr[i] ? ans : i);
     }
     return ans;
 }
@@ -173,23 +179,16 @@ inline void writeMatrix(vt(vt(tmp))&matrix,int r = 0,int c = 0){
         br();
     }
 }
-template<typename tmp> tmp power(tmp base,tmp exponent){
-    if(exponent is 0){
-        return 1;
-    } else {
-        vt(tmp)dp(log2(exponent) + 1,0);
-        dp[0] = base;
-        inc(i,1,dp.sz()){
-            dp[i] = dp[i - 1] * dp[i - 1];
+template<typename tmp> tmp power(tmp base,tmp exponent,tmp md){
+    tmp ans = 1;
+    while(exponent){
+        if(exponent & 1){
+            ans = mod(ans * base,md);
         }
-        tmp ans = 1;
-        while(exponent){
-            int pos = log2(exponent & (-exponent));
-            exponent ^= (1 << pos);
-            ans *= dp[pos];
-        }
-        return ans;
+        base = mod(base * base,md);
+        exponent >>= 1;
     }
+    return ans;
 }
 template<typename tmp>
 void coordinateCompressInplace(vt(tmp)&arr){
@@ -222,10 +221,11 @@ vt(tmp) coordinateCompress(vt(tmp)&arr){
     return ans;
 }
 template<typename tmp> tmp mod(tmp number,tmp base){
-    while(number < 0){
-        number += base;
+    tmp ans = number % base;
+    while(ans < 0){
+      ans += base;
     }
-    return number % base;
+    return ans;
 }
 template<typename tmp> inline tmp manhattanDist(pair(tmp,tmp) &first,pair(tmp,tmp) &second){
     return abs(first.fr - second.fr) + abs(first.sc - second.sc);
@@ -258,7 +258,41 @@ int main(){
     return 0;
 }
 void testcase(){
-    
+    int n,k,m;
+    string s;
+    cin >> n >> k >> m >> s;
+    vvi pos(k);
+    inc(i,0,m){
+        pos[s[i] - 'a'].pb(i);
+    }
+    each(arr,pos){
+        arr.pb(m);
+    }
+    string counter;
+    int last = -1;
+    while(counter.sz() < n){
+        int maxi = -1;
+        char nxt = 'a';
+        inc(i,0,pos.sz()){
+            int ind = upper_bound(all(pos[i]),last) - pos[i].bg();
+            if(pos[i][ind] > maxi){
+                maxi = pos[i][ind];
+                nxt = cast('a' + i,char);
+            }
+        }
+        if(maxi is m){
+            NN;
+            while(counter.sz() < n){
+                counter += nxt;
+            }
+            see(counter);
+            return;
+        } else {
+            counter += nxt;
+            last = maxi;
+        }
+    }
+    YY;
     return;
 }
 #pragma GCC diagnostic pop

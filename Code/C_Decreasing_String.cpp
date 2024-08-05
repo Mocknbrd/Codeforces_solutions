@@ -1,9 +1,6 @@
 #include <bits/stdc++.h>
-#pragma GCC optimize("O2")
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wc++11-extensions"
-#pragma GCC optimize("Ofast")
-#pragma GCC target("avx,avx2,fma")
 using namespace std;
 #define ios ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 #define see(statement) cout << statement << endl
@@ -13,7 +10,8 @@ using namespace std;
 #define nn see("No")
 #define is ==
 #define isnt !=
-#define fr first
+#define None nullptr
+#define fi first
 #define sc second
 #define Aa see("Alice")
 #define AA see("ALICE")
@@ -23,10 +21,15 @@ using namespace std;
 #define pf(value) push_front(value)
 #define rb() pop_back()
 #define rf() pop_front()
-#define self (*this)
+#define this (*this)
 #define sz() size()
-#define vec(type) vector<type>
+#define vt(type) vector<type>
 #define ins(element) insert(element)
+#define bg() begin()
+#define bk() back()
+#define fr() front()
+#define ed() end()
+#define mp(value1,value2) make_pair(value1,value2)
 #define br() cout << endl
 #define cast(element,type) static_cast<type>(element)
 #define ll long long
@@ -45,7 +48,7 @@ using namespace std;
 #define pld pair(ll,ld)
 #define vpii vector<pii>
 #define vpll vector<pll>
-#define check(statement) cout<<"**************Check: "<<statement<<" **************"<<endl;
+#define debug(statement) cerr<<"**************Debug: "<<statement<<" **************"<<endl;
 #define pi 2*acos(0.0)
 #define max_heap(tmp) priority_queue<tmp>
 #define min_heap(tmp) priority_queue<tmp,vector<tmp>,greater<tmp> >
@@ -55,8 +58,8 @@ using namespace std;
 #define ummap(type1,type2) unordered_multimap<type1,type2>
 #define set(type) set<type>
 #define uset(type) unordered_set<type>
-#define mmset(type) multiset<type>
-#define ummset(type) unordered_multiset<type>
+#define mset(type) multiset<type>
+#define umset(type) unordered_multiset<type>
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define elif else if
@@ -81,12 +84,6 @@ using namespace std;
 #define iter_for(it,container) for(auto it = container.begin();it != container.end();it++)
 #define iter_rev(it,container) for(auto it = container.rbegin();it != container.rend();it++)
 #define until(condition) while(!(condition))
-#define sorted(arr) sort(all(arr))
-#define custSort(container,comparator) sort(all(container),comparator)
-#define cnt(container,value) count(all(container),value)
-#define isSorted(container) is_sorted(all(container))
-#define rev(arr) reverse(all(arr))
-#define rsort(arr) sort(rall(arr));
 #define slice(start,end) substr(start,end - (start) + 1)
 #define char_index(c) (c >= 'A' and c <= 'Z' ? c - 'A' : c - 'a')
 inline ll llmax(ll a,ll b){
@@ -95,6 +92,21 @@ inline ll llmax(ll a,ll b){
 inline ll llmin(ll a,ll b){
     return a<b?a:b;
 }
+template<typename tmp> inline void sorted(vt(tmp)&arr){
+    sort(all(arr));
+};
+template <typename tmp> inline bool isSorted(vt(tmp)&arr){
+    return is_sorted(all(arr));
+};
+template <typename tmp> inline void rsort(vt(tmp)&arr){
+    sort(rall(arr));
+};
+template<typename tmp> inline void rev(vt(tmp)&arr){
+    reverse(all(arr));
+};
+template <typename tmp> inline int cnt(vt(tmp)&arr,tmp value){
+    return count(all(arr),value);
+};
 template<typename tmp1,typename tmp2>
 vector<pair<tmp1,tmp2> >zipped(vector<tmp1>&arr1,vector<tmp2>&arr2){
     vector<pair<tmp1,tmp2> >ans;
@@ -104,8 +116,8 @@ vector<pair<tmp1,tmp2> >zipped(vector<tmp1>&arr1,vector<tmp2>&arr2){
     return ans;
 }
 template<typename tmp>
-vec(tmp)uniqueConsec(vector<tmp>&arr){
-    vec(tmp)ans;
+vt(tmp)uniqueConsec(vector<tmp>&arr){
+    vt(tmp)ans;
     inc(i,0,arr.sz()){
         if(ans.sz() is 0 or ans.back() isnt arr[i]){
             ans.pb(arr[i]);
@@ -114,7 +126,7 @@ vec(tmp)uniqueConsec(vector<tmp>&arr){
     return ans;
 }
 template<typename tmp>
-vector<pair<int,tmp> >enumerated(vec(tmp)&arr){
+vector<pair<int,tmp> >enumerated(vt(tmp)&arr){
     vector<pair<int,tmp> >ans;
     inc(i,0,arr.sz()){
         ans.pb(make_pair(i,arr[i]));
@@ -122,13 +134,13 @@ vector<pair<int,tmp> >enumerated(vec(tmp)&arr){
     return ans;
 }
 template<typename tmp>
-inline void readArray(vec(tmp)&arr,int start = 0){
+inline void readArray(vt(tmp)&arr,int start = 0){
     inc(i,start,arr.size()){
         cin >> arr[i];
     }
 }
 template<typename tmp>
-inline void readMatrix(vec(tmp)&matrix,int r = 0,int c = 0){
+inline void readMatrix(vt(tmp)&matrix,int r = 0,int c = 0){
     inc(i,r,matrix.size()){
         inc(j,c,matrix[i].size()){
             cin >> matrix[i][j];
@@ -136,30 +148,30 @@ inline void readMatrix(vec(tmp)&matrix,int r = 0,int c = 0){
     }
 }
 template<typename tmp>
-inline void writeArray(vec(tmp)&arr,int start = 0){
+inline void writeArray(vt(tmp)&arr,int start = 0){
     inc(i,start,arr.size()){
         cout << arr[i] << " ";
     }
     br();
 }
 template<typename tmp>
-inline tmp findMaxIndex(vec(tmp)&arr,int start = 0){
+inline tmp findMaxIndex(vt(tmp)&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
-        ans = (arr[ans] > arr[i] ? ans : i);
+        ans = (arr[ans] >= arr[i] ? ans : i);
     }
     return ans;
 }
 template<typename tmp>
-inline tmp findMinIndex(vec(tmp)&arr,int start = 0){
+inline tmp findMinIndex(vt(tmp)&arr,int start = 0){
     tmp ans = start;
     inc(i,start,arr.sz()){
-        ans = (arr[ans] < arr[i] ? ans : i);
+        ans = (arr[ans] <= arr[i] ? ans : i);
     }
     return ans;
 }
 template<typename tmp>
-inline void writeMatrix(vec(vec(tmp))&matrix,int r = 0,int c = 0){
+inline void writeMatrix(vt(vt(tmp))&matrix,int r = 0,int c = 0){
     inc(i,r,matrix.size()){
         inc(j,c,matrix[i].size()){
             cout << matrix[i][j] << " ";
@@ -167,26 +179,19 @@ inline void writeMatrix(vec(vec(tmp))&matrix,int r = 0,int c = 0){
         br();
     }
 }
-template<typename tmp> tmp power(tmp base,tmp exponent){
-    if(exponent is 0){
-        return 1;
-    } else {
-        vec(tmp)dp(log2(exponent) + 1,0);
-        dp[0] = base;
-        inc(i,1,dp.sz()){
-            dp[i] = dp[i - 1] * dp[i - 1];
+template<typename tmp> tmp power(tmp base,tmp exponent,tmp md){
+    tmp ans = 1;
+    while(exponent){
+        if(exponent & 1){
+            ans = mod(ans * base,md);
         }
-        tmp ans = 1;
-        while(exponent){
-            int pos = log2(exponent & (-exponent));
-            exponent ^= (1 << pos);
-            ans *= dp[pos];
-        }
-        return ans;
+        base = mod(base * base,md);
+        exponent >>= 1;
     }
+    return ans;
 }
 template<typename tmp>
-void coordinateCompressInplace(vec(tmp)&arr){
+void coordinateCompressInplace(vt(tmp)&arr){
     map(tmp,int)pos;
     inc(i,0,arr.sz()){
         pos[arr[i]] = 0;
@@ -200,8 +205,8 @@ void coordinateCompressInplace(vec(tmp)&arr){
     }
 }
 template<typename tmp>
-vec(tmp) coordinateCompress(vec(tmp)&arr){
-    vec(tmp)ans = arr;
+vt(tmp) coordinateCompress(vt(tmp)&arr){
+    vt(tmp)ans = arr;
     map(tmp,int)pos;
     inc(i,0,ans.sz()){
         pos[ans[i]] = i;
@@ -216,10 +221,14 @@ vec(tmp) coordinateCompress(vec(tmp)&arr){
     return ans;
 }
 template<typename tmp> tmp mod(tmp number,tmp base){
-    while(number < 0){
-        number += base;
+    tmp ans = number % base;
+    while(ans < 0){
+      ans += base;
     }
-    return number % base;
+    return ans;
+}
+template<typename tmp> inline tmp manhattanDist(pair(tmp,tmp) &first,pair(tmp,tmp) &second){
+    return abs(first.fr - second.fr) + abs(first.sc - second.sc);
 }
 template<typename tmp> tmp gcd(tmp a, tmp b){
     if (a is 0)
@@ -230,7 +239,7 @@ template<typename tmp> tmp lcm(tmp a,tmp b){
     return (a * b) / gcd(a,b);
 }
 template<typename tmp> tmp ceil(tmp num,tmp den){
-    return (num / den) + (num % den != 0);
+    return (num / den) + (mod(num,den) != 0);
 }
 template<typename tmp>
 inline bool inBetween(tmp left,tmp mid,tmp right,bool incLeft = true,bool incRight = true){
@@ -250,42 +259,50 @@ int main(){
 }
 void testcase(){
     string s;
-    cin >> s;
-    int pos;
-    cin >> pos;
-    int n = s.sz();
-    vi prefix;
-    prefix.pb(0);
-    while(n){
-        prefix.pb(prefix.back() + n--);
-    }
-    int index = lower_bound(all(prefix),pos) - prefix.begin();
-    int offset = pos - prefix[index - 1];
-    int length = prefix[index] - prefix[index - 1];
-    set(pair(int,char))charset;
-    queue<int>inversions;
-    inc_la(i,0,s.sz(),1){
-        if(s[i] > s[i + 1]){
-            inversions.push(i);
+    ll pos;
+    cin >> s >> pos;
+    if(pos <= s.sz()){
+        cout << s[pos - 1];
+    } else {
+        vll stack,order;
+        inc(i,0,s.sz()){
+            while(stack.empty() is false and s[stack.back()] > s[i]){
+                order.pb(stack.back());
+                stack.rb();
+            }
+            stack.pb(i);
+        }
+        while(stack.empty() is false){
+            order.pb(stack.back());
+            stack.rb();
+        }
+        vll total,length;
+        total.pb(s.sz());
+        length.pb(s.sz() - 1);
+        while(total.sz() <= order.sz()){
+            total.pb(total.back() + length.back());
+            length.pb(length.back() - 1);
+        }
+        int index = lower_bound(all(total),pos) - total.bg();
+        set(int)exclude;
+        inc(i,0,index){
+            exclude.ins(order[i]);
+        }
+        string res;
+        inc(i,0,s.sz()){
+            if(exclude.count(i) is false){
+                res += s[i];
+            }
+        }
+        ll end = total[index];
+        dec(i,res.sz() - 1,0){
+            if(end is pos){
+                cout << res[i];
+                return;
+            }
+            end--;
         }
     }
-    inc(i,0,s.sz()){
-        charset.ins(make_pair(i,s[i]));
-    }
-    inc(i,0,index - 1){
-        if(inversions.empty() is false){
-            int curr = inversions.front(); inversions.pop();
-            charset.erase(make_pair(curr,s[curr]));
-        } else {
-            charset.erase(--charset.end());
-        }
-    }
-    string res(charset.sz(),'0');
-    int start = 0;
-    each(element,charset){
-        res[start++] = element.sc;
-    }
-    cout << res[offset - 1];
     return;
 }
 #pragma GCC diagnostic pop
